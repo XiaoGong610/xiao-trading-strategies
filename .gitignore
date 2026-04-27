@@ -1,3 +1,9 @@
 # Analysis files — personal trading data, not for public repo
 research/
 theta-gang/
+
+# Python virtual environment
+.venv/
+
+# Generated charts
+charts/

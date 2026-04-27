@@ -72,6 +72,16 @@ theta-gang/        # Theta gang trade analysis — one file per stock (e.g., AAP
 - Never overwrite or remove historical entries — they serve as a log of how thinking evolved over time
 - New use cases get their own top-level folder
 
+## Python Environment
+
+A virtual environment at `.venv/` (Python 3.12) with:
+- `yfinance` — free Yahoo Finance data (price history, options chains)
+- `plotly` — interactive HTML charts
+- `matplotlib` — static charts
+- `pandas` — data analysis
+
+Activate before running scripts: `source .venv/bin/activate`
+
 ## Future Extensions
 
 This project may expand to additional trading strategies and tooling over time.
