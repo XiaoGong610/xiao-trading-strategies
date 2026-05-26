@@ -6,22 +6,54 @@ Compare these stocks and rank them for the best trading opportunity: $ARGUMENTS
 
 The argument is a comma-separated list of tickers (e.g., "AAPL, TSLA, NVDA, AMZN, MSFT"). These should already be researched individually via `/research-stock` — this skill does the head-to-head comparison to decide which one to trade.
 
-**Step 1:** Read the existing research files for each ticker from `research/stocks/TICKER.md`. If a candidate file is missing for any ticker, flag it and suggest running `/research-stock TICKER` first.
+---
 
-**Step 2:** Synthesize the research into a comparative analysis. Focus on the differences that matter for deciding which stock to trade *now*.
+**Step 1: Read & validate research**
 
-## Comparison Criteria
+Read the existing research files for each ticker from `research/stocks/TICKER.md`.
 
-For each stock, compare:
-1. **Conviction** — how strong is the bull case? Any thesis-breaking risks?
-2. **Timing** — is the entry point attractive right now? Near support or overextended?
-3. **Growth vs. Valuation** — who has the best growth-to-valuation ratio?
-4. **Risk Profile** — upcoming earnings, binary events, sector headwinds
-5. **Strategy Fit** — which strategy suits each stock and how actionable is it?
+**Staleness check:** For each ticker, check the date of the most recent research entry:
+- **Fresh (<7 days):** Use as-is
+- **Stale (7-14 days):** Flag with ⚠️ — usable but note data may have shifted
+- **Very stale (>14 days):** Flag with 🚫 — recommend re-running `/research-stock TICKER` before comparing
+- **Missing:** Flag — must run `/research-stock TICKER` first
+
+| Ticker | Last Researched | Status | Conviction Score |
+|--------|----------------|--------|-----------------|
+
+If any ticker is missing or very stale, list it and suggest the user re-research before proceeding. Continue with available data but note the gap.
+
+**Step 2: Pull fresh technicals**
+
+Run `technicals.py` for each ticker to get current price data:
+```bash
+.venv/bin/python3 scripts/technicals.py TICKER1 && .venv/bin/python3 scripts/technicals.py TICKER2
+```
+
+---
+
+## Head-to-Head Scoring
+
+Score each stock on 5 weighted dimensions (1-10). Pull conviction scores from research files where available.
+
+| Dimension (Weight) | TICK1 | TICK2 | TICK3 | ... |
+|--------------------|-------|-------|-------|-----|
+| Conviction (25%) — bull case strength, moat, growth | | | | |
+| Timing (25%) — entry point quality, near support vs. extended | | | | |
+| Growth/Valuation (20%) — best growth-to-valuation ratio | | | | |
+| Risk Profile (15%) — earnings proximity, binary events, sector headwinds | | | | |
+| Strategy Fit (15%) — how actionable is the best strategy right now | | | | |
+| **Weighted Score** | | | | |
+
+**Scoring notes:**
+- Conviction should align with the `/research-stock` conviction score — don't reinvent it
+- Timing: at key support = 8-10, no-man's-land = 4-6, overextended = 1-3
+- Risk: lower risk = higher score (no earnings soon, no binary events = 8-10)
 
 ## Ranking Table
 
-| Rank | Ticker | Price | Trend | IV Rank | IV %ile | Next Earnings | Beta | Best Strategy | Verdict |
+| Rank | Ticker | Score | Price | Trend | RSI | Fwd P/E | Next Earnings | Best Strategy | Verdict |
+|------|--------|-------|-------|-------|-----|---------|---------------|---------------|---------|
 
 ## Strategy Fit (per stock)
 
@@ -33,13 +65,14 @@ For each stock, recommend the best strategy:
 
 ## Top Picks
 
-For the top 2-3 candidates:
-- Why they stand out
+For the top 2-3 candidates (highest weighted score):
+- Why they stand out vs. the rest
 - Recommended strategy and why
 - Quick entry suggestion (price level, strike, or DCA schedule)
 
 ## Skip For Now
 - Which stocks to avoid right now and why (earnings too close, IV too low, overextended, thesis unclear, etc.)
+- For each: what would need to change to reconsider (specific trigger, not vague)
 
 ## ETF Alternative
 

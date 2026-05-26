@@ -1,5 +1,35 @@
 # Valuation Benchmarks
 
+## Market-Level: CAPE (Shiller P/E)
+
+**CAPE** (Cyclically Adjusted Price-to-Earnings) = S&P 500 price / average of the last 10 years of inflation-adjusted earnings. Created by Nobel laureate Robert Shiller.
+
+Unlike regular P/E which uses a single year of earnings (noisy, distorted by business cycles), CAPE smooths over a full decade to reveal whether the overall market is cheap or expensive relative to its long-term earning power.
+
+| CAPE Level | Signal | Historical Context |
+|-----------|--------|-------------------|
+| <15 | Cheap — historically strong forward returns | Post-crash bottoms (2009, 1982, 1932) |
+| 15-20 | Fair value | Long-term average is ~17 |
+| 20-25 | Moderately expensive — positive but lower returns | Most of the 2010s |
+| 25-35 | Expensive — muted forward returns | 2017-2024 range |
+| 35-40 | Very expensive — thin margin of safety | Great Depression peak (~35), 2025-2026 |
+| 40+ | Extreme — only dot-com bubble reached 44 | January 2000 peak |
+
+**How to use CAPE:**
+- **Not a timing tool** — CAPE can stay elevated for years. High CAPE doesn't mean "sell now"
+- **A positioning tool** — high CAPE = be selective, size down, tighten stops. The margin of safety is thin, so any negative surprise hits harder
+- **Forward return predictor** — historically, CAPE >30 has led to below-average 10-year returns. CAPE <15 has led to above-average returns. The relationship is strong over decades, weak over months
+- **Regime context** — in `/research-scan-market`, CAPE adds to the regime assessment. CAPE near 40 + low VIX + Greed sentiment = complacency at extreme valuations
+
+**CAPE limitations:**
+- Structurally higher today due to tech dominance (higher-margin businesses than the historical average)
+- Share buybacks reduce share count and inflate per-share earnings, distorting comparisons to pre-2000 data
+- Interest rates matter: CAPE of 30 at 1% rates is different from CAPE of 30 at 5% rates
+
+**Quick rule:** When CAPE >35, every `/plan-stock` should note the elevated market valuation as a risk factor and consider smaller position sizes.
+
+---
+
 ## Forward P/E by Sector
 
 Not all P/E ratios are created equal. A 30x P/E means different things in different sectors.
