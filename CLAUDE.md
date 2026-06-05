@@ -242,11 +242,31 @@ Generates trading dashboard with live prices, RSI, forward P/E, gap-to-target, e
 .venv/bin/python3 scripts/dashboard.py --json   # JSON output
 ```
 
+### `scripts/sector-heatmap.py`
+Generates interactive sector performance heatmap (Plotly treemap). Block size = sector market cap, color = performance. Period toggle buttons in the chart.
+
+```bash
+.venv/bin/python3 scripts/sector-heatmap.py              # all periods with toggle buttons
+.venv/bin/python3 scripts/sector-heatmap.py --period 1mo  # single period
+.venv/bin/python3 scripts/sector-heatmap.py --no-open     # don't open browser
+```
+
+### `scripts/crypto-cycle.py`
+Fetches Bitcoin on-chain cycle indicators from BGeometrics free API (MVRV, NUPL, realized price, cycle composite score). Displays cycle dashboard and can update the knowledge base.
+
+```bash
+.venv/bin/python3 scripts/crypto-cycle.py              # terminal dashboard
+.venv/bin/python3 scripts/crypto-cycle.py --json       # JSON output
+.venv/bin/python3 scripts/crypto-cycle.py --save       # update knowledge/frameworks/crypto-cycles.md
+```
+
+Free tier: 10 requests/hour, no API key needed. For higher limits, register at bitcoin-data.com and set `BGEOMETRICS_TOKEN` env var.
+
 ## Knowledge Base
 
 Reference docs in `knowledge/` for trading decision-making. Skills consult these for context and nuance.
 
 - `signals/` — RSI interpretation, IV rank strategy selection matrix
-- `frameworks/` — AI capital flow model, valuation benchmarks by sector
+- `frameworks/` — AI capital flow model, valuation benchmarks, crypto 4-year cycle
 - `sectors/` — sector-specific metrics and cycle dynamics (to be built)
 - `strategies/` — when to use each strategy, rules, edge cases (to be built)

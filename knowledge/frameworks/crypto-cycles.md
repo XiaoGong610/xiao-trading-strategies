@@ -63,6 +63,105 @@ The cycle **peaked on schedule** and the crash hasn't fully played out:
 - Implied cycle bottom: $50-63K (vs. $30-40K if old patterns repeat exactly)
 - Timeline: bottom in Q3-Q4 2026, recovery begins in 2027
 
+## Wyckoff Cycle Phases (Detailed)
+
+The 4-year halving cycle maps onto the classic **Wyckoff market structure** with crypto-specific characteristics:
+
+| Phase | Duration | Price Action | Sentiment | On-Chain Signature |
+|-------|----------|-------------|-----------|-------------------|
+| **Accumulation** | 6-12 months | Range-bound, tight consolidation, repeated bounces | Disbelief, apathy, "crypto is dead" media | MVRV <1, NUPL <0, miner capitulation ending |
+| **Markup (Bull Run)** | 12-24 months | Uptrend, higher highs/lows, breakouts | Hope → optimism → excitement → FOMO | MVRV rising 1→3+, NUPL rising to 0.5-0.75, ETF inflows |
+| **Distribution** | 3-6 months | Topping range, volatile, fake breakouts | Euphoria, "this time is different", retail flooding in | MVRV >3.5, NUPL >0.75, Pi Cycle cross, Puell >4 |
+| **Markdown (Bear)** | 6-18 months | Downtrend, lower lows, capitulation flushes | Denial → fear → panic → capitulation | MVRV falling, NUPL dropping toward 0, miner stress |
+
+## On-Chain Indicators — The Cycle Dashboard
+
+These indicators tell you **where in the cycle you are**. Use them together — no single indicator is reliable alone.
+
+### Tier 1: Primary Cycle Indicators
+
+**1. MVRV Z-Score** (Market Value to Realized Value)
+- **What it measures:** Gap between BTC's market cap and realized cap (aggregate cost basis of all holders)
+- **How to read:**
+  - **>7:** Extreme overvaluation — cycle top zone (sell/trim)
+  - **3-7:** Overheated — distribution likely forming
+  - **1-3:** Fair to moderately valued — markup phase
+  - **0-1:** Fair value — accumulation or early recovery
+  - **<0:** Undervalued — cycle bottom zone (buy aggressively)
+- **Track record:** Picked every cycle top within 2 weeks
+- **Current reading (Jun 2026): 0.41** — near fair value. Well below euphoria. Suggests we're in intermediate recovery, not at an extreme in either direction
+- **Source:** [bitcoinmagazinepro.com/charts/mvrv-zscore](https://www.bitcoinmagazinepro.com/charts/mvrv-zscore/)
+
+**2. NUPL (Net Unrealized Profit/Loss)**
+- **What it measures:** Whether the market as a whole is sitting on profit or loss
+- **How to read:**
+  - **>0.75:** Euphoria/Greed — cycle top approaching (sell)
+  - **0.50-0.75:** Belief/Optimism — bull run, hold
+  - **0.25-0.50:** Hope/Fear — early recovery or early decline
+  - **0-0.25:** Anxiety — bearish, approaching capitulation
+  - **<0:** Capitulation — cycle bottom zone (buy)
+- **Current reading (Jun 2026): 0.28** — Hope/Fear zone. Past capitulation but not in optimism yet
+- **Key insight for this cycle:** NUPL never reached euphoria (>0.75) despite BTC hitting $126K — suggesting the 2025 top was driven more by ETF flows than retail FOMO. This is unusual and may support the "dampened cycle" thesis.
+
+**3. Pi Cycle Top Indicator**
+- **What it measures:** Relationship between 111-day MA and 2x 350-day MA
+- **How to read:** When the 111DMA crosses ABOVE the 350DMA×2, it signals a cycle top
+- **Track record:** Called 2013, 2017, and 2021 tops within 3 days each
+- **Current status:** Check live at [charts.bitbo.io/pi-cycle-top](https://charts.bitbo.io/pi-cycle-top/)
+
+### Tier 2: Confirming Indicators
+
+**4. Puell Multiple** (Miner Revenue)
+- **What it measures:** Daily BTC miner revenue vs. 365-day average of daily revenue
+- **How to read:**
+  - **>4:** Miners are very profitable, likely selling → cycle top
+  - **1-4:** Normal profitability
+  - **<0.5:** Miner stress — selling to survive → cycle bottom zone
+- **Why it matters:** Miners are forced sellers. When they're in extreme stress (<0.5), it often marks capitulation and the final flush before a bottom.
+- **Source:** [bitcoinmagazinepro.com/charts/puell-multiple](https://www.bitcoinmagazinepro.com/charts/puell-multiple/)
+
+**5. Hash Ribbon (Miner Capitulation)**
+- **What it measures:** Relationship between 30-day and 60-day hash rate moving averages
+- **How to read:**
+  - **30DMA < 60DMA:** Miner capitulation in progress (miners shutting down, unprofitable)
+  - **30DMA crosses back above 60DMA:** Capitulation ending → BUY signal
+- **Track record:** ~20 capitulation events since 2011, most coinciding with local or major bottoms (Jan 2015, Dec 2018, Dec 2022)
+- **Current cycle:** One of the longest capitulations on record occurred late 2025 - early 2026. BTC fell below average mining cost (~$87K) to $60K. Hash Ribbon flashed recovery signal in Q1 2026.
+- **Source:** [charts.bitbo.io/hash-ribbons](https://charts.bitbo.io/hash-ribbons/)
+
+**6. Thermocap Multiple**
+- **What it measures:** Ratio of BTC market cap to cumulative miner revenue (total security spend on the network)
+- **How to read:**
+  - **>400 (×10⁻⁸):** Historically marks cycle tops
+  - **<100 (×10⁻⁸):** Deep value territory
+- **Source:** [charts.bitbo.io/thermocap-multiple](https://charts.bitbo.io/thermocap-multiple/)
+
+### Tier 3: Context Models (Use Directionally, Not Precisely)
+
+**7. Stock-to-Flow (S2F) Model**
+- **What it measures:** BTC price predicted by scarcity (existing supply / new issuance rate)
+- **Current status:** BTC's post-2024 halving S2F ratio of ~113 is nearly double gold's
+- **⚠️ Caveat:** S2F's predictive accuracy has weakened significantly since 2021. Useful for understanding the scarcity narrative but don't use for price targets. The model overpredicted 2021 and has continued to diverge.
+
+**8. Rainbow Chart**
+- **What it measures:** BTC price against logarithmic regression bands with color zones (fire sale → bubble)
+- **⚠️ Caveat:** No fundamental basis — pure pattern-fitting. Fun to look at but not an investment tool.
+
+## Current Cycle Dashboard (Update Periodically)
+
+| Indicator | Reading (Jun 2026) | Zone | Signal |
+|-----------|-------------------|------|--------|
+| MVRV Z-Score | 0.41 | Fair value (0-1) | Neutral — not cheap, not expensive |
+| NUPL | 0.28 | Hope/Fear (0.25-0.50) | Past capitulation, not yet optimistic |
+| Pi Cycle | No cross | N/A | No top signal active |
+| Puell Multiple | ~1.0 (est.) | Normal | Miners recovering, not stressed |
+| Hash Ribbon | Recovery signal Q1 2026 | Post-capitulation | Historically bullish — buy signal fired |
+| BTC vs. Mining Cost | BTC ~$68K vs. ~$87K avg cost | Below cost | Miners unprofitable — late-stage stress |
+
+**Dashboard interpretation:** On-chain metrics do NOT confirm this is a typical cycle crash. MVRV never reached euphoria (peaked at 2.5 vs. 3.5+ in prior tops). NUPL never hit greed (>0.75). The Hash Ribbon buy signal has fired. This looks more like an **intermediate correction within an elongated cycle** than a classic blow-off top and crash.
+
+**Key divergence from our initial framework:** The halving timing (18 months to peak) says "cycle topped." But on-chain metrics say "the top wasn't euphoric enough to be a real top." This tension is the central question for crypto positioning in 2026.
+
 ## How to Use This Framework
 
 ### For Stock Selection

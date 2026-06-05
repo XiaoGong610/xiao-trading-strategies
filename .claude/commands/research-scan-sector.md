@@ -6,7 +6,12 @@ Research the following sector or theme and identify candidate stocks: $ARGUMENTS
 
 The argument can be a traditional sector (e.g., "healthcare", "energy", "financials") or a cross-sector investment theme (e.g., "ai-infrastructure", "defense", "glp-1"). Themes cut across traditional sector boundaries — pull relevant stocks from wherever they sit.
 
-Use web search to analyze the current state of this sector. Cover:
+Use web search to analyze the current state of this sector.
+
+**Sector-specific scripts:** If the sector has a dedicated data script, run it first:
+- **Crypto:** Run `.venv/bin/python3 scripts/crypto-cycle.py` for the on-chain cycle dashboard (MVRV, NUPL, cycle composite). Reference the output in the analysis.
+
+Cover:
 
 ## Sector Overview
 - What's driving the sector right now (macro trends, catalysts, headwinds)
