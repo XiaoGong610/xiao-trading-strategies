@@ -10,12 +10,16 @@ This is the **orchestrator** — it chains together the research funnel, strateg
 
 ---
 
-## Phase 0: Market Exposure Check
+## Phase 0: Market & Sector Context Check
 
-Before planning any individual trade, check the market environment:
+Before planning any individual trade, check the macro and sector environment. These provide the context that shapes position sizing, strategy selection, and timing.
 
-1. Read `research/sectors/market-overview.md` — check the most recent Market Regime classification.
-2. If no recent market overview (<7 days), note: "⚠️ Market regime unknown — consider running `/research-scan-market` first."
+### 0a. Market Overview
+
+1. Read `research/sectors/0-market-overview.md` — check the most recent Market Regime classification and Action Summary.
+2. **Freshness check:**
+   - **Fresh (<7 days):** Use as-is — reference regime, key risk, and next catalyst in the plan.
+   - **Stale (>7 days):** Flag: "⚠️ Market overview is stale (X days old). Consider running `/research-scan-market` first." If user wants to proceed, note the gap and use the last known regime with a caveat.
 
 **Regime gate:**
 - **Strong Uptrend / Uptrend** → proceed with full position sizing
@@ -25,13 +29,28 @@ Before planning any individual trade, check the market environment:
 
 If the regime gates you out, explain why and suggest what trigger to watch for (e.g., "Wait for S&P to reclaim 50-day SMA, then re-run `/plan-stock`").
 
+### 0b. Sector / Theme Context
+
+1. Identify the stock's sector or theme (e.g., semiconductors, crypto, software, energy).
+2. Check `research/sectors/` for a matching sector scan file.
+3. **Freshness check:**
+   - **Fresh (<14 days):** Use it — pull theme lifecycle stage, sector risks, and any sector-level insights that affect this stock.
+   - **Stale (>14 days) or missing:** Flag: "⚠️ No recent sector scan for [sector]. Consider running `/research-scan-sector [sector]` for broader context." If user wants to proceed, note the gap.
+
+4. **Integrate sector context into the plan:** The sector scan provides critical framing:
+   - **Theme lifecycle stage** — is this sector Emerging (aggressive) or Exhausting (avoid)?
+   - **Sector-specific risks** — cycle dynamics, regulation, competition that affect all stocks in the space
+   - **Relative positioning** — how does this stock rank vs. peers in the sector scan?
+   - **Knowledge base** — check `knowledge/` for relevant frameworks (e.g., `crypto-cycles.md` for crypto stocks, `valuation.md` for P/E context)
+
+**Document what you found:** In Phase 1, include a brief "Sector Context" section summarizing: lifecycle stage, sector-level risks/tailwinds, and any knowledge base insights that apply to this stock.
+
 ---
 
 ## Phase 1: Research
 
 **Check for existing research:**
 - Read `research/stocks/$TICKER.md` — if a recent `/research-stock` entry exists (<7 days old), summarize key findings and move to Phase 2.
-- Read `research/sectors/` — check if the stock's sector has been scanned recently for broader context.
 - Pull the **Conviction Score** from the research file. If score < 5, flag: "Low conviction — consider whether this stock warrants a full plan."
 
 **If no existing research, or research is stale (>7 days old):** Run `/research-stock $TICKER` first. This will:
@@ -42,8 +61,15 @@ If the regime gates you out, explain why and suggest what trigger to watch for (
 
 Wait for the research to complete before proceeding.
 
-**Conviction check** — based on the research output:
+**Sector Context** (from Phase 0b):
+- Theme lifecycle stage: [from sector scan]
+- Sector tailwinds/headwinds: [key factors affecting all stocks in this space]
+- Knowledge base insights: [any relevant frameworks — e.g., crypto 4-year cycle, CAPE valuation, sector-specific metrics]
+- Peer ranking: [where does this stock sit vs. sector scan candidates?]
+
+**Conviction check** — based on the research output AND sector context:
 - **Verdict:** Pass / Fail — do you have conviction? (Score ≥ 5 = Pass)
+- If the sector lifecycle is **Exhausting**, require conviction ≥ 7 to proceed (higher bar for crowded trades)
 - If Fail → stop here.
 
 ---
