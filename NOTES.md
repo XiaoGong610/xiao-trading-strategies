@@ -43,6 +43,18 @@ Bottleneck progression: GPU → HBM → Cluster Scaling → Optical → next
 Five tracks: Memory, I/O Interconnect, Optical, Power/Cooling, Custom ASIC
 Key insight: "Don't chase hot spots — position ahead of the bottleneck shift."
 
+### Sector Momentum Framework (2026-06-06)
+Three-pillar quantitative momentum system: Mansfield Relative Strength (vs S&P 500), Weinstein Stage Analysis (30-week SMA), ROC momentum. Classifies sectors into: Accelerating Up, Steady Uptrend, Pulling Back in Uptrend, Sideways, Downtrend, Capitulation. Each maps to a strategy playbook. Sector momentum overrides stock-level RSI when they conflict. See `knowledge/frameworks/sector-momentum.md`.
+
+### Regime-Aware Strategy Matrix (2026-06-06)
+`/plan-stock` Phase 4a: sector momentum × stock RSI determines entry approach. Key insight: "Stock RSI 75" means momentum in an accelerating sector but overextension in a sideways sector. The sector context is the primary input for timing decisions.
+
+### Crypto 4-Year Cycle Framework (2026-06-04)
+BTC halving cycle analysis with on-chain indicators (MVRV, NUPL, Pi Cycle, Hash Ribbon, Puell Multiple). Current cycle peaked at $126K on Oct 6, 2025 (18 months post-halving — textbook). On-chain metrics suggest dampened drawdown with higher floor ($50-63K). Affects COIN/CRCL/MSTR position sizing. See `knowledge/frameworks/crypto-cycles.md`.
+
+### GICS Sector Misclassification (2026-06-06)
+META, GOOG, and APP are classified as Communication Services by GICS but functionally behave as Technology/Ad-Tech. When using sector momentum framework, treat these as hybrid — check both Communication (GICS) and Technology (functional). Don't blindly apply Communication downtrend signals to these names.
+
 ---
 
 ## Discussions & Ideas
@@ -107,34 +119,34 @@ Prevent overconcentration and size positions properly. Critical before scaling u
 ### 4. Knowledge Base 🔄 IN PROGRESS
 Build a knowledge layer for smarter decision-making. Start with knowledge files, add scoring scripts later.
 
-**Phase 1 — Knowledge files (4 done, 6 remaining):**
+**Phase 1 — Knowledge files (7 done, 3 remaining):**
 - [x] `knowledge/signals/rsi-guide.md`
 - [x] `knowledge/signals/iv-rank-guide.md`
 - [x] `knowledge/frameworks/capital-flow.md`
-- [x] `knowledge/frameworks/valuation.md`
+- [x] `knowledge/frameworks/valuation.md` — includes CAPE/Shiller P/E (added 2026-05-26)
+- [x] `knowledge/frameworks/crypto-cycles.md` — 4-year halving cycle + on-chain indicators (added 2026-06-04)
+- [x] `knowledge/frameworks/sector-momentum.md` — Mansfield RS + Weinstein Stage + ROC (added 2026-06-06)
+- [x] `knowledge/frameworks/macro-regimes.md` — now embedded in `/research-scan-market` regime classification
 - [ ] `knowledge/sectors/semiconductors.md` — cycle dynamics, HBM/NAND drivers, key metrics
-- [ ] `knowledge/sectors/energy.md` — oil price drivers, toll-model vs upstream, geopolitical risk
-- [ ] `knowledge/sectors/software.md` — SaaS metrics (NRR, ARR), AI disruption vs adoption
 - [ ] `knowledge/strategies/when-to-csp.md` — IV rank thresholds, delta/DTE rules, earnings avoidance
-- [ ] `knowledge/strategies/when-to-dca.md` — RSI zones, volatility-based sizing, daily vs window-based
 - [ ] `knowledge/strategies/when-to-leaps.md` — IV environment, delta selection, vega risk
 
 **Phase 2 — Scoring scripts:**
+- [x] `scripts/sector-momentum.py` — Mansfield RS + Weinstein Stage + ROC for all 11 GICS sectors
+- [x] `scripts/sector-heatmap.py` — interactive Plotly treemap with period toggle
+- [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard (MVRV, NUPL, cycle composite)
 - [ ] `scripts/screener.py` — composite scoring (RSI + fwd P/E + gap-to-target + IV rank)
 - [ ] Wire into `/research-compare-stocks` for systematic ranking
-- [ ] Backtest scoring logic against past recommendations
 
-### 5. Macro Regime Detection ➡️ MEDIUM
-Different market regimes favor different strategies. The agent should adapt.
+### 5. Macro Regime Detection ✅ DONE (2026-06-06)
+~~Different market regimes favor different strategies.~~
 
-- [ ] **Regime classification** — bull / bear / sideways / high-vol / low-vol, based on S&P trend, VIX level, yield curve, breadth
-- [ ] **Strategy mapping by regime:**
-  - Bull + low vol → Buy & Hold, DCA, LEAPs
-  - Bull + high vol → DCA (not lump sum), CSPs at support
-  - Bear → CSPs get assigned more (danger), defensive stocks, cash-heavy
-  - Sideways → Theta gang shines (range-bound = premium selling paradise)
-- [ ] Integrate into `/research-scan-market` — report current regime and strategy implications
-- [ ] Add to knowledge base: `knowledge/frameworks/macro-regimes.md`
+Implemented via:
+- `/research-scan-market` — Market Regime table (S&P vs SMAs, VIX, Fear & Greed, yield curve, breadth) → 5 regime classifications with strategy implications
+- `/research-scan-sector` — Sector Momentum & Trend section with 6 momentum classifications
+- `/plan-stock` Phase 4a — Regime-aware strategy matrix (sector momentum × stock RSI)
+- `scripts/sector-momentum.py` — quantitative sector momentum with Mansfield RS, Weinstein Stage, ROC
+- `knowledge/frameworks/sector-momentum.md` — documents the three-pillar methodology
 
 ### 6. Market Intelligence Skills ➡️ MEDIUM
 Add continuous monitoring capabilities beyond point-in-time research snapshots.
@@ -152,15 +164,16 @@ Set up Claude Code cloud triggers to run jobs on a recurring schedule.
 - [ ] Pre-earnings: auto-flag stocks in watchlist with earnings approaching within 7 days
 - [ ] Explore Claude Code `/schedule` for cron-based remote agent triggers
 
-### 8. Visual Dashboard & Charts ➡️ MEDIUM
+### 8. Visual Dashboard & Charts 🔄 IN PROGRESS
 Interactive visualizations to help interpret signals at a glance. Two phases:
 
-**Phase 1 — Plotly chart scripts (quick wins, extends `/util-chart`):**
-- [ ] `scripts/chart-watchlist.py` — RSI vs fwd P/E scatter plot for all watching stocks. X=RSI, Y=fwd P/E, size=gap-to-target. Oversold + cheap stocks stand out in bottom-left quadrant.
-- [ ] `scripts/chart-sectors.py` — sector allocation pie/treemap showing concentration risk
+**Phase 1 — Plotly chart scripts (3 done, 3 remaining):**
+- [x] `scripts/sector-heatmap.py` — sector performance treemap, market-cap weighted, period toggles, reading guide
+- [x] `scripts/sector-momentum.py` — terminal dashboard with MRS, Weinstein Stage, ROC, momentum classification
+- [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard (MVRV, NUPL, composite score)
+- [ ] `scripts/chart-watchlist.py` — RSI vs fwd P/E scatter plot for all watching stocks. Oversold + cheap stocks stand out in bottom-left quadrant.
 - [ ] `scripts/chart-earnings.py` — earnings calendar timeline with countdown bars
 - [ ] `scripts/chart-performance.py` — portfolio P&L over time (once we have trade history)
-- [ ] All saved as interactive HTML to `charts/`, opened in browser
 
 **Phase 2 — Streamlit web app (full interactive dashboard):**
 - [ ] `scripts/app.py` — local web dashboard at `localhost:8501`
