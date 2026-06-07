@@ -38,12 +38,13 @@ If the regime gates you out, explain why and suggest what trigger to watch for (
    - **Stale (>14 days) or missing:** Flag: "⚠️ No recent sector scan for [sector]. Consider running `/research-scan-sector [sector]` for broader context." If user wants to proceed, note the gap.
 
 4. **Integrate sector context into the plan:** The sector scan provides critical framing:
+   - **Sector momentum** — is this sector Accelerating Up, Pulling Back, Sideways, or in Downtrend? This directly shapes entry approach (see strategy matrix below).
    - **Theme lifecycle stage** — is this sector Emerging (aggressive) or Exhausting (avoid)?
    - **Sector-specific risks** — cycle dynamics, regulation, competition that affect all stocks in the space
    - **Relative positioning** — how does this stock rank vs. peers in the sector scan?
    - **Knowledge base** — check `knowledge/` for relevant frameworks (e.g., `crypto-cycles.md` for crypto stocks, `valuation.md` for P/E context)
 
-**Document what you found:** In Phase 1, include a brief "Sector Context" section summarizing: lifecycle stage, sector-level risks/tailwinds, and any knowledge base insights that apply to this stock.
+**Document what you found:** In Phase 1, include a brief "Sector Context" section summarizing: momentum classification, lifecycle stage, sector-level risks/tailwinds, and any knowledge base insights that apply to this stock.
 
 ---
 
@@ -106,10 +107,28 @@ Each skill will produce its own detailed analysis (entry, sizing, exit rules, ri
 
 ## Phase 4: Compare & Recommend
 
-With all strategy outputs in hand, compare them and pick the best fit:
+### 4a. Sector Momentum → Entry Approach
+
+**This is the most important input for timing.** The sector's momentum (from Phase 0b) determines HOW you enter — it overrides stock-level RSI signals when they conflict.
+
+| Sector Momentum | Stock Extended (RSI >70) | Stock Neutral (RSI 40-70) | Stock Oversold (RSI <30) |
+|-----------------|-------------------------|--------------------------|-------------------------|
+| **Accelerating Up** | Buy a starter now, add on first dip. Don't wait — momentum carries higher | Full DCA or lump sum. You're riding a wave | Rare combo — buy aggressively |
+| **Steady Uptrend** | Start small DCA, accelerate on pullback | Normal DCA. Buy support tests | Buy the dip — sector supports recovery |
+| **Pulling Back in Uptrend** | Wait for RSI to cool, then buy | Best entry — pullback in an uptrend | Strong buy — oversold in healthy sector |
+| **Sideways/Choppy** | Wait — no momentum to carry you | Theta gang. Sell premium. | DCA slowly — no catalyst to drive recovery |
+| **Downtrend** | Avoid — falling knife in a falling sector | Small DCA only. Save cash. | Contrarian accumulation — but slow |
+| **Capitulation** | N/A (won't be extended in capitulation) | Aggressive DCA if thesis intact | Back up the truck — cycle bottom |
+
+**Key insight:** "Stock is overbought (RSI 75)" means something very different when the sector is Accelerating Up vs. Sideways. In an accelerating sector, RSI 75 is momentum — in a sideways sector, RSI 75 is overextension.
+
+### 4b. Strategy Selection
+
+With sector momentum context AND strategy outputs in hand, pick the best fit:
 
 | Factor | Consider |
 |--------|----------|
+| **Sector momentum** | Accelerating → favor momentum/Buy & Hold. Downtrend → favor DCA/accumulation. Sideways → favor theta gang |
 | Valuation | Stretched → favors DCA over lump sum. Fair/cheap → Buy & Hold viable |
 | IV environment | High IV → theta gang. Low IV → LEAPs or Buy & Hold |
 | Timing | At support → Buy & Hold. Uncertain → DCA. Pre-earnings → Wait |
@@ -117,7 +136,7 @@ With all strategy outputs in hand, compare them and pick the best fit:
 | Growth profile | Compounder → Buy & Hold/DCA. Range-bound → Theta Gang |
 | User's position | Already owns shares? → CC or add via DCA. No position → CSP or Buy & Hold |
 
-**Recommendation:** Pick the best strategy (or combination) with clear reasoning. Reference the specific trade setup from the winning strategy skill's output.
+**Recommendation:** Pick the best strategy (or combination) with clear reasoning. The sector momentum should be the FIRST factor considered — it sets the tempo. Then stock-level factors refine the entry.
 
 ---
 

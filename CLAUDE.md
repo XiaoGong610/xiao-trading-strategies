@@ -242,6 +242,15 @@ Generates trading dashboard with live prices, RSI, forward P/E, gap-to-target, e
 .venv/bin/python3 scripts/dashboard.py --json   # JSON output
 ```
 
+### `scripts/sector-momentum.py`
+Quantitative sector momentum analysis using three proven frameworks: Mansfield Relative Strength (vs S&P 500), Weinstein Stage Analysis (30-week SMA), and Rate of Change momentum. Classifies each sector into actionable categories (Accelerating Up, Pulling Back, Sideways, Downtrend, Capitulation) with strategy implications.
+
+```bash
+.venv/bin/python3 scripts/sector-momentum.py              # terminal dashboard
+.venv/bin/python3 scripts/sector-momentum.py --json        # JSON output
+.venv/bin/python3 scripts/sector-momentum.py --sector XLK  # single sector
+```
+
 ### `scripts/sector-heatmap.py`
 Generates interactive sector performance heatmap (Plotly treemap). Block size = sector market cap, color = performance. Period toggle buttons in the chart.
 

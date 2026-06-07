@@ -8,7 +8,13 @@ The argument can be a traditional sector (e.g., "healthcare", "energy", "financi
 
 Use web search to analyze the current state of this sector.
 
-**Sector-specific scripts:** If the sector has a dedicated data script, run it first:
+**Run sector momentum analysis first** to get quantitative momentum data:
+```bash
+.venv/bin/python3 scripts/sector-momentum.py --json
+```
+This provides Mansfield Relative Strength, Weinstein Stage, ROC, and RSI for all sectors. Use it to populate the Sector Momentum & Trend section below.
+
+**Sector-specific scripts:** If the sector has a dedicated data script, run it as well:
 - **Crypto:** Run `.venv/bin/python3 scripts/crypto-cycle.py` for the on-chain cycle dashboard (MVRV, NUPL, cycle composite). Reference the output in the analysis.
 
 Cover:
@@ -17,6 +23,35 @@ Cover:
 - What's driving the sector right now (macro trends, catalysts, headwinds)
 - Recent performance vs. S&P 500 (outperforming, underperforming, in line?)
 - Key themes (e.g., AI spend, rate sensitivity, regulatory changes)
+
+## Sector Momentum & Trend
+
+Classify the sector's current momentum. This directly drives strategy selection for stocks in this sector.
+
+Use the sector ETF (if available) or a basket of top stocks to assess:
+
+| Factor | Reading | How to Check |
+|--------|---------|-------------|
+| 1-week performance | % | Sector ETF or top stocks avg |
+| 1-month performance | % | Sector ETF or top stocks avg |
+| 3-month performance | % | Sector ETF or top stocks avg |
+| Sector vs. S&P 500 (1-month) | Over/under | Compare sector 1-month return vs. SPY 1-month return |
+| Sector RSI (14-day) | Value | Sector ETF RSI |
+
+**Momentum classification:**
+
+| Pattern | Classification | Strategy Implication |
+|---------|---------------|---------------------|
+| 1W > 0, 1M > 0, outperforming S&P | **Accelerating Up** | Buy strength — momentum entries work. Don't wait for pullback. Trail stops. |
+| 1W > 0, 1M > 0, in line with S&P | **Steady Uptrend** | Normal DCA. Buy support tests. Standard sizing. |
+| 1W < 0, 1M > 0 | **Pulling Back in Uptrend** | Best entry window — buy the dip. Accelerate DCA. CSP at support. |
+| 1W ~0, 1M ~0 | **Sideways/Choppy** | Theta gang territory. Sell premium. Reduce directional bets. |
+| 1W < 0, 1M < 0, underperforming S&P | **Downtrend** | Slow DCA only. Accumulate for the turn. Small positions. Save cash. |
+| 1W < 0, 1M < 0, RSI < 30 | **Capitulation** | Contrarian buy zone. Aggressive accumulation if thesis intact. |
+
+**Current momentum:** [pick one]
+**Evidence:** [1W/1M/3M performance, vs. S&P, RSI]
+**Strategy implication:** [what approach stocks in this sector should use — this carries forward to `/plan-stock`]
 
 ## Theme Lifecycle Stage
 

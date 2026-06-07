@@ -13,7 +13,8 @@ Use web search to gather current market data. Cover all sections below, then wri
 Start every scan output with a 5-line TL;DR. This is the single most important section — the user should get the answer in 10 seconds.
 
 - **Regime:** [regime name] — [one-line positioning guidance]
-- **Focus on:** [top 2-3 sectors/themes to research next, with lifecycle stage]
+- **Playbook:** [what strategies work in this regime — e.g., "Buy strength in accelerating sectors, DCA in pulling-back sectors, theta gang in sideways sectors"]
+- **Focus on:** [top 2-3 sectors/themes to research next, with momentum classification]
 - **Avoid:** [sectors to skip and why, in a few words]
 - **Key risk:** [the biggest thing that could go wrong right now]
 - **Next catalyst:** [the most important upcoming event + date]
@@ -44,10 +45,12 @@ Classify the current market environment. This frames everything below.
 
 ## Sector Rotation
 
-**Generate the sector heatmap first** for a visual overview:
+**Generate the sector heatmap and momentum dashboard first:**
 ```bash
 .venv/bin/python3 scripts/sector-heatmap.py --no-open
+.venv/bin/python3 scripts/sector-momentum.py
 ```
+The heatmap (`charts/sector-heatmap.html`) shows visual performance. The momentum dashboard provides quantitative signals: Mansfield RS (vs S&P 500), Weinstein Stage (1-4), ROC, and momentum classification for each sector. Use both in the analysis below.
 This saves an interactive treemap to `charts/sector-heatmap.html` with period toggle buttons (1-Week through 1-Year). Reference it in the analysis below.
 
 **How to read the heatmap:**
@@ -56,14 +59,22 @@ This saves an interactive treemap to `charts/sector-heatmap.html` with period to
 - Deeper color = stronger move. Hover for exact % change and current price.
 - Use the period buttons at the top to toggle between timeframes — compare 1-week vs. YTD to spot rotation shifts.
 
-Where is money flowing right now? Show a sector performance table:
+Where is money flowing right now? Show a sector performance table with momentum classification:
 
-| Sector | 1-Week | 1-Month | YTD | Trend | Notable Movers |
-|--------|--------|---------|-----|-------|----------------|
+| Sector | 1-Week | 1-Month | YTD | Momentum | Notable Movers |
+|--------|--------|---------|-----|----------|----------------|
+
+**Momentum classification** (based on 1-week and 1-month performance):
+- **Accelerating Up** (1W>0, 1M>0, beating S&P) → buy strength, momentum entries work
+- **Steady Uptrend** (1W>0, 1M>0) → normal DCA, buy support
+- **Pulling Back** (1W<0, 1M>0) → best dip-buy window
+- **Sideways** (1W~0, 1M~0) → theta gang territory
+- **Downtrend** (1W<0, 1M<0) → slow accumulation only
+- **Capitulation** (1W<0, 1M<0, oversold) → contrarian buy if thesis intact
 
 Identify:
-- **Leading sectors** — outperforming, money flowing in
-- **Lagging sectors** — underperforming, but watch for rotation opportunities
+- **Accelerating sectors** — outperforming, money flowing in → ride the momentum
+- **Pulling-back sectors** — dipping in an uptrend → best entry window
 - **Turning sectors** — showing early signs of reversing (either topping out or bottoming)
 
 ## Volatility & Options Landscape
