@@ -23,9 +23,9 @@ Act as a top-tier equity research analyst. Be brief and to the point — lead wi
 Research establishes conviction first, then recommends a strategy. The research funnel goes top-down, narrowing at each level:
 
 ```
-/research-scan-market       →  Where is money flowing? Which sectors/themes are hot?
+/research-market       →  Where is money flowing? Which sectors/themes are hot?
     ↓                            (broad, cheap — run freely)
-/research-scan-sector      →  Deep-dive a sector or theme, rank 5-10 candidates
+/research-sector      →  Deep-dive a sector or theme, rank 5-10 candidates
     ↓                            (moderate cost — run per sector of interest)
 /research-stock            →  Full deep-dive: fundamentals, earnings, sentiment, strategy fit
     ↓                            (moderate cost — run on candidates worth investigating)
@@ -37,7 +37,7 @@ Research establishes conviction first, then recommends a strategy. The research 
 
 **Cost discipline:** Each level should filter down. Don't run `/plan-stock` on every candidate — it runs all applicable strategy skills and is token-heavy. The recommended flow:
 
-1. **Scan broadly** — `/research-scan-market` + `/research-scan-sector` → many candidates (cheap)
+1. **Scan broadly** — `/research-market` + `/research-sector` → many candidates (cheap)
 2. **Research selectively** — `/research-stock` on the top 5-10 candidates (moderate)
 3. **Compare & narrow** — `/research-stock-compare` to pick the top 2-3 (cheap)
 4. **Plan only the best** — `/plan-stock` on the 2-3 you're seriously considering trading (expensive, but worth it)
@@ -46,9 +46,9 @@ Jump in at any level — if you already know the stock, go straight to `/researc
 
 **Sectors vs. Themes:**
 - **Sectors** are the standard GICS sectors (Technology, Healthcare, Financials, Energy, Industrials, etc.). Stable and useful for tracking where money is flowing in/out.
-- **Themes** are cross-sector investment narratives that cut across sector boundaries (e.g., "AI Infrastructure" spans semis, power, construction, and cloud). Themes emerge organically from `/research-scan-market` — don't pre-define them. Add new themes as narratives form, let them fade when they play out.
+- **Themes** are cross-sector investment narratives that cut across sector boundaries (e.g., "AI Infrastructure" spans semis, power, construction, and cloud). Themes emerge organically from `/research-market` — don't pre-define them. Add new themes as narratives form, let them fade when they play out.
 
-Both sectors and themes are valid arguments for `/research-scan-sector`. Scan files go in `research/sectors/` using lowercase names (e.g., `healthcare.md`, `ai-infrastructure.md`, `defense.md`).
+Both sectors and themes are valid arguments for `/research-sector`. Scan files go in `research/sectors/` using lowercase names (e.g., `healthcare.md`, `ai-infrastructure.md`, `defense.md`).
 
 ## Trading Strategies
 
@@ -71,8 +71,8 @@ Research → Strategy → Trade → Manage → Exit
 
 | Category | Skill | Purpose |
 |----------|-------|---------|
-| **research** | `/research-scan-market` | Broad market overview, sector rotation |
-| | `/research-scan-sector` | Deep-dive a sector or theme, rank candidates |
+| **research** | `/research-market` | Broad market overview, sector rotation |
+| | `/research-sector` | Deep-dive a sector or theme, rank candidates |
 | | `/research-stock` | Full stock deep-dive: fundamentals, earnings, strategy fit |
 | | `/research-stock-compare` | Compare researched stocks head-to-head, pick the best |
 | **plan** | `/plan-stock` | Orchestrator: context → research → strategy → trade setup |

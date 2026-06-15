@@ -19,7 +19,7 @@ Unlike regular P/E which uses a single year of earnings (noisy, distorted by bus
 - **Not a timing tool** — CAPE can stay elevated for years. High CAPE doesn't mean "sell now"
 - **A positioning tool** — high CAPE = be selective, size down, tighten stops. The margin of safety is thin, so any negative surprise hits harder
 - **Forward return predictor** — historically, CAPE >30 has led to below-average 10-year returns. CAPE <15 has led to above-average returns. The relationship is strong over decades, weak over months
-- **Regime context** — in `/research-scan-market`, CAPE adds to the regime assessment. CAPE near 40 + low VIX + Greed sentiment = complacency at extreme valuations
+- **Regime context** — in `/research-market`, CAPE adds to the regime assessment. CAPE near 40 + low VIX + Greed sentiment = complacency at extreme valuations
 
 **CAPE limitations:**
 - Structurally higher today due to tech dominance (higher-margin businesses than the historical average)

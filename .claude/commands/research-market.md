@@ -122,9 +122,9 @@ Rank 3-5 sectors to investigate further:
 
 | Priority | Sector/Theme | Why | Lifecycle Stage | Next Step |
 |----------|-------------|-----|-----------------|-----------|
-| 1 | ... | ... | ... | `/research-scan-sector SECTOR` |
-| 2 | ... | ... | ... | `/research-scan-sector SECTOR` |
-| 3 | ... | ... | ... | `/research-scan-sector SECTOR` |
+| 1 | ... | ... | ... | `/research-sector SECTOR` |
+| 2 | ... | ... | ... | `/research-sector SECTOR` |
+| 3 | ... | ... | ... | `/research-sector SECTOR` |
 
 Be opinionated — don't just list everything. Focus on what's actionable right now. Prefer Emerging/Accelerating themes over Mature/Exhausting ones. The user may pursue any strategy (buy-and-hold, DCA, theta gang, swing trading), so keep recommendations strategy-agnostic.
 

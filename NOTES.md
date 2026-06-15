@@ -15,8 +15,8 @@ A living document for brainstorming, discussions, decisions, and TODOs.
 
 ### Research Funnel (2026-05-09)
 Cost-aware top-down funnel:
-1. `/research-scan-market` (cheap) → many sectors
-2. `/research-scan-sector` (moderate) → 5-10 candidates per sector
+1. `/research-market` (cheap) → many sectors
+2. `/research-sector` (moderate) → 5-10 candidates per sector
 3. `/research-stock` (moderate) → deep-dive on candidates worth investigating
 4. `/research-stock-compare` (cheap) → narrow to top 2-3
 5. `/plan-stock` (expensive) → only run on stocks you're seriously considering
@@ -63,7 +63,7 @@ META, GOOG, and APP are classified as Communication Services by GICS but functio
 ## Discussions & Ideas
 
 ### ETF vs. Individual Stocks (2026-05-10)
-- `/research-scan-sector` includes relevant ETFs
+- `/research-sector` includes relevant ETFs
 - `/research-stock-compare` includes ETF alternative analysis
 - ETFs win when: can't pick a winner, want diversification, limited capital
 - Individual stocks win when: high conviction, want theta gang (need higher IV), ETF dilutes thesis
@@ -129,7 +129,7 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 - [x] `knowledge/frameworks/valuation.md` — includes CAPE/Shiller P/E (added 2026-05-26)
 - [x] `knowledge/frameworks/crypto-cycles.md` — 4-year halving cycle + on-chain indicators (added 2026-06-04)
 - [x] `knowledge/frameworks/sector-momentum.md` — Mansfield RS + Weinstein Stage + ROC (added 2026-06-06)
-- [x] `knowledge/frameworks/macro-regimes.md` — now embedded in `/research-scan-market` regime classification
+- [x] `knowledge/frameworks/macro-regimes.md` — now embedded in `/research-market` regime classification
 - [x] `knowledge/sectors/semiconductors.md` — cycle dynamics, sub-sectors, HBM/NAND drivers, key metrics, AI overlay (added 2026-06-14)
 - [x] `knowledge/strategies/when-to-csp.md` — IV rank thresholds, delta/DTE rules, earnings avoidance, management rules (added 2026-06-14)
 - [x] `knowledge/strategies/when-to-leaps.md` — IV environment, delta selection, vega risk, capital efficiency (added 2026-06-14)
@@ -145,8 +145,8 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 ~~Different market regimes favor different strategies.~~
 
 Implemented via:
-- `/research-scan-market` — Market Regime table (S&P vs SMAs, VIX, Fear & Greed, yield curve, breadth) → 5 regime classifications with strategy implications
-- `/research-scan-sector` — Sector Momentum & Trend section with 6 momentum classifications
+- `/research-market` — Market Regime table (S&P vs SMAs, VIX, Fear & Greed, yield curve, breadth) → 5 regime classifications with strategy implications
+- `/research-sector` — Sector Momentum & Trend section with 6 momentum classifications
 - `/plan-stock` Phase 4a — Regime-aware strategy matrix (sector momentum × stock RSI)
 - `scripts/sector-momentum.py` — quantitative sector momentum with Mansfield RS, Weinstein Stage, ROC
 - `knowledge/frameworks/sector-momentum.md` — documents the three-pillar methodology
@@ -163,7 +163,7 @@ Add continuous monitoring capabilities beyond point-in-time research snapshots.
 Set up Claude Code cloud triggers to run jobs on a recurring schedule.
 
 - [ ] Daily: refresh technicals for all watching stocks
-- [ ] Weekly: re-run `/research-scan-market` for sector rotation updates
+- [ ] Weekly: re-run `/research-market` for sector rotation updates
 - [ ] Pre-earnings: auto-flag stocks in watchlist with earnings approaching within 7 days
 - [ ] Explore Claude Code `/schedule` for cron-based remote agent triggers
 

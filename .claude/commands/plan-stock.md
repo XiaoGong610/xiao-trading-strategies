@@ -19,7 +19,7 @@ Before planning any individual trade, check the macro and sector environment. Th
 1. Read `research/sectors/0-market-overview.md` — check the most recent Market Regime classification and Action Summary.
 2. **Freshness check:**
    - **Fresh (<7 days):** Use as-is — reference regime, key risk, and next catalyst in the plan.
-   - **Stale (>7 days):** Flag: "⚠️ Market overview is stale (X days old). Consider running `/research-scan-market` first." If user wants to proceed, note the gap and use the last known regime with a caveat.
+   - **Stale (>7 days):** Flag: "⚠️ Market overview is stale (X days old). Consider running `/research-market` first." If user wants to proceed, note the gap and use the last known regime with a caveat.
 
 **Regime gate:**
 - **Strong Uptrend / Uptrend** → proceed with full position sizing
@@ -35,7 +35,7 @@ If the regime gates you out, explain why and suggest what trigger to watch for (
 2. Check `research/sectors/` for a matching sector scan file.
 3. **Freshness check:**
    - **Fresh (<14 days):** Use it — pull theme lifecycle stage, sector risks, and any sector-level insights that affect this stock.
-   - **Stale (>14 days) or missing:** Flag: "⚠️ No recent sector scan for [sector]. Consider running `/research-scan-sector [sector]` for broader context." If user wants to proceed, note the gap.
+   - **Stale (>14 days) or missing:** Flag: "⚠️ No recent sector scan for [sector]. Consider running `/research-sector [sector]` for broader context." If user wants to proceed, note the gap.
 
 4. **Integrate sector context into the plan:** The sector scan provides critical framing:
    - **Sector momentum** — is this sector Accelerating Up, Pulling Back, Sideways, or in Downtrend? This directly shapes entry approach (see strategy matrix below).
