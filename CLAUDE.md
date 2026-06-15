@@ -29,7 +29,7 @@ Research establishes conviction first, then recommends a strategy. The research 
     ↓                            (moderate cost — run per sector of interest)
 /research-stock            →  Full deep-dive: fundamentals, earnings, sentiment, strategy fit
     ↓                            (moderate cost — run on candidates worth investigating)
-/research-compare-stocks   →  Compare researched stocks head-to-head, pick the best + ETF alternative
+/research-stock-compare   →  Compare researched stocks head-to-head, pick the best + ETF alternative
     ↓                            (cheap — reads existing research, no new data fetching)
 /plan-stock                →  Orchestrator: research → run all strategy skills → compare → recommend
                                  (EXPENSIVE — runs multiple strategy skills. Only run on top picks)
@@ -39,7 +39,7 @@ Research establishes conviction first, then recommends a strategy. The research 
 
 1. **Scan broadly** — `/research-scan-market` + `/research-scan-sector` → many candidates (cheap)
 2. **Research selectively** — `/research-stock` on the top 5-10 candidates (moderate)
-3. **Compare & narrow** — `/research-compare-stocks` to pick the top 2-3 (cheap)
+3. **Compare & narrow** — `/research-stock-compare` to pick the top 2-3 (cheap)
 4. **Plan only the best** — `/plan-stock` on the 2-3 you're seriously considering trading (expensive, but worth it)
 
 Jump in at any level — if you already know the stock, go straight to `/research-stock` or `/plan-stock`.
@@ -74,7 +74,7 @@ Research → Strategy → Trade → Manage → Exit
 | **research** | `/research-scan-market` | Broad market overview, sector rotation |
 | | `/research-scan-sector` | Deep-dive a sector or theme, rank candidates |
 | | `/research-stock` | Full stock deep-dive: fundamentals, earnings, strategy fit |
-| | `/research-compare-stocks` | Compare researched stocks head-to-head, pick the best |
+| | `/research-stock-compare` | Compare researched stocks head-to-head, pick the best |
 | **plan** | `/plan-stock` | Orchestrator: context → research → strategy → trade setup |
 | **strategy** | `/strategy-buy-and-hold` | Buy & Hold execution planning |
 | | `/strategy-dca` | DCA schedule and sizing |

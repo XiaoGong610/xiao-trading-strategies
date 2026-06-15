@@ -13,8 +13,8 @@ A set of Claude Code custom skills for stock research and multi-strategy trading
 |---------|-------------|
 | `/research-scan-market` | Broad market overview — sector rotation, money flow, hot themes |
 | `/research-scan-sector software` | Deep-dive a sector or theme, rank 5-10 candidates |
-| `/research-compare-stocks AAPL, TSLA, NVDA` | Compare stocks head-to-head, rank by opportunity, ETF alternative |
 | `/research-stock AAPL` | Full stock deep-dive — fundamentals, earnings, sentiment, strategy fit |
+| `/research-stock-compare AAPL, TSLA, NVDA` | Compare stocks head-to-head, rank by opportunity, ETF alternative |
 
 ### Planning
 | Command | Description |

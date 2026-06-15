@@ -18,7 +18,7 @@ Cost-aware top-down funnel:
 1. `/research-scan-market` (cheap) → many sectors
 2. `/research-scan-sector` (moderate) → 5-10 candidates per sector
 3. `/research-stock` (moderate) → deep-dive on candidates worth investigating
-4. `/research-compare-stocks` (cheap) → narrow to top 2-3
+4. `/research-stock-compare` (cheap) → narrow to top 2-3
 5. `/plan-stock` (expensive) → only run on stocks you're seriously considering
 
 ### Folder Structure (2026-05-10)
@@ -64,7 +64,7 @@ META, GOOG, and APP are classified as Communication Services by GICS but functio
 
 ### ETF vs. Individual Stocks (2026-05-10)
 - `/research-scan-sector` includes relevant ETFs
-- `/research-compare-stocks` includes ETF alternative analysis
+- `/research-stock-compare` includes ETF alternative analysis
 - ETFs win when: can't pick a winner, want diversification, limited capital
 - Individual stocks win when: high conviction, want theta gang (need higher IV), ETF dilutes thesis
 
@@ -139,7 +139,7 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 - [x] `scripts/sector-heatmap.py` — interactive Plotly treemap with period toggle
 - [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard (MVRV, NUPL, cycle composite)
 - [ ] `scripts/screener.py` — composite scoring (RSI + fwd P/E + gap-to-target + IV rank)
-- [ ] Wire into `/research-compare-stocks` for systematic ranking
+- [ ] Wire into `/research-stock-compare` for systematic ranking
 
 ### 5. Macro Regime Detection ✅ DONE (2026-06-06)
 ~~Different market regimes favor different strategies.~~
