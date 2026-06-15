@@ -74,12 +74,66 @@ Capital rotates in two phases within each track:
 5. **The downstream you go, the longer the time horizon** — Track 1 is a now trade, Track 5 is a 2-3 year thesis
 6. **Use the Narrative → Verification filter** — concentrate in names that have shifted from story to proof
 
-## Key Questions to Ask
+## Demand Propagation Timeline (需求传导时间差)
 
-- Where is the system bottleneck *right now*?
-- Which link in the chain will go from "supporting role" to "lead"? (哪个环节会从"配角"变成"主角"?)
-- Which company can truly convert this bottleneck into revenue and profit? (哪家公司能真正把这个瓶颈变成收入和利润?)
-- Has the market already priced in the shift? (Check fwd P/E vs. growth rate)
+Money flows upstream with a concrete time delay. The most visible name (NVDA) is always the most fully priced. Position upstream before earnings arrive.
+
+```
+Hyperscaler capex revision up (AMZN, META, GOOG, MSFT)
+    → 6 months:   NVDA earnings delivery (GPU revenue)
+    → 12 months:  Memory (MU) + Optical (COHR, LITE) earnings delivery
+    → 18 months:  Equipment (ASML, LRCX) + upstream materials (AXTI) delivery
+```
+
+这不是预测，是物理规律。只要第一步是真的，后面就是排队进场。
+(This isn't prediction — it's physics. As long as step 1 is real, everything else lines up.)
+
+**How to use:** When hyperscalers guide capex up, don't chase NVDA. Look 12-18 months downstream at memory and optical names that haven't moved yet. By the time Wall Street "discovers" them, you're already positioned.
+
+## The Qualification Cycle (Qual周期)
+
+The most counter-intuitive rule in semi investing. AI semiconductor B2B has a **6-18 month customer qualification** process. During Qual: sending samples, running production lines, tuning yield, burning R&D. Financials show **zero revenue**.
+
+**The script:**
+```
+Ugly financials → stock drops → retail curses → institutions reduce → more drops
+    → Qual passes → orders flood in (STEP FUNCTION, not smooth growth)
+        → Wall Street "rediscovers" the company → you're 6-12 months late
+```
+
+Qual一旦通过，营收不是平滑增长，是阶梯式跳升。(Once Qual passes, revenue doesn't grow smoothly — it jumps in steps.)
+
+**Case studies:**
+- **MU:** HBM <5% of revenue, losing money → "memory is dead" → HBM3E passes NVDA qual → margins 20%→40%+ → +709%
+- **AMD:** MI300 doubted as "forever #2" → running Qual at MSFT/META/ORCL → MI325X/355X explode → +321%
+- **SNDK:** Traditional SSD, P/E 5x → AI inference needs KV cache/vector DB/SSD → redefined cyclical→secular → P/E 15x+
+- **ALAB:** Retimers didn't exist in old servers → AI servers (PCIe 5.0/6.0) MUST have retimers → new mandatory component
+
+**Key insight:** Qual期内的财报是失真的。真正的价值已经锁定，只是市场还没反应过来。财报最难看的那个季度，往往就是最暴利的买点。(Financials during Qual are distorted. Real value is already locked in — market hasn't reacted. The ugliest quarter is often the most profitable entry.)
+
+## Architecture Transition: Three Types of Opportunity
+
+When AI shifts computing architecture, three things happen simultaneously on the supply chain:
+
+| Type | What Happens | Example | How to Find |
+|------|-------------|---------|-------------|
+| **Nodes disappear** | Old components become irrelevant | Legacy server NICs, low-speed interconnect | Track what the new architecture removes |
+| **Nodes appear from nowhere** | New mandatory components that didn't exist before | ALAB (retimers), CPO modules | Track what the new architecture REQUIRES that the old didn't |
+| **Supporting → Lead** | Existing companies get redefined by AI demand | MRVL (PAM4 DSP → AI optical nervous system), SNDK (SSD → AI inference infra) | Track which "boring" companies suddenly sit at a critical bottleneck |
+
+法则3的核心：别盯当下的王者（已priced in），盯架构换代时凭空多出来的新节点——那才是钱凭空生出来的地方。
+(Don't stare at the current king — watch for new nodes appearing during architecture transitions. That's where money is created from thin air.)
+
+## 3-Question Checklist (Every Investment)
+
+Before investing in any AI supply chain name, ask:
+
+1. **Demand path:** Which supply chain will this demand propagate along? Which link will it reach at 6 / 12 / 18 months?
+2. **Qual cycle:** Who on this chain is currently running Qual with the ugliest financials? That's the most profitable entry.
+3. **Architecture shift:** What new nodes in the new architecture didn't exist in the old? That's where money appears from thin air.
+
+走完这三步，你就能领先市场半步。不用更多。在美股，领先半步已经够了。
+(Follow these 3 steps, you're half a step ahead. No more needed. In US stocks, half a step is enough.)
 
 ## ASIC Inference Thesis
 Foundation models will eventually stabilize (human knowledge frontier develops slowly). The large, stable parts are suitable for hardware-specialized chips (ASIC) for fast inference. Domain models and fine-tuning continue on general GPUs. This is like Bitcoin mining moving from GPU to ASIC miners — GPUs become unsuitable for large-scale inference over time.
