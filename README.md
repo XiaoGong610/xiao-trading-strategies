@@ -56,10 +56,10 @@ research/
     1-DASHBOARD.md   # Auto-generated trading dashboard
   comparisons/       # Head-to-head stock comparisons (gitignored)
 knowledge/           # Decision-making reference docs (committed)
-  signals/           # RSI, IV rank interpretation guides
-  frameworks/        # Capital flow, valuation, sector momentum, crypto cycles
-  sectors/           # Sector-specific metrics (semiconductors)
-  strategies/        # Strategy rules — when to sell CSPs, when to buy LEAPs
+  signals/           # RSI, IV rank, volume, moving averages, MACD guides
+  frameworks/        # Capital flow, valuation, sector momentum, crypto cycles, risk metrics
+  sectors/           # Sector-specific metrics and cycle dynamics (semiconductors)
+  strategies/        # Strategy rules — CSP, LEAPs, Buy & Hold, DCA
 portfolio/           # Active positions (gitignored)
 trades/              # Closed trade log (gitignored)
 charts/              # Generated HTML charts (gitignored)
@@ -85,13 +85,19 @@ Reference docs in `knowledge/` that skills consult for decision-making. All skil
 |------|---------|
 | `signals/rsi-guide.md` | RSI interpretation — sector beta, trend context, common mistakes |
 | `signals/iv-rank-guide.md` | IV Rank thresholds, IV Rank × RSI decision matrix for strategy selection |
+| `signals/volume-guide.md` | Volume confirmation — relative volume, HVN/LVN, capitulation signals |
+| `signals/ma-guide.md` | SMA 20/50/200 alignment, golden/death cross, entry level selection |
+| `signals/macd-guide.md` | MACD crossovers, divergences, histogram momentum |
+| `frameworks/capital-flow.md` | AI supply chain: 9-track bottleneck progression, demand timeline, Qual cycle, 3-question checklist |
 | `frameworks/valuation.md` | Forward P/E benchmarks by sector, CAPE/Shiller P/E, PEG ratio |
-| `frameworks/ai-capital-flow.md` | AI supply chain bottleneck progression — where capital flows next |
 | `frameworks/sector-momentum.md` | Mansfield RS + Weinstein Stage + ROC — three-pillar momentum system |
 | `frameworks/crypto-cycles.md` | BTC 4-year halving cycle, on-chain indicators (MVRV, NUPL) |
-| `sectors/semiconductors.md` | Semi cycle dynamics, sub-sectors, key metrics, AI overlay |
+| `frameworks/risk-metrics.md` | Sharpe, Sortino, Alpha, Beta, Max Drawdown — portfolio risk assessment |
+| `sectors/semiconductors.md` | Semi cycles, Qual cycle trading, optical sub-layer, AI architecture transitions |
 | `strategies/when-to-csp.md` | CSP setup checklist, IV×RSI matrix, management rules, position sizing |
 | `strategies/when-to-leaps.md` | LEAP delta/expiry selection, vega risk, IV<30 gate, capital efficiency |
+| `strategies/when-to-buy-and-hold.md` | Lump-sum vs DCA routing, conviction sizing, SMA entries, sell triggers |
+| `strategies/when-to-dca.md` | RSI × sector pacing matrix, budget planning, acceleration/pause rules |
 
 ## Setup
 
