@@ -16,6 +16,7 @@ Assume the user already has conviction from `/research-stock` or `/plan-stock`. 
 Use the script's output for price, technicals, and support/resistance. Supplement with web search for recent news or valuation context.
 
 **Step 2: Consult knowledge base**
+- Read `knowledge/strategies/when-to-buy-and-hold.md` — apply the ideal setup checklist, Conviction × Valuation decision matrix, and lump-sum vs DCA routing
 - Read `knowledge/frameworks/valuation.md` — use the Forward P/E by Sector table to assess if current valuation is cheap, fair, or expensive. Apply the RSI + Fwd P/E quick decision rule.
 - Read `knowledge/signals/rsi-guide.md` — don't buy solely because RSI < 30 — check WHY it's oversold
 - Read `knowledge/signals/ma-guide.md` — check SMA alignment for trend confirmation. Buy at 50 SMA in normal uptrend, 200 SMA for weak/early recovery. Avoid if price below all SMAs (bearish stack).
