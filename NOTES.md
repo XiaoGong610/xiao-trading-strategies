@@ -116,10 +116,10 @@ Prevent overconcentration and size positions properly. Critical before scaling u
 - [ ] **Position sizing calculator** — Kelly criterion or fixed-risk model. Input: conviction level, volatility, portfolio size → output: how many shares/contracts
 - [ ] Add a portfolio risk section to `/trade-portfolio` dashboard showing sector concentration, correlation heatmap, and allocation vs. limits
 
-### 4. Knowledge Base 🔄 IN PROGRESS
+### 4. Knowledge Base ✅ DONE (2026-06-14)
 Build a knowledge layer for smarter decision-making. Start with knowledge files, add scoring scripts later.
 
-**Phase 1 — Knowledge files (7 done, 3 remaining):**
+**Phase 1 — Knowledge files (10/10 done):**
 - [x] `knowledge/signals/rsi-guide.md`
 - [x] `knowledge/signals/iv-rank-guide.md`
 - [x] `knowledge/frameworks/capital-flow.md`
@@ -127,9 +127,9 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 - [x] `knowledge/frameworks/crypto-cycles.md` — 4-year halving cycle + on-chain indicators (added 2026-06-04)
 - [x] `knowledge/frameworks/sector-momentum.md` — Mansfield RS + Weinstein Stage + ROC (added 2026-06-06)
 - [x] `knowledge/frameworks/macro-regimes.md` — now embedded in `/research-scan-market` regime classification
-- [ ] `knowledge/sectors/semiconductors.md` — cycle dynamics, HBM/NAND drivers, key metrics
-- [ ] `knowledge/strategies/when-to-csp.md` — IV rank thresholds, delta/DTE rules, earnings avoidance
-- [ ] `knowledge/strategies/when-to-leaps.md` — IV environment, delta selection, vega risk
+- [x] `knowledge/sectors/semiconductors.md` — cycle dynamics, sub-sectors, HBM/NAND drivers, key metrics, AI overlay (added 2026-06-14)
+- [x] `knowledge/strategies/when-to-csp.md` — IV rank thresholds, delta/DTE rules, earnings avoidance, management rules (added 2026-06-14)
+- [x] `knowledge/strategies/when-to-leaps.md` — IV environment, delta selection, vega risk, capital efficiency (added 2026-06-14)
 
 **Phase 2 — Scoring scripts:**
 - [x] `scripts/sector-momentum.py` — Mansfield RS + Weinstein Stage + ROC for all 11 GICS sectors
@@ -167,12 +167,12 @@ Set up Claude Code cloud triggers to run jobs on a recurring schedule.
 ### 8. Visual Dashboard & Charts 🔄 IN PROGRESS
 Interactive visualizations to help interpret signals at a glance. Two phases:
 
-**Phase 1 — Plotly chart scripts (3 done, 3 remaining):**
+**Phase 1 — Plotly chart scripts (5 done, 1 remaining):**
 - [x] `scripts/sector-heatmap.py` — sector performance treemap, market-cap weighted, period toggles, reading guide
 - [x] `scripts/sector-momentum.py` — terminal dashboard with MRS, Weinstein Stage, ROC, momentum classification
 - [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard (MVRV, NUPL, composite score)
-- [ ] `scripts/chart-watchlist.py` — RSI vs fwd P/E scatter plot for all watching stocks. Oversold + cheap stocks stand out in bottom-left quadrant.
-- [ ] `scripts/chart-earnings.py` — earnings calendar timeline with countdown bars
+- [x] `scripts/chart-watchlist.py` — RSI vs fwd P/E scatter plot, sector-colored, gap-to-target sizing, quadrant labels (added 2026-06-14)
+- [x] `scripts/chart-earnings.py` — earnings calendar timeline with urgency color-coding (red/orange/yellow/green), terminal summary (added 2026-06-14)
 - [ ] `scripts/chart-performance.py` — portfolio P&L over time (once we have trade history)
 
 **Phase 2 — Streamlit web app (full interactive dashboard):**

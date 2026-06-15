@@ -271,11 +271,28 @@ Fetches Bitcoin on-chain cycle indicators from BGeometrics free API (MVRV, NUPL,
 
 Free tier: 10 requests/hour, no API key needed. For higher limits, register at bitcoin-data.com and set `BGEOMETRICS_TOKEN` env var.
 
+### `scripts/chart-watchlist.py`
+Interactive RSI vs Forward P/E scatter plot for all watching stocks. Bottom-left quadrant = oversold + cheap (best opportunities). Dot size inversely proportional to gap-to-target.
+
+```bash
+.venv/bin/python3 scripts/chart-watchlist.py              # generate chart + open browser
+.venv/bin/python3 scripts/chart-watchlist.py --no-open     # don't open browser
+```
+
+### `scripts/chart-earnings.py`
+Earnings calendar timeline for watchlist stocks. Color-coded countdown bars (red=imminent, orange=soon, yellow=upcoming, green=safe). Also prints terminal summary.
+
+```bash
+.venv/bin/python3 scripts/chart-earnings.py              # generate chart + open browser
+.venv/bin/python3 scripts/chart-earnings.py --no-open     # don't open browser
+.venv/bin/python3 scripts/chart-earnings.py --all         # include non-watching stocks
+```
+
 ## Knowledge Base
 
 Reference docs in `knowledge/` for trading decision-making. Skills consult these for context and nuance.
 
 - `signals/` — RSI interpretation, IV rank strategy selection matrix
-- `frameworks/` — AI capital flow model, valuation benchmarks, crypto 4-year cycle
-- `sectors/` — sector-specific metrics and cycle dynamics (to be built)
-- `strategies/` — when to use each strategy, rules, edge cases (to be built)
+- `frameworks/` — AI capital flow model, valuation benchmarks, crypto 4-year cycle, sector momentum
+- `sectors/` — sector-specific metrics and cycle dynamics (semiconductors)
+- `strategies/` — when to sell CSPs, when to buy LEAPs (rules, checklists, decision matrices)

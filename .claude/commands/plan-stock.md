@@ -50,17 +50,24 @@ If the regime gates you out, explain why and suggest what trigger to watch for (
 
 ## Phase 1: Research
 
-**Check for existing research:**
-- Read `research/stocks/$TICKER.md` — if a recent `/research-stock` entry exists (<7 days old), summarize key findings and move to Phase 2.
-- Pull the **Conviction Score** from the research file. If score < 5, flag: "Low conviction — consider whether this stock warrants a full plan."
+**Check for existing research FIRST — do NOT re-run research if fresh data exists:**
 
-**If no existing research, or research is stale (>7 days old):** Run `/research-stock $TICKER` first. This will:
-- Run `technicals.py` for quantitative data
-- Web search for qualitative info (business model, earnings, sentiment)
-- Save full output to `research/stocks/$TICKER.md`
-- Include a Strategy Fit recommendation and Conviction Score
+1. Read `research/stocks/$TICKER.md`
+2. Find the most recent entry header (format: `# TICKER — Research | YYYY-MM-DD` or `# TICKER — Deep Dive | YYYY-MM-DD`)
+3. Parse the date and check freshness:
 
-Wait for the research to complete before proceeding.
+   - **Fresh (≤7 days old):** ✅ SKIP `/research-stock`. Extract these from the existing entry:
+     - Conviction Score
+     - Thesis summary
+     - Key catalysts and risks
+     - Strategy Fit recommendation
+     - Then proceed directly to Phase 2.
+
+   - **Stale (>7 days old) or missing:** Run `/research-stock $TICKER` to get fresh data.
+
+4. Pull the **Conviction Score**. If score < 5, flag: "Low conviction — consider whether this stock warrants a full plan."
+
+**Why this matters:** `/research-stock` and `/plan-stock` serve different purposes. Research answers "should I own this?" (thesis conviction, strategy-agnostic). Plan answers "how should I enter?" (strategy-specific, price/IV-dependent). If conviction is already established, don't waste tokens re-establishing it — go straight to strategy execution.
 
 **Sector Context** (from Phase 0b):
 - Theme lifecycle stage: [from sector scan]
