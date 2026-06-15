@@ -41,12 +41,28 @@ Not all P/E ratios are created equal. A 30x P/E means different things in differ
 | Semiconductors (mature) | < 15x | 15-25x | > 35x | TXN, QCOM, INTC type |
 | Semiconductors (growth) | < 25x | 25-50x | > 60x | AMD, AVGO, MRVL — growth justifies premium |
 | Semiconductors (hyper-growth) | < 40x | 40-80x | > 100x | CRDO, ALAB — 100%+ growth, priced for perfection |
+| Semiconductors (foundry/equipment) | < 18x | 18-28x | > 35x | TSM, ASML, LRCX — industry median ~36x (May 2026) |
 | Software (mature SaaS) | < 20x | 20-35x | > 45x | CRM, NOW, ADBE |
 | Software (high-growth) | < 35x | 35-60x | > 80x | DDOG, CRWD, PLTR |
 | Healthcare (large pharma) | < 12x | 12-18x | > 25x | LLY is an exception due to GLP-1 growth |
 | Healthcare (biotech) | < 15x | 15-25x | > 35x | Often negative earnings — use P/S instead |
 | Industrials | < 18x | 18-30x | > 40x | GEV, ETN — AI infra premium justified? |
 | Consumer (FAANG) | < 18x | 18-30x | > 40x | META, GOOG, AMZN |
+
+### Semi Valuation Snapshot (May 2026)
+
+Industry median Fwd PE: **36x**. Smart money focuses on "is Forward PE expensive? Has the story been delivered?"
+
+| Zone | Names | Fwd PE | Signal |
+|------|-------|--------|--------|
+| **Cheap** (below median) | MU (7.55x), QCOM (~19x) | <25x | Below industry median — repair potential. MU is cheapest semi with HBM catalyst. |
+| **Fair** (near median) | TSM (~22x), NVDA (25x), AVGO (~28x) | 20-30x | Strong fundamentals, valuations relatively fair. |
+| **Expensive** (above median) | AMD (~32x), MRVL (~38x) | 30-45x | Growth expectations high, valuation already reflects them. |
+| **Overvalued** (risk) | MTK (44x), ARM (~62x), INTC (~125x) | >45x | Far above median. Bubble risk — need exceptional growth to justify. |
+
+估值是门艺术，便宜有便宜的理由，贵有贵的逻辑。(Valuation is an art — cheap is cheap for a reason, expensive has its own logic.)
+
+Source: shawninvestment, Yahoo Finance / GuruFocus
 
 ## When Cheap P/E is NOT a Buy Signal
 

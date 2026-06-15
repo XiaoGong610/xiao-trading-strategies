@@ -20,7 +20,7 @@ This is a strategy-agnostic fundamentals and sentiment analysis. Focus on whethe
 - Read `knowledge/signals/macd-guide.md` — check for divergences to strengthen Technical Outlook scenarios
 - Read `knowledge/frameworks/valuation.md` for sector-appropriate P/E benchmarks
 - If the stock is in semiconductors, read `knowledge/sectors/semiconductors.md` for cycle signals and key metrics
-- If the stock is AI supply chain related, read `knowledge/frameworks/capital-flow.md` for bottleneck positioning
+- If the stock is AI supply chain related, read `knowledge/frameworks/ai-capital-flow.md` for bottleneck positioning
 
 Combine all sources to cover the following sections:
 

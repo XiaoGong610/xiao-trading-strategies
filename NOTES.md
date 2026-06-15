@@ -125,7 +125,7 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 **Phase 1 — Knowledge files (10/10 done):**
 - [x] `knowledge/signals/rsi-guide.md`
 - [x] `knowledge/signals/iv-rank-guide.md`
-- [x] `knowledge/frameworks/capital-flow.md`
+- [x] `knowledge/frameworks/ai-capital-flow.md`
 - [x] `knowledge/frameworks/valuation.md` — includes CAPE/Shiller P/E (added 2026-05-26)
 - [x] `knowledge/frameworks/crypto-cycles.md` — 4-year halving cycle + on-chain indicators (added 2026-06-04)
 - [x] `knowledge/frameworks/sector-momentum.md` — Mansfield RS + Weinstein Stage + ROC (added 2026-06-06)

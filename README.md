@@ -86,7 +86,7 @@ Reference docs in `knowledge/` that skills consult for decision-making. All skil
 | `signals/rsi-guide.md` | RSI interpretation — sector beta, trend context, common mistakes |
 | `signals/iv-rank-guide.md` | IV Rank thresholds, IV Rank × RSI decision matrix for strategy selection |
 | `frameworks/valuation.md` | Forward P/E benchmarks by sector, CAPE/Shiller P/E, PEG ratio |
-| `frameworks/capital-flow.md` | AI supply chain bottleneck progression — where capital flows next |
+| `frameworks/ai-capital-flow.md` | AI supply chain bottleneck progression — where capital flows next |
 | `frameworks/sector-momentum.md` | Mansfield RS + Weinstein Stage + ROC — three-pillar momentum system |
 | `frameworks/crypto-cycles.md` | BTC 4-year halving cycle, on-chain indicators (MVRV, NUPL) |
 | `sectors/semiconductors.md` | Semi cycle dynamics, sub-sectors, key metrics, AI overlay |

@@ -23,7 +23,7 @@ Use the script's output for price, technicals, and support/resistance. Supplemen
 - Read `knowledge/signals/volume-guide.md` — confirm entry with volume (low volume pullback to support = healthy, high volume breakdown = distribution)
 - Run `.venv/bin/python3 scripts/sector-momentum.py --json` and consult `knowledge/frameworks/sector-momentum.md` — sector momentum determines entry approach
 - If IV Rank > 50 (from technicals.py --options output), note that initiating via CSP may be more capital-efficient — see `knowledge/signals/iv-rank-guide.md` decision matrix
-- For AI supply chain stocks, read `knowledge/frameworks/capital-flow.md` for bottleneck positioning context
+- For AI supply chain stocks, read `knowledge/frameworks/ai-capital-flow.md` for bottleneck positioning context
 
 ## Entry Analysis
 

@@ -16,7 +16,7 @@ This provides Mansfield Relative Strength, Weinstein Stage, ROC, and RSI for all
 
 **Check for sector-specific knowledge:** If a knowledge file exists for this sector (e.g., `knowledge/sectors/semiconductors.md`), read it first for sector-specific metrics, cycle dynamics, sub-sector hierarchy, and common mistakes. This provides informed context before web search.
 
-**For AI-related sectors** (semiconductors, networking, cloud, power/cooling): consult `knowledge/frameworks/capital-flow.md` to identify which supply chain track is at the inflection point and which names benefit.
+**For AI-related sectors** (semiconductors, networking, cloud, power/cooling): consult `knowledge/frameworks/ai-capital-flow.md` to identify which supply chain track is at the inflection point and which names benefit.
 
 **Sector-specific scripts:** If the sector has a dedicated data script, run it as well:
 - **Crypto:** Run `.venv/bin/python3 scripts/crypto-cycle.py` for the on-chain cycle dashboard (MVRV, NUPL, cycle composite). Reference the output in the analysis.

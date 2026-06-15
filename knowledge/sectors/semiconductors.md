@@ -24,7 +24,7 @@ The typical semi cycle is **3-4 years trough-to-trough**. AI spending is creatin
 
 **Hierarchy of importance for current cycle (mid-2026):** GPU/HBM > Optical/CPO > Networking/Custom > Equipment > EDA (steady) > Analog recovery. Analog is last to inflect — still working through industrial destock.
 
-**Optical sub-layer bottleneck:** Within optical, capital is rotating from finished modules (COHR, LITE) → upstream substrates (AXTI, Soitec) and CPO components (AAOI, Sivers). Small-cap, low-awareness substrate plays are the bottleneck within the bottleneck. See `knowledge/frameworks/capital-flow.md` for the full optical sub-layer breakdown.
+**Optical sub-layer bottleneck:** Within optical, capital is rotating from finished modules (COHR, LITE) → upstream substrates (AXTI, Soitec) and CPO components (AAOI, Sivers). Small-cap, low-awareness substrate plays are the bottleneck within the bottleneck. See `knowledge/frameworks/ai-capital-flow.md` for the full optical sub-layer breakdown.
 
 ## Cycle Identification
 

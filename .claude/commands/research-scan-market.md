@@ -84,7 +84,7 @@ Identify:
 
 ## Hot Themes
 
-**For AI-related themes**, consult `knowledge/frameworks/capital-flow.md` to identify which track in the AI supply chain is at the inflection point (GPU → HBM → Networking → Power → ASIC). Position ahead of the bottleneck shift, not after it re-rates.
+**For AI-related themes**, consult `knowledge/frameworks/ai-capital-flow.md` to identify which track in the AI supply chain is at the inflection point (GPU → HBM → Networking → Power → ASIC). Position ahead of the bottleneck shift, not after it re-rates.
 
 **If crypto is a relevant theme**, run the on-chain cycle dashboard and consult the framework:
 ```bash
