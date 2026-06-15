@@ -57,9 +57,9 @@ research/
   comparisons/       # Head-to-head stock comparisons (gitignored)
 knowledge/           # Decision-making reference docs (committed)
   signals/           # RSI, IV rank interpretation guides
-  frameworks/        # Capital flow, valuation benchmarks
-  sectors/           # Sector-specific metrics (to be built)
-  strategies/        # Strategy rules and edge cases (to be built)
+  frameworks/        # Capital flow, valuation, sector momentum, crypto cycles
+  sectors/           # Sector-specific metrics (semiconductors)
+  strategies/        # Strategy rules — when to sell CSPs, when to buy LEAPs
 portfolio/           # Active positions (gitignored)
 trades/              # Closed trade log (gitignored)
 charts/              # Generated HTML charts (gitignored)
@@ -67,10 +67,31 @@ scripts/             # Python scripts (committed)
   technicals.py      # Market data fetcher (price, technicals, options)
   update-index.py    # Auto-generate 0-INDEX.md from frontmatter
   dashboard.py       # Trading dashboard with live prices, RSI, fwd P/E
+  sector-momentum.py # Mansfield RS + Weinstein Stage + ROC momentum
+  sector-heatmap.py  # Interactive Plotly sector performance treemap
+  crypto-cycle.py    # BTC on-chain cycle dashboard (MVRV, NUPL)
+  chart-watchlist.py # RSI vs fwd P/E scatter plot for watchlist
+  chart-earnings.py  # Earnings calendar timeline with urgency colors
 .claude/commands/    # Claude Code custom skills (committed)
 leaders.md           # ThetaGang.com top traders reference
 NOTES.md             # Project decisions, discussions, and TODOs
 ```
+
+## Knowledge Base
+
+Reference docs in `knowledge/` that skills consult for decision-making. All skills are wired to read the relevant knowledge files automatically.
+
+| File | Purpose |
+|------|---------|
+| `signals/rsi-guide.md` | RSI interpretation — sector beta, trend context, common mistakes |
+| `signals/iv-rank-guide.md` | IV Rank thresholds, IV Rank × RSI decision matrix for strategy selection |
+| `frameworks/valuation.md` | Forward P/E benchmarks by sector, CAPE/Shiller P/E, PEG ratio |
+| `frameworks/capital-flow.md` | AI supply chain bottleneck progression — where capital flows next |
+| `frameworks/sector-momentum.md` | Mansfield RS + Weinstein Stage + ROC — three-pillar momentum system |
+| `frameworks/crypto-cycles.md` | BTC 4-year halving cycle, on-chain indicators (MVRV, NUPL) |
+| `sectors/semiconductors.md` | Semi cycle dynamics, sub-sectors, key metrics, AI overlay |
+| `strategies/when-to-csp.md` | CSP setup checklist, IV×RSI matrix, management rules, position sizing |
+| `strategies/when-to-leaps.md` | LEAP delta/expiry selection, vega risk, IV<30 gate, capital efficiency |
 
 ## Setup
 

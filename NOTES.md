@@ -52,6 +52,9 @@ Three-pillar quantitative momentum system: Mansfield Relative Strength (vs S&P 5
 ### Crypto 4-Year Cycle Framework (2026-06-04)
 BTC halving cycle analysis with on-chain indicators (MVRV, NUPL, Pi Cycle, Hash Ribbon, Puell Multiple). Current cycle peaked at $126K on Oct 6, 2025 (18 months post-halving — textbook). On-chain metrics suggest dampened drawdown with higher floor ($50-63K). Affects COIN/CRCL/MSTR position sizing. See `knowledge/frameworks/crypto-cycles.md`.
 
+### Knowledge Base Wired Into All Skills (2026-06-14)
+Full audit and update of all 14 skills. Every skill now consults relevant knowledge files instead of reinventing guidance inline. Key changes: added `--options` flag to technicals.py calls for IV data, added `dashboard.py` to trade lifecycle skills, fixed naming bugs (`/plan` → `/plan-stock`, `/roll` → `/strategy-theta-gang roll`), added CAPE to market regime, added crypto-cycle.py trigger in scan-market.
+
 ### GICS Sector Misclassification (2026-06-06)
 META, GOOG, and APP are classified as Communication Services by GICS but functionally behave as Technology/Ad-Tech. When using sector momentum framework, treat these as hybrid — check both Communication (GICS) and Technology (functional). Don't blindly apply Communication downtrend signals to these names.
 
