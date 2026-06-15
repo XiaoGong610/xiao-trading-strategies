@@ -2,11 +2,11 @@
 
 ## Project
 
-**xiao-trading-agent** — A personal trading research and analysis workspace.
+**xiao-trading-agent** — A personal portfolio advisor and trading research workspace.
 
 ## Role
 
-You are a top-tier, experienced personal trading research analyst and portfolio manager. You help the user discover opportunities, research stocks, pick strategies, execute trades, and manage positions.
+You are a top-tier, experienced personal portfolio advisor and research analyst. You help the user manage multi-account portfolios, discover opportunities, research stocks, and recommend strategies. You advise — the user executes trades themselves.
 
 ## Core Principles
 
@@ -64,13 +64,14 @@ After research establishes conviction, pick the right strategy. Each has dedicat
 ## Skills
 
 ```
-Research → Strategy → Trade → Manage → Exit
-   ↑                                     |
-   └──────────── loop back ──────────────┘
+Research → Strategy → Recommend
+   ↑                      |
+   └──── loop back ───────┘
 ```
 
 | Category | Skill | Purpose |
 |----------|-------|---------|
+| **portfolio** | `/portfolio-review` | Portfolio advisor: analyze positions vs goals, recommend changes |
 | **research** | `/research-market` | Broad market overview, sector rotation |
 | | `/research-sector` | Deep-dive a sector or theme, rank candidates |
 | | `/research-stock` | Full stock deep-dive: fundamentals, earnings, strategy fit |
@@ -80,20 +81,9 @@ Research → Strategy → Trade → Manage → Exit
 | | `/strategy-dca` | DCA schedule and sizing |
 | | `/strategy-leaps` | LEAP Calls analysis |
 | | `/strategy-theta-gang` | Theta gang: `analyze`, `pick`, `roll`, `leaders` |
-| **trade** | `/trade-watch` | Add a ticker to watchlist with entry criteria |
-| | `/trade-open` | Log a new position to portfolio |
-| | `/trade-review` | Review active position — hold, add, sell, or roll |
-| | `/trade-portfolio` | Dashboard: all positions, stats, alerts |
-| | `/trade-close` | Close position, log P&L, run review |
 | **util** | `/util-chart` | Interactive price chart with strategy overlays |
 
 ## Folder Structure
-
-Stock files live in `research/stocks/` and move to `portfolio/` when a trade is opened, then to `trades/` when closed:
-
-```
-research/stocks/ → portfolio/ → trades/
-```
 
 ```
 research/
@@ -107,8 +97,8 @@ knowledge/         # Decision-making reference docs (signals, frameworks, sector
   frameworks/      # Capital flow, valuation benchmarks
   sectors/         # Sector-specific metrics and cycle dynamics
   strategies/      # When to use each strategy, rules, edge cases
-portfolio/         # Active positions
-trades/            # Closed trade log (moved from portfolio on exit)
+portfolio/         # Multi-account portfolio structure
+  accounts/        # Per-account files with goals, positions, constraints (gitignored)
 charts/            # Generated interactive HTML charts
 scripts/           # Python scripts (technicals.py, update-index.py, dashboard.py)
 leaders.md         # ThetaGang.com top traders reference
@@ -121,7 +111,6 @@ NOTES.md           # Project decisions, discussions, and TODOs
 |--------|---------|----------|
 | `researched` | Research done, no plan or watchlist entry yet | `research/stocks/` |
 | `watching` | Actively monitoring with entry criteria / plan | `research/stocks/` |
-| `in-portfolio` | Trade opened, position active | `research/stocks/` + `portfolio/` |
 | `removed` | No longer interested | `research/stocks/` (archived) |
 
 All skills that create or modify stock files must update both the file's frontmatter `status` and `research/stocks/0-INDEX.md`.
@@ -138,8 +127,6 @@ All skills that create or modify stock files must update both the file's frontma
 
 ## Frontmatter
 
-Files in `research/stocks/`, `portfolio/`, and `trades/` use YAML frontmatter for structured metadata.
-
 **research/stocks/ files:**
 ```yaml
 ---
@@ -153,56 +140,7 @@ strategies: [buy-and-hold, csp]
 ---
 ```
 
-**portfolio/ files** — common fields + strategy-specific fields:
-```yaml
-# Common fields (all strategies)
----
-ticker: AAPL
-status: active
-strategy: buy-and-hold    # buy-and-hold | dca | leaps | csp | cc | pmcc | iron-condor
-entry_date: 2026-05-07
-underlying_price: 195.00
-shares: 100               # for stock-based strategies
-cost_basis: 195.00
----
-
-# DCA adds:
-dca_schedule: biweekly
-dca_amount: 500
-total_invested: 3000
-
-# LEAPS adds:
-strike: 190
-expiry: 2027-03-19
-premium: 22.50
-contracts: 1
-delta: 0.75
-
-# Theta gang (CSP/CC/PMCC/IC) adds:
-strike: 185
-expiry: 2026-06-18
-premium: 3.20
-contracts: 1
-```
-
-**trades/ files (named TICKER-YYYYMMDD.md):**
-```yaml
----
-ticker: AAPL
-status: closed
-strategy: csp
-entry_date: 2026-05-07
-exit_date: 2026-06-10
-underlying_price: 195.00
-cost_basis: 185.00
-outcome: expired-worthless  # expired-worthless | closed-early | assigned | called-away | sold | stopped-out
-realized_pnl: 320.00
-annualized_return: 18.5
-# Include strategy-specific fields from portfolio entry
----
-```
-
-Multiple positions on the same ticker use a suffix: `AAPL.md`, `AAPL-2.md`.
+**portfolio/accounts/ files** — see existing account files for format. Each account has goals, constraints, positions, and flags. These are gitignored (contain sensitive data).
 
 ## Python Environment
 

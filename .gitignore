@@ -1,7 +1,6 @@
 # Analysis files — personal trading data, not for public repo
 research/
 portfolio/
-trades/
 
 # Python virtual environment
 .venv/

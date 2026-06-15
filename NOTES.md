@@ -94,30 +94,30 @@ knowledge/
 
 ## TODOs
 
-### 1. Capture Current Holdings & Trades ⬆️ HIGH
-Import existing portfolio positions and trade history so `/trade-portfolio` has real data. Without this, the agent can't factor in existing positions when recommending strategies.
+### 1. Portfolio Advisor Framework ✅ DONE (2026-06-14)
+Multi-account portfolio advisor with per-account goals, constraints, and position tracking.
 
-- [ ] Build `/trade-import` skill to bulk-load positions into `portfolio/` files
-- [ ] Support importing from brokerage exports (CSV) or manual entry
-- [ ] Populate frontmatter with strategy, entry date, cost basis, etc.
+- [x] Build `/portfolio-review` skill — reads account files, fetches live data, recommends changes
+- [x] Create per-account files in `portfolio/accounts/` (HOLD, BROKERAGELINK, ROTH IRA, THETAGANG)
+- [x] Gitignore account files (contain sensitive data)
+- [x] Remove trade lifecycle skills (`trade-open`, `trade-close`, `trade-review`, `trade-watch`, `trade-portfolio`) — agent advises, doesn't track transactions
 
-### 2. Refine & Test Trade Skills ⬆️ HIGH (depends on #1)
-The trade lifecycle skills (`trade-open`, `trade-close`, `trade-review`, `trade-portfolio`) have been built but never tested with real data.
+### 2. Smart Watchlist ⬆️ HIGH
+Enhance watchlist to bridge research → portfolio action. Know which stocks to add to which account, and when.
 
-- [ ] Test `/trade-open` — log a real position, verify frontmatter and portfolio file creation
-- [ ] Test `/trade-review` — review an active position, verify technicals integration
-- [ ] Test `/trade-close` — close a position, verify P&L calculation and move to `trades/`
-- [ ] Test `/trade-portfolio` — dashboard with active positions, trade history, and candidates summary
-- [ ] Verify index (`0-INDEX.md`) status transitions work end-to-end
-- [ ] Refine skills based on real usage — same way we improved research and plan skills
+- [ ] Add `target_accounts` field to research/stocks frontmatter (e.g., `target_accounts: [thetagang, roth-ira]`)
+- [ ] Add `entry_trigger` field (e.g., `"RSI < 35 or pullback to $380"`)
+- [ ] Enhance `dashboard.py` to show target account and entry trigger status per watching stock
+- [ ] Wire into `/portfolio-review` — cross-reference watchlist triggers with account goals (e.g., "AAPL hit entry trigger → add to ThetaGang via CC strategy")
+- [ ] Consider alert/notification when a watching stock hits its entry trigger
 
 ### 3. Risk & Portfolio Management ⬆️ HIGH
-Prevent overconcentration and size positions properly. Critical before scaling up positions.
+Prevent overconcentration and size positions properly.
 
-- [ ] **Correlation analysis** — measure how correlated watching/portfolio stocks are. Flag if 80% of positions move together (e.g., all AI semis drop on one NVDA miss)
+- [ ] **Correlation analysis** — measure how correlated portfolio stocks are across accounts
+- [ ] **Cross-account aggregation** — total exposure per ticker across all accounts (e.g., TSLA across HOLD + Roth + ThetaGang + BrokerageLink)
 - [ ] **Allocation framework** — define max % per stock, per sector, per theme. Enforce in `/plan-stock` recommendations
-- [ ] **Position sizing calculator** — Kelly criterion or fixed-risk model. Input: conviction level, volatility, portfolio size → output: how many shares/contracts
-- [ ] Add a portfolio risk section to `/trade-portfolio` dashboard showing sector concentration, correlation heatmap, and allocation vs. limits
+- [ ] **Position sizing calculator** — Kelly criterion or fixed-risk model
 
 ### 4. Knowledge Base ✅ DONE (2026-06-14)
 Build a knowledge layer for smarter decision-making. Start with knowledge files, add scoring scripts later.

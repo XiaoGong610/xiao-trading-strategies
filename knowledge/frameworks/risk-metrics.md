@@ -51,8 +51,8 @@ Don't just measure returns — measure **return per unit of risk**. A 20% return
 - Check Beta — adding a Beta 2.0 stock to a portfolio of Beta 0.8 stocks increases overall risk significantly
 - Check correlation with existing positions — if all your positions move together, diversification is an illusion
 
-### For Portfolio Review (`/trade-portfolio`)
-- Calculate portfolio-level Sharpe monthly (once we have enough trade history)
+### For Portfolio Review (`/portfolio-review`)
+- Calculate portfolio-level Sharpe monthly
 - Track Max Drawdown — if it exceeds 20%, review position sizing and correlation
 - Compare Alpha vs. SPY — if negative, consider shifting to index
 

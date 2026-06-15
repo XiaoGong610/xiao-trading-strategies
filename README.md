@@ -1,12 +1,17 @@
 # xiao-trading-agent
 
-A personal trading research and analysis workspace powered by [Claude Code](https://claude.ai/code).
+A personal portfolio advisor and trading research workspace powered by [Claude Code](https://claude.ai/code).
 
 ## What This Is
 
-A set of Claude Code custom skills for stock research and multi-strategy trading. The skills use `technicals.py` for quantitative data and web search for qualitative context. The repo is organized around a trading workflow: research, plan, execute, manage, exit, repeat.
+A set of Claude Code custom skills for multi-account portfolio management and stock research. The agent advises — you execute. Skills use `technicals.py` for quantitative data and web search for qualitative context.
 
 ## Skills
+
+### Portfolio
+| Command | Description |
+|---------|-------------|
+| `/portfolio-review` | Analyze positions across accounts against goals, recommend changes |
 
 ### Research
 | Command | Description |
@@ -32,15 +37,6 @@ A set of Claude Code custom skills for stock research and multi-strategy trading
 | `/strategy-theta-gang roll AAPL 170P 2026-05-16 CSP` | Analyze whether to roll a position |
 | `/strategy-theta-gang leaders AAPL` | Check what top thetagang.com traders are doing |
 
-### Trade Management
-| Command | Description |
-|---------|-------------|
-| `/trade-watch AAPL` | Add a stock to the watchlist with entry criteria |
-| `/trade-open AAPL CSP 185P 2026-06-18 3.20` | Log a new position to the portfolio |
-| `/trade-review AAPL` | Review an active position — hold, add, sell, or roll? |
-| `/trade-portfolio` | Dashboard — all positions, alerts, stats |
-| `/trade-close AAPL expired-worthless` | Close a position, calculate P&L, run trade review |
-
 ### Utility
 | Command | Description |
 |---------|-------------|
@@ -60,8 +56,8 @@ knowledge/           # Decision-making reference docs (committed)
   frameworks/        # Capital flow, valuation, sector momentum, crypto cycles, risk metrics
   sectors/           # Sector-specific metrics and cycle dynamics (semiconductors)
   strategies/        # Strategy rules — CSP, LEAPs, Buy & Hold, DCA
-portfolio/           # Active positions (gitignored)
-trades/              # Closed trade log (gitignored)
+portfolio/           # Multi-account portfolio structure
+  accounts/          # Per-account files with goals, positions, constraints (gitignored)
 charts/              # Generated HTML charts (gitignored)
 scripts/             # Python scripts (committed)
   technicals.py      # Market data fetcher (price, technicals, options)

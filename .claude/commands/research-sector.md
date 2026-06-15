@@ -127,7 +127,6 @@ For each ETF, note:
 ## Top Picks
 Highlight the top 2-3 candidates (highest scoring) and suggest next steps:
 - Run `/research-stock TICKER` for a deep-dive on fundamentals
-- Run `/trade-watch TICKER` to add to watchlist for monitoring
 - Run `/plan-stock TICKER` for full pre-trade analysis
 
 If theme lifecycle is **Exhausting**: recommend no new entries — suggest reviewing existing positions instead.
