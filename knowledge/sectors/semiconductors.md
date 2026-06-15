@@ -19,8 +19,12 @@ The typical semi cycle is **3-4 years trough-to-trough**. AI spending is creatin
 | **Foundry / Equipment** | ASML, LRCX, KLAC, AMAT, TSM | Wafer fab equipment (WFE) spending, utilization rates, order backlog |
 | **Analog / Mixed-Signal** | TXN, ADI, MCHP, ON | Auto/industrial end-markets, inventory at distributors, pricing power |
 | **Networking / Custom ASIC** | AVGO, MRVL, ALAB, CRDO | Custom silicon wins, optical interconnect upgrades, SerDes/retimer attach |
+| **Optical / CPO** | COHR, LITE, FN, CIEN, AAOI, AXTI, MXL | 800G→1.6T modules, silicon photonics, CPO, InP substrates, optical DSP |
+| **EDA / Design Tools** | SNPS, CDNS | "Toll booth" — every chip designed uses their software. Compounders. |
 
-**Hierarchy of importance for current cycle (mid-2026):** GPU/HBM > Networking/Custom > Equipment > Analog recovery. Analog is last to inflect — still working through industrial destock.
+**Hierarchy of importance for current cycle (mid-2026):** GPU/HBM > Optical/CPO > Networking/Custom > Equipment > EDA (steady) > Analog recovery. Analog is last to inflect — still working through industrial destock.
+
+**Optical sub-layer bottleneck:** Within optical, capital is rotating from finished modules (COHR, LITE) → upstream substrates (AXTI, Soitec) and CPO components (AAOI, Sivers). Small-cap, low-awareness substrate plays are the bottleneck within the bottleneck. See `knowledge/frameworks/capital-flow.md` for the full optical sub-layer breakdown.
 
 ## Cycle Identification
 
