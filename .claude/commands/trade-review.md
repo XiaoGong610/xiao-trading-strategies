@@ -10,10 +10,17 @@ Read the portfolio file at `portfolio/$TICKER.md` to understand the current posi
 
 **Step 1:** Run the data script to get current price and technicals:
 ```bash
-.venv/bin/python3 scripts/technicals.py $ARGUMENTS
+.venv/bin/python3 scripts/technicals.py $ARGUMENTS --options
 ```
 
 Use the script's output for current price, technicals, and support/resistance vs. entry data. Supplement with web search for news and qualitative updates.
+
+**Consult knowledge base:**
+- Read `portfolio/$ARGUMENTS.md` for position details AND `research/stocks/$ARGUMENTS.md` for the original thesis
+- Based on the position's strategy, read the relevant knowledge file:
+  - CSP/CC positions → `knowledge/strategies/when-to-csp.md` (management rules: close at 50%, roll triggers)
+  - LEAP positions → `knowledge/strategies/when-to-leaps.md` (roll before 90 DTE, cut on thesis break)
+- Run `.venv/bin/python3 scripts/sector-momentum.py --json` — check if sector conditions have changed since entry
 
 ## Position Status
 - Current stock price vs. entry price and strike
@@ -39,7 +46,7 @@ Use the script's output for current price, technicals, and support/resistance vs
 One of:
 - **Hold** — on track, let theta do its work
 - **Close early** — hit 50% profit target or risk/reward no longer favorable
-- **Roll** — position tested, still bullish, roll for credit (suggest running `/roll`)
+- **Roll** — position tested, still bullish, roll for credit (suggest running `/strategy-theta-gang roll $ARGUMENTS`)
 - **Add** — thesis strengthened, consider adding a second position
 - **Exit** — thesis broken or risk too high, close the position
 

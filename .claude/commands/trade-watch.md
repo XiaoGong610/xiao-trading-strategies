@@ -10,10 +10,12 @@ This is a lightweight skill to quickly add a stock to the watchlist for monitori
 
 **Step 1:** Run the data script for quick price, support, and 52-week data:
 ```bash
-.venv/bin/python3 scripts/technicals.py $ARGUMENTS
+.venv/bin/python3 scripts/technicals.py $ARGUMENTS --options
 ```
 
 Use the script's output for price, support levels, and technicals. Supplement with web search for earnings dates, news, and IV context.
+
+Read `knowledge/signals/iv-rank-guide.md` to interpret IV Rank thresholds for strategy selection.
 
 ## Quick Assessment
 - Current price, 52-week range, sector
@@ -28,7 +30,7 @@ Use the script's output for price, support levels, and technicals. Supplement wi
 - Any events to wait for before entering (earnings, ex-div, macro)?
 
 ## Next Steps
-- Suggest running `/plan TICKER` when entry conditions are approaching
+- Suggest running `/plan-stock TICKER` when entry conditions are approaching
 - Note any upcoming catalysts to watch
 
 Save the output to `research/stocks/$TICKER.md` (use uppercase ticker as filename).
@@ -52,4 +54,7 @@ If the file already exists:
 - If status is `researched`, update it to `watching`
 - Prepend the new analysis above all previous entries (after the YAML frontmatter block). Never remove historical entries.
 
-**Update index:** Run `.venv/bin/python3 scripts/update-index.py` to regenerate `0-INDEX.md`.
+**Update index & dashboard:**
+```bash
+.venv/bin/python3 scripts/update-index.py && .venv/bin/python3 scripts/dashboard.py
+```

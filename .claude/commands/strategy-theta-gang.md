@@ -26,6 +26,12 @@ This is a pure options mechanics analysis. Do NOT cover company fundamentals, gr
 
 Use the script's output for IV, price, support/resistance levels, and expiry data. Supplement with web search only for qualitative info the script can't provide.
 
+**Step 2: Consult knowledge base**
+- Read `knowledge/strategies/when-to-csp.md` — apply the ideal setup checklist and IV Rank × RSI decision matrix
+- Read `knowledge/signals/iv-rank-guide.md` — if IV Rank < 25, flag: "Premium too thin — consider LEAPs or shares instead"
+- Read `knowledge/signals/rsi-guide.md` — interpret RSI in sector context (high-beta sectors hit extremes routinely)
+- Run `.venv/bin/python3 scripts/sector-momentum.py --json` and consult `knowledge/frameworks/sector-momentum.md` — if sector is in Stage 4 downtrend, flag that support levels may not hold
+
 ## Options Environment
 - Current stock price and recent trend (from script's `price` and `technicals`)
 - IV rank and IV percentile — is premium rich right now? (from script's `options`)
@@ -133,6 +139,8 @@ Analyze rolling options for the given position. Arguments after `roll`: TICKER C
 ```
 
 Use the script's output for current price, support/resistance, and options chain data. Supplement with web search for any additional context needed.
+
+Consult management rules in knowledge/strategies/when-to-csp.md for roll decision criteria (close at 50% profit, roll when tested, cut if thesis breaks).
 
 ## Current Position Status
 - Current stock price vs. your strike

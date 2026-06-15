@@ -14,11 +14,17 @@ Assume the user already has conviction from `/research-stock` or `/plan-stock`. 
 
 **Step 1:** Run the data script:
 ```bash
-.venv/bin/python3 scripts/technicals.py $ARGUMENTS
+.venv/bin/python3 scripts/technicals.py $ARGUMENTS --options
 ```
 (Extract the ticker from the arguments.)
 
 Use the script's output for price, volatility, and support/resistance. Supplement with web search for upcoming catalysts.
+
+**Step 2: Consult knowledge base**
+- Read `knowledge/signals/rsi-guide.md` — RSI zones map to DCA pacing: RSI <30 = accelerate (double daily amount), RSI 30-50 = normal, RSI >70 = pause or halve
+- Read `knowledge/frameworks/valuation.md` — use the RSI + Fwd P/E combo for sizing. Oversold + cheap = accelerate DCA, overbought + expensive = pause. If CAPE >35, consider reducing total budget or extending duration.
+- Run `.venv/bin/python3 scripts/sector-momentum.py --json` and consult `knowledge/frameworks/sector-momentum.md` — map sector classification to DCA behavior: Accelerating = normal DCA, Pulling Back = accelerate, Downtrend = slow DCA only
+- Read `knowledge/signals/iv-rank-guide.md` — if IV Rank >50, note that CSP entry may be more capital-efficient. If IV Rank <25, LEAPs may offer better leverage.
 
 ## Stock Profile for DCA
 

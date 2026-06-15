@@ -8,12 +8,18 @@ This is a strategy-agnostic fundamentals and sentiment analysis. Focus on whethe
 
 **Step 1:** Run the data script to get current price, technicals, and fundamentals:
 ```bash
-.venv/bin/python3 scripts/technicals.py $ARGUMENTS
+.venv/bin/python3 scripts/technicals.py $ARGUMENTS --options
 ```
 
 **Step 2:** Use web search to gather qualitative information (news, earnings, analyst opinions, institutional activity).
 
-Combine both sources to cover the following sections:
+**Step 3: Consult knowledge base**
+- Read `knowledge/signals/rsi-guide.md` for RSI interpretation (sector beta differences, trend context, common mistakes)
+- Read `knowledge/frameworks/valuation.md` for sector-appropriate P/E benchmarks
+- If the stock is in semiconductors, read `knowledge/sectors/semiconductors.md` for cycle signals and key metrics
+- If the stock is AI supply chain related, read `knowledge/frameworks/capital-flow.md` for bottleneck positioning
+
+Combine all sources to cover the following sections:
 
 ---
 
@@ -98,6 +104,8 @@ Rate the stock on 6 dimensions (1-10 each). Be honest — most stocks score 4-7,
 | Institutional Support (smart money alignment) | /10 | |
 | **Overall Conviction** | **/10** | Weighted avg — Business & Growth count 2x |
 
+For Valuation scoring, use sector-appropriate Forward P/E benchmarks from knowledge/frameworks/valuation.md — don't rely on absolute P/E alone.
+
 **Conviction guide:** 8-10 = high conviction (worth a full position), 6-7 = moderate (DCA or smaller size), 4-5 = speculative (watch only), 1-3 = avoid.
 
 ## Summary
@@ -105,11 +113,15 @@ Rate the stock on 6 dimensions (1-10 each). Be honest — most stocks score 4-7,
 - Overall take: bullish, neutral, or bearish — with reasoning
 
 ## Strategy Fit
-Based on the stock's volatility, IV environment, growth profile, and price action, recommend which trading strategy fits best:
-- **Buy & Hold** — long-term compounder, just accumulate shares
-- **DCA** — conviction is there but timing is uncertain
-- **LEAP Calls** — bullish with leverage, defined risk
-- **Theta Gang** — rich premiums, range-bound or slight bullish bias
+
+Based on the research above, recommend which strategy fits best. Consult `knowledge/signals/iv-rank-guide.md` for the IV Rank × RSI decision matrix:
+- **IV Rank < 25 + RSI < 30** → LEAP Calls (see `knowledge/strategies/when-to-leaps.md`)
+- **IV Rank < 25 + RSI 30-70** → Buy & Hold or DCA
+- **IV Rank 50-75 + RSI < 50** → Theta Gang / CSP (see `knowledge/strategies/when-to-csp.md`)
+- **IV Rank > 75** → Sell premium aggressively (CSP/CC)
+
+Note: This is a directional recommendation. Run `technicals.py TICKER --options` for IV data, or note that strategy fit will be validated by `/plan-stock` or strategy-specific skills.
+
 Pick one (or a combination) and explain why it suits this stock right now.
 
 ---

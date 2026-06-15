@@ -16,7 +16,7 @@ Outcomes: expired-worthless, closed-early, assigned, called-away, rolled-and-clo
 
 ## Actions
 
-1. **Read the portfolio file** at `portfolio/TICKER.md` to get position details from frontmatter (strategy, strike, expiry, premium, contracts, entry_date, cost_basis).
+1. **Read the portfolio file** at `portfolio/TICKER.md` to get position details from frontmatter (strategy, strike, expiry, premium, contracts, entry_date, cost_basis). Read the relevant `knowledge/strategies/` file for the position's strategy type to compare actual results vs. ideal setup in the trade review.
 
 2. **Calculate P&L:**
    - **expired-worthless:** P&L = premium × contracts × 100
@@ -46,6 +46,9 @@ Outcomes: expired-worthless, closed-early, assigned, called-away, rolled-and-clo
 6. **Update stock file** (if `research/stocks/TICKER.md` exists):
    - If outcome is assigned/called-away and user may want to re-enter, set status back to `watching`
    - If the user is done with this ticker, set status to `removed`
-   - **Update index:** Run `.venv/bin/python3 scripts/update-index.py` to regenerate `0-INDEX.md`
+   - **Update index & dashboard:**
+     ```bash
+     .venv/bin/python3 scripts/update-index.py && .venv/bin/python3 scripts/dashboard.py
+     ```
 
 Start the trade review entry with: `---` followed by `# TICKER — Trade Review | YYYY-MM-DD`.

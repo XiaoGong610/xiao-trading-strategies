@@ -10,10 +10,17 @@ Assume the user already has conviction from `/research-stock` or `/plan-stock`. 
 
 **Step 1:** Run the data script:
 ```bash
-.venv/bin/python3 scripts/technicals.py $ARGUMENTS
+.venv/bin/python3 scripts/technicals.py $ARGUMENTS --options
 ```
 
 Use the script's output for price, technicals, and support/resistance. Supplement with web search for recent news or valuation context.
+
+**Step 2: Consult knowledge base**
+- Read `knowledge/frameworks/valuation.md` — use the Forward P/E by Sector table to assess if current valuation is cheap, fair, or expensive. Apply the RSI + Fwd P/E quick decision rule.
+- Read `knowledge/signals/rsi-guide.md` — don't buy solely because RSI < 30 — check WHY it's oversold
+- Run `.venv/bin/python3 scripts/sector-momentum.py --json` and consult `knowledge/frameworks/sector-momentum.md` — sector momentum determines entry approach
+- If IV Rank > 50 (from technicals.py --options output), note that initiating via CSP may be more capital-efficient — see `knowledge/signals/iv-rank-guide.md` decision matrix
+- For AI supply chain stocks, read `knowledge/frameworks/capital-flow.md` for bottleneck positioning context
 
 ## Entry Analysis
 

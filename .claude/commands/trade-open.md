@@ -53,7 +53,10 @@ cost_basis: (strike - premium for CSP, or underlying price for shares)
 
 3. **Update stock file** (if `research/stocks/TICKER.md` exists):
    - Update the frontmatter `status` field to `in-portfolio`
-   - **Update index:** Run `.venv/bin/python3 scripts/update-index.py` to regenerate `0-INDEX.md`
+   - **Update index & dashboard:**
+     ```bash
+     .venv/bin/python3 scripts/update-index.py && .venv/bin/python3 scripts/dashboard.py
+     ```
 
 4. If `portfolio/TICKER.md` already exists (second position on same ticker):
    - Create `portfolio/TICKER-2.md` instead (increment the suffix)

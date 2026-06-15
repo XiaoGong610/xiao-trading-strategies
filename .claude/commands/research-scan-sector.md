@@ -14,6 +14,10 @@ Use web search to analyze the current state of this sector.
 ```
 This provides Mansfield Relative Strength, Weinstein Stage, ROC, and RSI for all sectors. Use it to populate the Sector Momentum & Trend section below.
 
+**Check for sector-specific knowledge:** If a knowledge file exists for this sector (e.g., `knowledge/sectors/semiconductors.md`), read it first for sector-specific metrics, cycle dynamics, sub-sector hierarchy, and common mistakes. This provides informed context before web search.
+
+**For AI-related sectors** (semiconductors, networking, cloud, power/cooling): consult `knowledge/frameworks/capital-flow.md` to identify which supply chain track is at the inflection point and which names benefit.
+
 **Sector-specific scripts:** If the sector has a dedicated data script, run it as well:
 - **Crypto:** Run `.venv/bin/python3 scripts/crypto-cycle.py` for the on-chain cycle dashboard (MVRV, NUPL, cycle composite). Reference the output in the analysis.
 
@@ -90,17 +94,23 @@ Rank 5-10 stocks from this sector using weighted scoring. Score each dimension 1
 
 **Scoring guide:**
 - **Growth (25%):** Revenue/earnings growth rate vs. peers. >30% = 8-10, 15-30% = 5-7, <15% = 1-4
-- **Valuation (20%):** Fwd P/E or PEG relative to sector. Below sector avg = 7-10, in line = 4-6, premium = 1-3
+- **Valuation (20%):** Fwd P/E or PEG relative to sector. Use sector-appropriate benchmarks from `knowledge/frameworks/valuation.md`. Below sector avg = 7-10, in line = 4-6, premium = 1-3
 - **Moat (15%):** Competitive advantage durability. Wide moat = 8-10, narrow = 5-7, none = 1-4
 - **Catalyst (15%):** Upcoming positive event within 3 months. Strong catalyst = 8-10, moderate = 5-7, none = 1-4
 - **Technicals (15%):** Trend + proximity to entry. Uptrend at support = 8-10, extended = 4-6, downtrend = 1-3
-- **Options (10%):** Liquid options chain for strategy flexibility. Liquid = 8-10, moderate = 5-7, illiquid/none = 1-4
+- **Options (10%):** Liquid options chain + IV environment. Consult `knowledge/signals/iv-rank-guide.md` — IV Rank >50 = theta gang viable, <25 = LEAPs territory. Liquid + high IV = 8-10, liquid + low IV = 5-7, illiquid = 1-4
 
 **Weighted Score** = (Growth×0.25) + (Valuation×0.20) + (Moat×0.15) + (Catalyst×0.15) + (Technicals×0.15) + (Options×0.10)
 
 **Lifecycle adjustment:** If theme stage is Mature or Exhausting, subtract 1 from all candidate scores. Note this in the table.
 
 **Verdict:** Score ≥7 = Strong, 5-6.9 = Moderate, <5 = Watch Later
+
+**Validate top candidates:** For the top 3-5 scoring stocks, run `technicals.py` to get real data:
+```bash
+.venv/bin/python3 scripts/technicals.py TICKER1 && .venv/bin/python3 scripts/technicals.py TICKER2
+```
+Adjust scores based on actual technicals if they differ from web search estimates.
 
 ## Relevant ETFs
 

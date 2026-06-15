@@ -84,6 +84,15 @@ If the regime gates you out, explain why and suggest what trigger to watch for (
 
 ## Phase 2: Market Context & Timing
 
+Run the data script for current price, technicals, and options data:
+```bash
+.venv/bin/python3 scripts/technicals.py $TICKER --options
+```
+
+Read `knowledge/signals/rsi-guide.md` and `knowledge/signals/iv-rank-guide.md` to interpret RSI and IV data correctly.
+
+If the stock is in the semiconductor sector, read `knowledge/sectors/semiconductors.md` for cycle and sub-sector context.
+
 Use the script's `price`, `technicals`, `support`, `resistance`, and `options` data:
 - Current stock price, 5-day and 1-month trend
 - Technical levels: key support AND resistance
@@ -142,6 +151,8 @@ With sector momentum context AND strategy outputs in hand, pick the best fit:
 | Options liquidity | Illiquid or unavailable → stock-based strategies only |
 | Growth profile | Compounder → Buy & Hold/DCA. Range-bound → Theta Gang |
 | User's position | Already owns shares? → CC or add via DCA. No position → CSP or Buy & Hold |
+
+Consult `knowledge/strategies/when-to-csp.md` and `knowledge/strategies/when-to-leaps.md` to validate that the stock meets the ideal setup checklist for the recommended strategy.
 
 **Recommendation:** Pick the best strategy (or combination) with clear reasoning. The sector momentum should be the FIRST factor considered — it sets the tempo. Then stock-level factors refine the entry.
 

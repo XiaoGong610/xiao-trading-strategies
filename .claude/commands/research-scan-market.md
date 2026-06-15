@@ -28,6 +28,7 @@ Classify the current market environment. This frames everything below.
 | S&P 500 vs. 50/200 SMA | Above/below | Trend direction |
 | VIX level | Current | <15 complacent, 15-20 normal, 20-30 elevated, >30 fear |
 | Fear & Greed Index (CNN) | 0-100 | 0-25 extreme fear (contrarian buy), 25-45 fear, 45-55 neutral, 55-75 greed, 75-100 extreme greed (contrarian sell) |
+| CAPE (Shiller P/E) | Current | <20 cheap, 20-25 fair, 25-35 expensive, >35 extreme — see `knowledge/frameworks/valuation.md` |
 | Yield curve (2Y-10Y) | Spread | Inverted = recession risk |
 | Market breadth | % stocks above 200 SMA | >60% healthy, 40-60% mixed, <40% weak (200 SMA ≈ 1 trading year — the institutional standard for long-term trend; broad participation above it = healthy market, narrow = fragile rally) |
 
@@ -51,7 +52,6 @@ Classify the current market environment. This frames everything below.
 .venv/bin/python3 scripts/sector-momentum.py
 ```
 The heatmap (`charts/sector-heatmap.html`) shows visual performance. The momentum dashboard provides quantitative signals: Mansfield RS (vs S&P 500), Weinstein Stage (1-4), ROC, and momentum classification for each sector. Use both in the analysis below.
-This saves an interactive treemap to `charts/sector-heatmap.html` with period toggle buttons (1-Week through 1-Year). Reference it in the analysis below.
 
 **How to read the heatmap:**
 - Each block = one GICS sector (represented by its ETF, e.g., XLK = Technology)
@@ -80,9 +80,17 @@ Identify:
 ## Volatility & Options Landscape
 - VIX level and trend — is volatility elevated or depressed?
 - Any upcoming macro events that could move markets (FOMC, jobs report, CPI, earnings season)?
-- Which sectors have elevated IV right now? (opportunities for theta gang)
+- Which sectors have elevated IV right now? Consult `knowledge/signals/iv-rank-guide.md` for thresholds: IV Rank >50 = theta gang opportunities, IV Rank <25 = LEAPs territory
 
 ## Hot Themes
+
+**For AI-related themes**, consult `knowledge/frameworks/capital-flow.md` to identify which track in the AI supply chain is at the inflection point (GPU → HBM → Networking → Power → ASIC). Position ahead of the bottleneck shift, not after it re-rates.
+
+**If crypto is a relevant theme**, run the on-chain cycle dashboard and consult the framework:
+```bash
+.venv/bin/python3 scripts/crypto-cycle.py
+```
+Reference `knowledge/frameworks/crypto-cycles.md` for cycle positioning (MVRV, NUPL, composite score). Note where we are in the 4-year halving cycle and implications for crypto-adjacent stocks (COIN, MSTR, GLXY).
 
 For each theme, assess the lifecycle stage:
 
