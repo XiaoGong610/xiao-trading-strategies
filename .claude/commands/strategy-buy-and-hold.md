@@ -18,6 +18,8 @@ Use the script's output for price, technicals, and support/resistance. Supplemen
 **Step 2: Consult knowledge base**
 - Read `knowledge/frameworks/valuation.md` — use the Forward P/E by Sector table to assess if current valuation is cheap, fair, or expensive. Apply the RSI + Fwd P/E quick decision rule.
 - Read `knowledge/signals/rsi-guide.md` — don't buy solely because RSI < 30 — check WHY it's oversold
+- Read `knowledge/signals/ma-guide.md` — check SMA alignment for trend confirmation. Buy at 50 SMA in normal uptrend, 200 SMA for weak/early recovery. Avoid if price below all SMAs (bearish stack).
+- Read `knowledge/signals/volume-guide.md` — confirm entry with volume (low volume pullback to support = healthy, high volume breakdown = distribution)
 - Run `.venv/bin/python3 scripts/sector-momentum.py --json` and consult `knowledge/frameworks/sector-momentum.md` — sector momentum determines entry approach
 - If IV Rank > 50 (from technicals.py --options output), note that initiating via CSP may be more capital-efficient — see `knowledge/signals/iv-rank-guide.md` decision matrix
 - For AI supply chain stocks, read `knowledge/frameworks/capital-flow.md` for bottleneck positioning context

@@ -89,7 +89,7 @@ Run the data script for current price, technicals, and options data:
 .venv/bin/python3 scripts/technicals.py $TICKER --options
 ```
 
-Read `knowledge/signals/rsi-guide.md` and `knowledge/signals/iv-rank-guide.md` to interpret RSI and IV data correctly.
+Read `knowledge/signals/rsi-guide.md` and `knowledge/signals/iv-rank-guide.md` to interpret RSI and IV data correctly. Read `knowledge/signals/ma-guide.md` for SMA alignment and entry level selection. Check `knowledge/signals/volume-guide.md` for volume confirmation and `knowledge/signals/macd-guide.md` for divergences.
 
 If the stock is in the semiconductor sector, read `knowledge/sectors/semiconductors.md` for cycle and sub-sector context.
 

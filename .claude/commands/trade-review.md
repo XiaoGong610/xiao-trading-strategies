@@ -21,6 +21,8 @@ Use the script's output for current price, technicals, and support/resistance vs
   - CSP/CC positions → `knowledge/strategies/when-to-csp.md` (management rules: close at 50%, roll triggers)
   - LEAP positions → `knowledge/strategies/when-to-leaps.md` (roll before 90 DTE, cut on thesis break)
 - Run `.venv/bin/python3 scripts/sector-momentum.py --json` — check if sector conditions have changed since entry
+- Read `knowledge/signals/ma-guide.md` — has the stock broken below key SMAs since entry? SMA alignment change = trend change
+- Read `knowledge/signals/volume-guide.md` — check relative volume on recent moves (high volume decline = distribution, low volume = healthy pullback)
 
 ## Position Status
 - Current stock price vs. entry price and strike

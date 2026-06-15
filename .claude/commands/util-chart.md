@@ -57,6 +57,12 @@ Write and run a Python script that:
 
    **Panel 4 (20% height): Volume**
    - Volume bars colored green (up day) / red (down day)
+   - Add 20-day average volume line as a reference (see `knowledge/signals/volume-guide.md` — bars >2x average = institutional activity)
+
+**Interpretation references** (for adding annotations or reading guide):
+- SMA alignment and entry levels → `knowledge/signals/ma-guide.md`
+- Volume confirmation patterns → `knowledge/signals/volume-guide.md`
+- RSI thresholds by sector → `knowledge/signals/rsi-guide.md`
 
 3. **Chart formatting:**
    - Title: "TICKER — Chart | Period | Generated YYYY-MM-DD"

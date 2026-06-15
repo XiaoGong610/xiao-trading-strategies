@@ -15,6 +15,9 @@ This is a strategy-agnostic fundamentals and sentiment analysis. Focus on whethe
 
 **Step 3: Consult knowledge base**
 - Read `knowledge/signals/rsi-guide.md` for RSI interpretation (sector beta differences, trend context, common mistakes)
+- Read `knowledge/signals/ma-guide.md` — check SMA alignment (bullish stack vs tangled) and which SMA to use for entry levels
+- Read `knowledge/signals/volume-guide.md` — validate price moves with relative volume (>2x avg = institutional, <0.5x = ignore)
+- Read `knowledge/signals/macd-guide.md` — check for divergences to strengthen Technical Outlook scenarios
 - Read `knowledge/frameworks/valuation.md` for sector-appropriate P/E benchmarks
 - If the stock is in semiconductors, read `knowledge/sectors/semiconductors.md` for cycle signals and key metrics
 - If the stock is AI supply chain related, read `knowledge/frameworks/capital-flow.md` for bottleneck positioning
