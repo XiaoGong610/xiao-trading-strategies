@@ -158,18 +158,92 @@ Consult `knowledge/strategies/when-to-csp.md` and `knowledge/strategies/when-to-
 
 ---
 
-## Phase 5: Exit Plan
+## Phase 5: Execution Plan
 
-Every entry needs a predefined exit plan. Define these BEFORE entering the trade:
+Consult `knowledge/strategies/execution-framework.md` for the full decision framework. Every plan must specify concrete orders across all three phases: entry, protection, and exit.
 
-| Exit Type | Level | Action |
-|-----------|-------|--------|
-| **Profit target** | $X (+Y%) | Take profit / trail stop |
-| **Thesis invalidation** | $X (-Y%) | Hard stop — thesis is broken, exit immediately |
-| **Time stop** | Date | If thesis hasn't played out by this date, reassess |
-| **Catalyst failure** | Event | If expected catalyst doesn't materialize, exit |
+### 5a. Entry Orders
 
-**Invalidation price** is NOT a trailing stop — it's the price where your fundamental thesis breaks (e.g., breaks below key support that held for months, or loses a critical customer).
+Use the execution framework's decision matrix (sector momentum × price location) to select entry type, then use `technicals.py` output (support levels, SMA, ATR) to set specific prices.
+
+```
+Entry strategy: [Market buy / Limit buy / Scaled limits / DCA / CSP / Breakout buy]
+Orders:
+  - Order 1: [type] [size%] at $X — [rationale: SMA support, prior low, HVN, etc.]
+  - Order 2: [type] [size%] at $X — [rationale: Entry 1 minus 1 ATR]
+  - Order 3: [type] [size%] at $X — [rationale: Entry 2 minus 1 ATR]
+DCA: $X/day in [account] — [full/half pace based on sector momentum + RSI]
+Order duration: GTC / cancel after 30 days
+```
+
+**DCA pacing rules:**
+- Sector Accelerating + RSI 30-60 → full pace
+- Sector Accelerating + RSI >70 → half pace
+- Sector Downtrend + RSI >50 → half pace
+- Sector Downtrend + RSI <30 → full pace (contrarian)
+- Earnings <7 days → half pace
+- Stock >20% above SMA20 → half pace
+
+**Scaled order spacing:** Use ATR to space orders — prevents clustering. Default: Entry 1 at support, Entry 2 at support minus 1 ATR, Entry 3 at support minus 2 ATR. Sizing: 40% / 30% / 30%.
+
+### 5b. Protection
+
+Select based on position size relative to portfolio:
+
+| Position Size | Protection Type |
+|--------------|----------------|
+| >15% of portfolio | Trailing stop or collar — MANDATORY |
+| 5-15% | Trailing stop recommended |
+| <5% | Mental stop — monitor weekly |
+
+```
+Stop type: [Hard stop / Trailing stop % / Collar / Protective put / Mental stop]
+Stop level: $X (-Y% from entry)
+Rationale: [below SMA50, 1.5x ATR below entry, thesis invalidation level]
+Max loss: $X (Z% of portfolio)
+```
+
+**Stop placement methods (use the HIGHER of both):**
+- ATR method: 1.5x ATR below entry (standard) or 2.0x ATR (conservative)
+- SMA method: below SMA50 (uptrend) or below SMA200 (neutral)
+
+**When NOT to use stops:** During DCA accumulation phase, deep value contrarian plays, options (risk already defined), tax-locked positions (use protective puts instead).
+
+### 5c. Exit / Profit Taking
+
+```
+Target 1: $X (+Y%) — [sell Z%] — [rationale: analyst consensus, resistance level]
+Target 2: $X (+Y%) — [sell Z%] — [rationale: stretch target, valuation-based]
+Trailing stop: X% from high — [for remaining position after targets hit]
+Time stop: [date] — [reassess or close if no progress]
+Catalyst exit: [specific event that means immediate exit, regardless of price]
+```
+
+**Scaled exit template for large positions:**
+- 25% at Target 1 (analyst consensus or first resistance)
+- 25% at Target 2 (stretch target)
+- 25% via trailing stop (let it run)
+- 25% hold indefinitely (core compounder position)
+
+**Risk/reward check:** Target 1 reward / stop loss risk should be >= 2:1. If less than 2:1, the entry price is too high — wait for a better level or widen the target.
+
+### 5d. Execution Summary
+
+End every plan with a target allocation and concrete order list. Do NOT specify which account — the user decides where to place orders.
+
+```
+## Execution Summary
+
+Target allocation: Y% of total portfolio (based on conviction Z/10)
+Current allocation: X% — [underweight/on-target/overweight]
+
+Orders:
+1. DCA: $X/day [full/half pace] — [duration or "ongoing"]
+2. Limit buy: X shares at $X (GTC) — [support level rationale]
+3. Limit buy: X shares at $X (GTC) — [deeper support rationale]
+4. Stop: [type] at $X — [rationale]
+5. Profit target: Limit sell X shares at $X — [rationale]
+```
 
 ---
 
@@ -180,9 +254,11 @@ Every entry needs a predefined exit plan. Define these BEFORE entering the trade
 - [ ] Entry timing makes sense given technicals? (Phase 2)
 - [ ] Strategy skills have been run and outputs collected? (Phase 3)
 - [ ] Best strategy selected with clear reasoning? (Phase 4)
-- [ ] Exit plan defined with invalidation + profit target? (Phase 5)
+- [ ] Execution plan with entry + protection + exit defined? (Phase 5)
+- [ ] Risk/reward >= 2:1? (Phase 5d)
+- [ ] Max loss on this trade < 2% of total portfolio? (Phase 5)
 - [ ] No earnings/ex-div landmines in the trade window? (Phase 2)
-- [ ] Position sizing appropriate for portfolio?
+- [ ] Position sizing appropriate for conviction level? (Phase 5)
 
 **Final Verdict:** Go / No-Go / Wait — with a one-line summary, recommended strategy, and next action.
 

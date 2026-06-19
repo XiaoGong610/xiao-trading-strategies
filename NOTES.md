@@ -58,6 +58,15 @@ Full audit and update of all 14 skills. Every skill now consults relevant knowle
 ### GICS Sector Misclassification (2026-06-06)
 META, GOOG, and APP are classified as Communication Services by GICS but functionally behave as Technology/Ad-Tech. When using sector momentum framework, treat these as hybrid — check both Communication (GICS) and Technology (functional). Don't blindly apply Communication downtrend signals to these names.
 
+### Execution Framework (2026-06-18)
+Investment strategies (DCA, B&H, LEAPs, Theta Gang) answer "what approach." The execution framework answers "what orders to place." Three phases: Entry (market/limit/scaled/DCA/CSP/breakout), Protection (stop/trailing/collar/put), Exit (target/scaled sells/trailing/time stop). Key tools: ATR for stop placement and order spacing, SMA for support levels, conviction for target allocation (% of portfolio, not $ amounts). Built into `/plan-stock` Phase 5 and documented in `knowledge/strategies/execution-framework.md`.
+
+### Portfolio Review Workflow (2026-06-18)
+Redesigned `/portfolio-review` to start with user-shared brokerage screenshots → update account files → cross-account analysis → recommendations. Removed dependency on nonexistent PROFILE.md/POSITIONS.md. Account files are the source of truth, refreshed from screenshots. Reviews saved to `portfolio/REVIEW-YYYY-MM-DD.md` as historical log.
+
+### Pivot to Portfolio Advisor (2026-06-18)
+CLAUDE.md updated to reflect the system as a research + portfolio management workspace, not a trading agent. Key changes: "Trading Strategies" → "Investment Strategies," added Execution Framework section with conviction-based allocation targets, updated skill diagram to `Research → Strategy → Execute → Manage`, documented 5-account structure. The agent advises; the user executes.
+
 ---
 
 ## Discussions & Ideas
@@ -102,27 +111,27 @@ Multi-account portfolio advisor with per-account goals, constraints, and positio
 - [x] Gitignore account files (contain sensitive data)
 - [x] Remove trade lifecycle skills (`trade-open`, `trade-close`, `trade-review`, `trade-watch`, `trade-portfolio`) — agent advises, doesn't track transactions
 
-### 2. Smart Watchlist ⬆️ HIGH
-Enhance watchlist to bridge research → portfolio action. Know which stocks to add to which account, and when.
+### 2. Smart Watchlist ➡️ MEDIUM
+Enhance watchlist to bridge research → portfolio action.
 
-- [ ] Add `target_accounts` field to research/stocks frontmatter (e.g., `target_accounts: [thetagang, roth-ira]`)
-- [ ] Add `entry_trigger` field (e.g., `"RSI < 35 or pullback to $380"`)
-- [ ] Enhance `dashboard.py` to show target account and entry trigger status per watching stock
-- [ ] Wire into `/portfolio-review` — cross-reference watchlist triggers with account goals (e.g., "AAPL hit entry trigger → add to ThetaGang via CC strategy")
+- [ ] Add `entry_trigger` field to research/stocks frontmatter (e.g., `"RSI < 35 or pullback to $380"`)
+- [ ] Enhance `dashboard.py` to show entry trigger status per watching stock
 - [ ] Consider alert/notification when a watching stock hits its entry trigger
+- ~~target_accounts field~~ — decided account-agnostic is better (2026-06-18)
 
-### 3. Risk & Portfolio Management ⬆️ HIGH
+### 3. Risk & Portfolio Management 🔄 PARTIALLY DONE
 Prevent overconcentration and size positions properly.
 
-- [ ] **Correlation analysis** — measure how correlated portfolio stocks are across accounts
-- [ ] **Cross-account aggregation** — total exposure per ticker across all accounts (e.g., TSLA across HOLD + Roth + ThetaGang + BrokerageLink)
-- [ ] **Allocation framework** — define max % per stock, per sector, per theme. Enforce in `/plan-stock` recommendations
-- [ ] **Position sizing calculator** — Kelly criterion or fixed-risk model
+- [x] **Cross-account aggregation** — done in `/portfolio-review` (2026-06-18). Shows total exposure per ticker across all 5 accounts.
+- [x] **Allocation framework** — conviction-based targets (9-10 → 5-8%, 7-8 → 3-5%, etc.) in execution framework
+- [x] **Position sizing** — 2% risk rule in `knowledge/strategies/execution-framework.md`
+- [ ] **Correlation analysis** — measure how correlated portfolio stocks are
+- [ ] **Max allocation enforcement** — auto-flag in `/plan-stock` when a stock would exceed target %
 
 ### 4. Knowledge Base ✅ DONE (2026-06-14)
 Build a knowledge layer for smarter decision-making. Start with knowledge files, add scoring scripts later.
 
-**Phase 1 — Knowledge files (10/10 done):**
+**Phase 1 — Knowledge files (11/11 done):**
 - [x] `knowledge/signals/rsi-guide.md`
 - [x] `knowledge/signals/iv-rank-guide.md`
 - [x] `knowledge/frameworks/ai-capital-flow.md`
@@ -133,6 +142,7 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 - [x] `knowledge/sectors/semiconductors.md` — cycle dynamics, sub-sectors, HBM/NAND drivers, key metrics, AI overlay (added 2026-06-14)
 - [x] `knowledge/strategies/when-to-csp.md` — IV rank thresholds, delta/DTE rules, earnings avoidance, management rules (added 2026-06-14)
 - [x] `knowledge/strategies/when-to-leaps.md` — IV environment, delta selection, vega risk, capital efficiency (added 2026-06-14)
+- [x] `knowledge/strategies/execution-framework.md` — order types, stop placement, exits, position sizing, conviction-based allocation (added 2026-06-18)
 
 **Phase 2 — Scoring scripts:**
 - [x] `scripts/sector-momentum.py` — Mansfield RS + Weinstein Stage + ROC for all 11 GICS sectors
@@ -194,13 +204,10 @@ Daily RSI tells one story; weekly/monthly tell another. Combining timeframes giv
 - [ ] Add to knowledge base: `knowledge/signals/multi-timeframe.md`
 - [ ] Consider adding weekly/monthly SMA alignment (e.g., price above monthly SMA 10 = long-term uptrend intact)
 
-### 9. Leveraged ETF Strategy ⬇️ LOW
-Evaluate leveraged single-stock ETFs as alternative to options. Examples: TSLL (2x TSLA), CONL (2x COIN), NVDL (2x NVDA).
+### 9. Leveraged ETF Strategy ❌ DECIDED AGAINST (2026-06-18)
+~~Evaluate leveraged single-stock ETFs as alternative to options.~~
 
-- [ ] Research available leveraged ETFs for stocks on our watchlist
-- [ ] Add leveraged ETF consideration to `/plan-stock`
-- [ ] Document the tradeoffs: daily rebalancing decay, no options needed, volatility drag on long holds
-- [ ] Consider as a strategy of its own (`/strategy-leveraged-etf`?) or fold into existing strategies
+**Decision:** Leveraged ETFs (TSLL, CONL) are structurally bad for long-term holds due to daily-reset decay and path dependency. Portfolio review found $46K in TSLL across 3 accounts — recommended selling all. GoBig account learned the hard way: TSLL calls lost 73-96% even while TSLA was up. **Buy LEAPs on the underlying instead.** Not building a strategy skill for this.
 
 ### 10. Tax Optimization 📅 SEASONAL
 Maximize after-tax returns. Critical before year-end.

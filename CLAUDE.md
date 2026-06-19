@@ -16,6 +16,55 @@ You are a top-tier, experienced personal portfolio advisor and research analyst.
 - **Flag risks prominently** — upcoming earnings, binary events, low liquidity, thesis-breaking news
 - **Use real data** — run `technicals.py` for quantitative data, web search for qualitative context
 
+## Weekly Session Workflow
+
+Each week follows two phases. Not every step runs every week — skip what's fresh.
+
+### Phase 1: Research (account-agnostic)
+
+Start with: "Claude, what should I pay attention to?"
+
+```
+1. Watchlist triage  → .venv/bin/python3 scripts/watchlist.py
+                       Tier stocks: active/passive/remove. Identify refresh queue.
+2. Refresh stale     → /research-stock on the REFRESH QUEUE (stale active stocks only)
+                       Don't refresh passive or remove candidates weekly.
+3. Market overview   → /research-market (skip if <7 days old)
+                       Regime, sector rotation, key risks
+4. Sector scans      → /research-sector on hot/changed sectors (skip if <14 days old)
+5. Plans             → /plan-stock on top 2-3 actionable picks (with execution plan)
+6. Dashboard         → .venv/bin/python3 -m streamlit run scripts/app.py
+                       Visual dashboard with all fresh data
+```
+
+**Watchlist triage first** — this prevents wasting time researching 48 stocks. The script auto-identifies which stocks actually need attention (typically 10-15, not 48).
+
+**Output:** "Here are the stocks to act on, at these prices, target X% allocation."
+
+### Phase 2: Portfolio (account-specific)
+
+User shares brokerage screenshots.
+
+```
+1. Update accounts   → refresh portfolio/accounts/*.md from screenshots
+2. Portfolio review   → /portfolio-review
+                       Cross-account concentration, DCA review, options management
+3. Recommendations   → account-specific actions:
+                       "Sell TSLL in Roth, add MU DCA in BrokerageLink,
+                        sell 3 TSLA CCs in ThetaGang at $450 Jul"
+```
+
+**Output:** Specific actions per account, respecting each account's goals, constraints, and tax status.
+
+### What to Skip
+
+- **Dashboard + portfolio review:** never skip (core of every session)
+- **Market overview:** skip if <7 days old and no major macro event
+- **Sector scans:** skip if <14 days old and sector hasn't moved
+- **Full research funnel:** only when looking for new ideas or regime shifts (monthly)
+
+---
+
 ## Research
 
 Act as a top-tier equity research analyst. Be brief and to the point — lead with the business model and differentiation, then layer in sentiment and catalysts.
@@ -50,34 +99,53 @@ Jump in at any level — if you already know the stock, go straight to `/researc
 
 Both sectors and themes are valid arguments for `/research-sector`. Scan files go in `research/sectors/` using lowercase names (e.g., `healthcare.md`, `ai-infrastructure.md`, `defense.md`).
 
-## Trading Strategies
+## Investment Strategies
 
-After research establishes conviction, pick the right strategy. Each has dedicated skills (or placeholders).
+After research establishes conviction, pick the right strategy. Each has dedicated skills.
 
 | Strategy | Best When | Skills |
 |----------|-----------|--------|
 | **Buy & Hold** | High-conviction compounder, long time horizon, want full upside | `/strategy-buy-and-hold` |
-| **DCA** | Conviction but uncertain timing, want to average in | `/strategy-dca` |
+| **DCA** | Conviction but uncertain timing, want to average in (user prefers **daily** DCA) | `/strategy-dca` |
 | **LEAP Calls** | Bullish with leverage, defined risk, clear catalysts ahead | `/strategy-leaps` |
 | **Theta Gang** | Elevated IV, range-bound or at support, happy to own shares | `/strategy-theta-gang` |
+
+## Execution Framework
+
+Investment strategies answer **what approach** — the execution framework answers **what orders to place**. See `knowledge/strategies/execution-framework.md` for the full decision logic.
+
+Every `/plan-stock` must end with an **Execution Plan** specifying:
+1. **Entry** — order type (market/limit/scaled/DCA/CSP), prices based on support/SMA/ATR, DCA pacing
+2. **Protection** — stop type (hard/trailing/collar/put), placement via ATR + SMA methods
+3. **Exit** — profit targets (scaled sells), trailing stops, time stops, catalyst exits
+4. **Target allocation** — expressed as % of total portfolio, based on conviction (not dollar amounts, not account-specific)
+
+**Conviction-based allocation targets:**
+
+| Conviction | Target % of Total Portfolio |
+|-----------|---------------------------|
+| 9-10 | 5-8% |
+| 7-8 | 3-5% |
+| 5-6 | 1-3% |
+| <5 | 0-1% or don't enter |
 
 ## Skills
 
 ```
-Research → Strategy → Recommend
-   ↑                      |
-   └──── loop back ───────┘
+Research → Strategy → Execute → Manage
+   ↑                              |
+   └──────── loop back ───────────┘
 ```
 
 | Category | Skill | Purpose |
 |----------|-------|---------|
-| **portfolio** | `/portfolio-review` | Portfolio advisor: analyze positions vs goals, recommend changes |
-| **research** | `/research-market` | Broad market overview, sector rotation |
+| **portfolio** | `/portfolio-review` | Cross-account analysis: positions vs goals, concentration, DCA review |
+| **research** | `/research-market` | Broad market overview, sector rotation, regime classification |
 | | `/research-sector` | Deep-dive a sector or theme, rank candidates |
-| | `/research-stock` | Full stock deep-dive: fundamentals, earnings, strategy fit |
+| | `/research-stock` | Full stock deep-dive: fundamentals, earnings, conviction score |
 | | `/research-stock-compare` | Compare researched stocks head-to-head, pick the best |
-| **plan** | `/plan-stock` | Orchestrator: context → research → strategy → trade setup |
-| **strategy** | `/strategy-buy-and-hold` | Buy & Hold execution planning |
+| **plan** | `/plan-stock` | Orchestrator: context → research → strategy → execution plan |
+| **strategy** | `/strategy-buy-and-hold` | Buy & Hold entry planning |
 | | `/strategy-dca` | DCA schedule and sizing |
 | | `/strategy-leaps` | LEAP Calls analysis |
 | | `/strategy-theta-gang` | Theta gang: `analyze`, `pick`, `roll`, `leaders` |
@@ -97,13 +165,27 @@ knowledge/         # Decision-making reference docs (signals, frameworks, sector
   frameworks/      # Capital flow, valuation benchmarks
   sectors/         # Sector-specific metrics and cycle dynamics
   strategies/      # When to use each strategy, rules, edge cases
-portfolio/         # Multi-account portfolio structure
-  accounts/        # Per-account files with goals, positions, constraints (gitignored)
+portfolio/         # Multi-account portfolio management
+  accounts/        # Per-account files: goals, positions, constraints, flags (gitignored)
+  REVIEW-*.md      # Point-in-time portfolio reviews (historical log)
 charts/            # Generated interactive HTML charts
 scripts/           # Python scripts (technicals.py, update-index.py, dashboard.py)
 leaders.md         # ThetaGang.com top traders reference
 NOTES.md           # Project decisions, discussions, and TODOs
 ```
+
+### Portfolio Account Files
+
+Account files (`portfolio/accounts/*.md`) are the source of truth for current holdings. Updated from user-shared brokerage screenshots — not auto-generated.
+
+Each file contains:
+- **YAML frontmatter** — account name, type, total value, cash, goals, strategy, constraints (durable)
+- **Positions tables** — current holdings, cost basis, P&L (refreshed from screenshots)
+- **Options positions** — active CCs, CSPs, LEAPs with expiry and status
+- **Flags** — concentration warnings, underwater positions, urgent items
+- **Review cadence** — when/how to review this account (durable)
+
+The user manages 5 accounts: HOLD (covered calls), ThetaGang (premium selling), Roth IRA (aggressive/all strategies), BrokerageLink (401k DCA engine), GoBig (LEAPs).
 
 **Stock lifecycle status** — tracked via the `status` field in frontmatter and indexed in `research/stocks/0-INDEX.md`:
 
@@ -226,11 +308,34 @@ Earnings calendar timeline for watchlist stocks. Color-coded countdown bars (red
 .venv/bin/python3 scripts/chart-earnings.py --all         # include non-watching stocks
 ```
 
+### `scripts/watchlist.py`
+Watchlist manager — auto-tiers watching stocks into Active (refresh weekly), Passive (check monthly), and Remove candidates. Identifies the refresh queue for the weekly session.
+
+```bash
+.venv/bin/python3 scripts/watchlist.py              # terminal dashboard
+.venv/bin/python3 scripts/watchlist.py --json        # JSON output
+.venv/bin/python3 scripts/watchlist.py --update      # write tier to stock frontmatter
+```
+
+Classification logic:
+- **Active:** conviction ≥7 OR within 15% of entry target OR earnings <30 days
+- **Passive:** conviction 5-6, no near-term catalyst
+- **Remove:** no conviction + stale >30 days, or conviction <5, or >50% above target
+
+### `scripts/app.py`
+Interactive Streamlit dashboard combining all research data into one view.
+
+```bash
+.venv/bin/python3 -m streamlit run scripts/app.py
+```
+
+Panels: Market Regime, Sector Momentum, Top Picks, RSI vs FwdPE Scatter, Conviction Scores, Earnings Calendar, Near Entry Target, Research Freshness.
+
 ## Knowledge Base
 
-Reference docs in `knowledge/` for trading decision-making. Skills consult these for context and nuance.
+Reference docs in `knowledge/` for investment decision-making. Skills consult these for context and nuance.
 
-- `signals/` — RSI interpretation, IV rank strategy selection matrix
+- `signals/` — RSI, IV rank, MACD, MA, volume interpretation guides
 - `frameworks/` — AI capital flow model, valuation benchmarks, crypto 4-year cycle, sector momentum
 - `sectors/` — sector-specific metrics and cycle dynamics (semiconductors)
-- `strategies/` — when to sell CSPs, when to buy LEAPs (rules, checklists, decision matrices)
+- `strategies/` — when to sell CSPs, when to buy LEAPs, **execution framework** (order types, stops, exits, position sizing)
