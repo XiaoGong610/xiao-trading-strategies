@@ -1,6 +1,6 @@
 # Reference Repos — Learning Notes
 
-Two open-source Claude Code trading projects we can learn from. Cloned to `~/Workspace/Learning Resources/`.
+Open-source trading/investment skill projects we can learn from. Cloned to `~/Workspace/Learning Resources/`.
 
 ---
 
@@ -193,6 +193,202 @@ Two open-source Claude Code trading projects we can learn from. Cloned to `~/Wor
 
 ---
 
+## 3. serenity-skill (muxuuu)
+
+**Repo**: `~/Workspace/Learning Resources/serenity-skill/`
+**GitHub**: https://github.com/muxuuu/serenity-skill
+**Philosophy**: Supply-chain bottleneck hunting — start from a market narrative, walk through the real system, find the scarce layer, verify with hard evidence, rank what deserves attention
+**Scale**: 1 skill (SKILL.md), 8 reference docs, 3 asset templates, 2 scripts, 3 examples
+**APIs**: None (methodology-only — relies on host agent's web search, market data, and filing access)
+**Origin**: Distilled from public Serenity / @aleabitoreddit X posts and research patterns
+
+### Core Methodology
+
+```
+market story → system change → required parts → supply-chain layers
+→ scarce constraints → public companies → evidence → repricing path
+→ what could prove the idea wrong
+```
+
+### Reference Docs (8)
+
+| File | Purpose |
+|------|---------|
+| `deep-research-workflow.md` | 8-step workflow: scope → system change → value chain → scarce layers → company universe → evidence → rank → explain |
+| `evidence-ladder.md` | Source grading (strong/medium/weak), red flags, per-candidate evidence standard |
+| `market-source-playbook.md` | Per-market source paths: US (SEC, shelf/ATM risk), A-shares (tenders, env approvals), HK, Taiwan, Japan, Korea, Europe |
+| `serenity-dialogue-protocol.md` | Socratic stress-test mode — one question per turn, pushes thesis from story to proof |
+| `output-style-and-language.md` | Plain-language output rules, mandatory "what could go wrong" section, judgment guardrails |
+| `research-sources.md` | Curated source list: Agent Skills docs, Serenity public profile, case study companies (AXT, Sivers, Tower, Aehr) |
+| `risk-and-compliance.md` | Investment research boundaries — no guaranteed returns, no trade commands, no MNPI |
+| `public-profile-and-evaluation.md` | Public profile context and reliability notes |
+
+### Assets & Scripts
+
+| File | Purpose |
+|------|---------|
+| `assets/thesis-template.md` | Structured thesis memo: view, trend, system change, value-chain map, evidence table, "what market may be missing", financials, catalysts, risks |
+| `assets/bottleneck-scorecard.json` | JSON schema for the scorecard (8 factors + 8 penalties, 0-5 each) |
+| `assets/research-prompt-pack.md` | Pre-built prompts for theme scans, single-company challenges, comparisons, scorecard |
+| `scripts/serenity_scorecard.py` | Local scoring script — 0-100 weighted score from JSON input, markdown output |
+| `scripts/validate_skill.py` | Agent Skill structure validator |
+
+### Key Concepts
+
+| Concept | Description |
+|---------|-------------|
+| **Layer-first ranking** | Rank value-chain layers before companies. Prevents "popular ticker list" syndrome. |
+| **Scarce layer** | Company is interesting when customers cannot route around it — moat via constraint, not just quality |
+| **Evidence strength labeling** | Strong / Medium / Weak / Needs checking — forces clarity on what you know vs. believe |
+| **Red flag checklist** | 7 mechanical checks: single customer rumor, social-driven move, financing risk, vague customer, inventory divergence, margin contradiction, theme-washing |
+| **"What the market may be missing"** | Current category → possible new category → why investors are slow → what triggers re-pricing |
+| **US financing risk flags** | Shelf registration, ATM, convertible debt, SBC dilution, insider selling pattern |
+| **Explicitly downgrade one popular area** | Every sector scan must name one obvious/popular area and explain why it ranks lower |
+| **Bottleneck scorecard** | 8 weighted factors (demand, chokepoint, evidence, concentration, expansion, valuation, coupling, catalyst) minus penalties (dilution, governance, geopolitics, liquidity, hype, accounting, cyclicality, alt design risk) |
+
+### What We Integrated (2026-06-23)
+
+| Integration | Where | Description |
+|-------------|-------|-------------|
+| **Bottleneck scorecard** | `scripts/bottleneck-scorecard.py` | Adapted scoring script — 0-100 for supply-chain stocks. Runs conditionally in `/research-stock` for hardware/manufacturing sectors |
+| **Evidence ladder + red flags** | `knowledge/frameworks/evidence-ladder.md` | Source grading, 7 red flags, per-candidate evidence standard. Red flags run on ALL stocks in `/research-stock` |
+| **US financing risk flags** | `/research-stock` Red Flag Check + evidence-ladder.md | 5 dilution/financing checks (S-3, ATM, converts, SBC, insider selling). Noted in Risks, don't reduce conviction directly |
+| **Value-chain layer ranking** | `/research-sector` | For supply-chain sectors: rank constrained layers before companies. 8-layer checklist + "explicitly downgrade one popular area" |
+| **"What the market may be missing"** | `/research-stock` | Re-rating framework between Summary and Bottleneck Scorecard: current category → possible new category → why investors are slow → trigger |
+
+### What We Didn't Take (and why)
+
+| Item | Why Skipped |
+|------|-------------|
+| Thesis challenge / dialogue protocol | Interesting but not urgent — bear case section partially covers this. Could become a `/challenge` skill later |
+| Market source playbook (non-US) | We're US-focused. Taiwan monthly revenue and Japan low-coverage signals are interesting but low priority |
+| Research prompt pack | Pre-built prompts for their skill system — we have our own skill triggers |
+| Deep research workflow (8-step) | Already embedded in our value-chain layer ranking addition |
+| Full SKILL.md installation | Designed for generic Agent Skills clients — our skills are purpose-built Claude Code commands |
+
+---
+
+## 4. stock-skill / 美股大佬蒸馏 (destiny520537work)
+
+**Repo**: `~/Workspace/Learning Resources/stock-skill/`
+**Gitee**: https://gitee.com/destiny520537work/stock-skill
+**Philosophy**: Distills 3 public US stock traders into a unified decision framework: supply chain (Serenity) × macro (TraderS) × technical execution (恨铁)
+**Scale**: 1 SKILL.md + 4 trader files (serenity.md, tradersS.md, bei.md, combined.md)
+**APIs**: None (methodology-only, relies on host agent's tools)
+**Language**: Primarily Chinese with English concepts
+
+### The Three Traders
+
+| Trader | Handle | Focus | Core Question |
+|--------|--------|-------|---------------|
+| **Serenity** | @serenity (X) | Supply-chain bottleneck analysis | "Who in this chain is hardest to replace?" |
+| **TraderS 缺德道人** | @Trader_S18 (X) | Macro-first judgment | "Is macro tailwind or headwind?" |
+| **恨铁不成小猫猫** | 小红书 | Technical execution & discipline | "Is the volume-price-ATR confirming?" |
+
+### 3-Step Decision Flow
+
+```
+Step 1 (TraderS): Is macro tailwind? → Yes → Step 2
+Step 2 (Serenity): Is bottleneck logic valid? → Yes → Step 3
+Step 3 (恨铁): Volume/price/ATR confirmed? → Yes → Enter
+```
+
+### Key Concepts
+
+| Concept | Source | Description |
+|---------|--------|-------------|
+| **5-type market day classification** | 恨铁 | Trend / Range / Reversal / Munger / Event — classify before deciding how to enter |
+| **True/false breakout filter** | 恨铁 | Volume >1.5x + ATR >1x average + moderate IV = true breakout |
+| **3-phase entry** | 恨铁 | Probe (2-3/10) → Validate (add after confirmation) → Trend delivery (full size) |
+| **Event Day rules** | 恨铁 | Wait for first shock wave, no counter-trend, must have stop, max 1 retry after loss |
+| **Crypto as liquidity indicator** | TraderS | BTC direction + ETF flows + stablecoin market cap as second-layer macro verification |
+| **12-dimension fundamental checklist** | 恨铁 | Cash flow > NI, margins vs peers, management track record, pledge ratio, related-party transactions, channel inventory |
+| **Data provenance labeling** | Combined | Tag data as "user-provided" / "web search" / "⚠️ training memory — may be stale" |
+| **Expectation gap analysis** | TraderS | What's priced in vs. reality → where is the gap? |
+
+### What We Integrated (2026-06-23)
+
+| Integration | Where | Description |
+|-------------|-------|-------------|
+| **Crypto liquidity triangulation** | `/research-market` Liquidity Check | BTC direction + ETF flows + stablecoin cap + 10Y yield as second-layer macro verification |
+| **Market day classification** | `knowledge/signals/market-day-types.md` | 5-type system (Trend/Range/Reversal/Munger/Event) with Event Day discipline rules |
+| **True/false breakout filter** | `knowledge/signals/breakout-filter.md` | 3-way filter (Volume >1.5x + ATR >1x + IV <50) with signal grades A-D |
+| **Fundamental due diligence items** | `/research-stock` | Added: shareholder pledge ratio, core team turnover, related-party transactions, channel inventory truth |
+
+### What We Didn't Take (and why)
+
+| Item | Why Skipped |
+|------|-------------|
+| Serenity persona/supply-chain methodology | Already integrated from serenity-skill repo (more comprehensive) |
+| 3-phase entry (probe/validate/deliver) | Our DCA + scaled limits approach serves the same purpose with less complexity |
+| Debate mode between 3 personas | Fun UI feature but low analytical value for a personal advisor |
+| Data provenance labeling | Good discipline but hard to enforce in skill prompts without adding noise. May revisit. |
+| Forced output templates per persona | Our skills already have structured output templates |
+| TraderS's expectation gap analysis | Covered by the "What the Market May Be Missing" section (from serenity-skill) |
+
+---
+
+## 5. TradingAgents (TauricResearch)
+
+**Repo**: `~/Workspace/Learning Resources/TradingAgents-Framework/`
+**GitHub**: https://github.com/TauricResearch/TradingAgents (88K stars)
+**Philosophy**: Multi-agent LLM framework mirroring a real trading firm — analysts, researchers, trader, risk management, portfolio manager
+**Scale**: Full Python package with LangGraph orchestration, 4 analyst agents, bull/bear researchers, 3-way risk debate, trader, portfolio manager
+**APIs**: OpenAI/Claude/Gemini/Grok (LLM), Alpha Vantage, yfinance, FRED, Polymarket, StockTwits, Reddit
+**Architecture**: LangGraph state machine with checkpointing, memory reflection, and structured output
+
+### Agent Pipeline
+
+```
+4 Analysts (parallel) → Research Manager → Bull/Bear Debate
+→ Trader → Risk Debate (aggressive/conservative/neutral) → Portfolio Manager
+```
+
+### Key Data Sources
+
+| Source | API Key | What It Provides |
+|--------|---------|------------------|
+| **FRED** | Free (register) | Fed funds rate, Treasury yields, CPI, PCE, unemployment, M2, VIX — hard macro numbers |
+| **Polymarket** | None | Market-implied probabilities for binary events (rate cuts, recession, tariffs, elections) |
+| **StockTwits** | None | Retail sentiment with bull/bear labels per message — leading indicator |
+| **Reddit** | None | r/wallstreetbets, r/stocks, r/investing — post volume and themes |
+| **Alpha Vantage** | Free tier | Fundamentals, income statement, balance sheet, cash flow |
+
+### Key Architectural Patterns
+
+| Pattern | Description |
+|---------|-------------|
+| **Pre-fetch sentinel** | Social data fetched OUTSIDE the LLM call, injected as structured blocks — prevents hallucination when data is sparse |
+| **Confidence degradation** | Sentiment output includes `confidence: low/medium/high` based on data quality — honest about signal strength |
+| **Verified snapshot** | Technical analyst must call ground-truth endpoint; prompt says "if sources conflict, flag it, don't reconcile" |
+| **Memory reflection loop** | After decisions, outcomes tracked. Next run for same ticker injects "lessons from prior decisions" to Portfolio Manager |
+| **Cross-source divergence** | "If news is bearish but StockTwits is bullish, that mismatch is itself a signal" |
+| **Two-LLM split** | Heavy model for analysis, light model for routing — token cost optimization |
+| **Data provenance** | Every data point tagged with source — prevents stale training data from being cited as current |
+
+### What We Integrated (2026-06-23)
+
+| Integration | Where | Description |
+|-------------|-------|-------------|
+| **Retail sentiment script** | `scripts/sentiment.py` → `/research-stock` | StockTwits bull/bear ratio + Reddit posts. Flags divergence (>65% bullish = hype, >65% bearish = contrarian) |
+| **Macro data script** | `scripts/macro.py` → `/research-market` | FRED dashboard (8 key indicators) + Polymarket predictions (rate cuts, recession, inflation, tariffs) |
+| **Memory reflection loop** | `/plan-stock` Phase 0c | Reads prior plans and portfolio reviews for same ticker, extracts lessons to avoid repeating mistakes |
+| **Anti-hallucination prompt** | `/plan-stock` Phase 2 | "Treat technicals.py as source of truth. If sources conflict, flag it, don't reconcile." |
+| **Data provenance rule** | `/research-market` | Tag numbers as [FRED], [Polymarket], [web search]. Flag training memory with ⚠️ |
+
+### What We Didn't Take (and why)
+
+| Item | Why Skipped |
+|------|-------------|
+| LangGraph orchestration | We use Claude Code skills, not a Python pipeline |
+| Multi-agent debate (bull/bear + risk) | Our bull/bear case sections cover this; full debate is token-heavy for marginal insight |
+| Two-LLM architecture | We use one model; relevant if token cost becomes a concern |
+| Structured output schemas | Our skills output markdown to files, not typed JSON |
+| Alpha Vantage integration | We use yfinance (free, no key); AV has better fundamentals but requires API key |
+| Five-tier rating (Buy/Overweight/Hold/Underweight/Sell) | Our conviction + allocation table already maps to this implicitly |
+
+---
+
 ## Key Patterns Worth Borrowing
 
 ### High Priority
@@ -224,17 +420,15 @@ Two open-source Claude Code trading projects we can learn from. Cloned to `~/Wor
 
 ---
 
-## Comparison: All Three Projects
+## Comparison: All Five Projects
 
-| Aspect | claude-trading-skills | TradingAgent | xiao-trading-agent |
-|--------|----------------------|--------------|---------------------|
-| **Focus** | Broad toolkit | Goal-driven swing | Research-first |
-| **Skills** | 57 | 14 | 16 (and growing) |
-| **Data** | FMP + FINVIZ + Alpaca | yfinance only | yfinance only |
-| **State** | YAML + JSON schemas | YAML | Markdown + YAML frontmatter |
-| **Options** | Black-Scholes + Greeks | Conservative CC/CSP | Theta gang + LEAPS |
-| **Market gating** | Breadth + regime + bubble | Distribution days | Not yet |
-| **Screening** | VCP, CANSLIM, PEAD, dividend | Swing scoring (0-10) | Manual research funnel |
-| **Postmortem** | MAE/MFE + lessons | Swing cycle analysis | Not yet |
-| **Charts** | User screenshots | User screenshots | Generated Plotly HTML |
-| **Unique strength** | Depth + edge pipeline | Simplicity + focus | Research funnel + strategy fit |
+| Aspect | claude-trading-skills | TradingAgent | serenity-skill | stock-skill | TradingAgents (Tauric) | xiao-trading-agent |
+|--------|----------------------|--------------|----------------|-------------|----------------------|---------------------|
+| **Focus** | Broad toolkit | Goal-driven swing | Bottleneck hunting | 3-trader distillation | Multi-agent firm | Research-first advisor |
+| **Scale** | 57 skills | 14 skills | 1 skill (deep) | 4 trader files | Full Python pipeline | 16 skills (growing) |
+| **Data** | FMP + FINVIZ + Alpaca | yfinance | Host agent's tools | Host agent's tools | yfinance + FRED + Polymarket + StockTwits | yfinance + FRED + Polymarket + StockTwits |
+| **State** | YAML + JSON | YAML | Stateless | Stateless | LangGraph + SQLite | Markdown + YAML |
+| **Options** | Black-Scholes | CC/CSP | N/A | N/A | N/A | Theta gang + LEAPS |
+| **Gating** | Breadth + regime | Distribution days | N/A | Macro → supply chain → technical | 3-way risk debate | Sector momentum + regime |
+| **Evidence** | Data quality checker | N/A | Ladder + red flags | N/A | Memory reflection | Integrated from all |
+| **Unique** | Edge pipeline | Simplicity | Bottleneck scoring | 3-persona debate | Data source breadth | Research funnel + execution |

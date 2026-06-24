@@ -67,6 +67,33 @@ Redesigned `/portfolio-review` to start with user-shared brokerage screenshots �
 ### Pivot to Portfolio Advisor (2026-06-18)
 CLAUDE.md updated to reflect the system as a research + portfolio management workspace, not a trading agent. Key changes: "Trading Strategies" → "Investment Strategies," added Execution Framework section with conviction-based allocation targets, updated skill diagram to `Research → Strategy → Execute → Manage`, documented 5-account structure. The agent advises; the user executes.
 
+### TradingAgents Framework Integration (2026-06-23)
+Integrated data sources and patterns from [TradingAgents](https://github.com/TauricResearch/TradingAgents) (88K stars, multi-agent LLM trading framework). Five additions:
+1. **`scripts/sentiment.py`** — StockTwits bull/bear ratio + Reddit posts (r/wsb, r/stocks, r/investing). No API keys. Flags >65% bull/bear divergence. Wired into `/research-stock`.
+2. **`scripts/macro.py`** — FRED macro dashboard (fed funds, 10Y/2Y, yield curve, CPI, PCE, unemployment, VIX) + Polymarket prediction markets (rate cuts, recession, inflation, tariffs). FRED needs free API key, Polymarket is keyless. Wired into `/research-market`.
+3. **Memory reflection loop** in `/plan-stock` Phase 0c — reads prior plans and portfolio reviews for the same ticker, extracts lessons to avoid repeating mistakes.
+4. **Anti-hallucination prompt** in `/plan-stock` Phase 2 — "Treat technicals.py as source of truth. If sources conflict, flag the discrepancy."
+5. **Data provenance rule** in `/research-market` — tag numbers as [FRED], [Polymarket], [web search]. Flag training memory with ⚠️.
+
+Skipped: LangGraph orchestration, multi-agent debate, two-LLM architecture, structured output schemas, Alpha Vantage, five-tier rating.
+
+### Stock-Skill Integration (2026-06-23)
+Integrated execution and macro concepts from [stock-skill](https://gitee.com/destiny520537work/stock-skill) (3-trader distillation: Serenity × TraderS × 恨铁). Four additions:
+1. **Crypto liquidity triangulation** in `/research-market` — BTC direction + ETF flows + stablecoin cap + 10Y yield as second-layer macro verification
+2. **Market day classification** (`knowledge/signals/market-day-types.md`) — 5 types: Trend/Range/Reversal/Munger/Event. Event Day rules: wait for first shock wave, no counter-trend, must have stop
+3. **True/false breakout filter** (`knowledge/signals/breakout-filter.md`) — Volume >1.5x + ATR >1x + moderate IV = confirmed breakout. Signal grades A-D.
+4. **Fundamental due diligence items** in `/research-stock` — shareholder pledge ratio, core team turnover, related-party transactions, channel inventory truth
+
+Skipped: Serenity persona (already have from serenity-skill), 3-phase entry (DCA/scaled limits cover this), debate mode, data provenance labeling, forced output templates.
+
+### Serenity-Skill Integration (2026-06-23)
+Integrated supply-chain bottleneck analysis from [serenity-skill](https://github.com/muxuuu/serenity-skill) (Serenity/@aleabitoreddit methodology). Three additions:
+1. **`scripts/bottleneck-scorecard.py`** — 0-100 scoring for supply-chain stocks (8 weighted factors + 8 penalty modifiers). Supplemental to the general conviction score — only runs for hardware/manufacturing sectors.
+2. **`knowledge/frameworks/evidence-ladder.md`** — Source grading (strong/medium/weak/needs-checking), 7 red flags, per-candidate evidence standard. Red flags run on ALL stocks, not just supply-chain.
+3. **Value-chain layer ranking** in `/research-sector` — for supply-chain sectors, rank the constrained LAYERS before ranking companies. Prevents "popular ticker list" syndrome. Requires explicitly downgrading one popular area.
+
+Key design decision: bottleneck scorecard is supplemental (not a replacement for conviction score) because it only applies to supply-chain-heavy sectors. Evidence ladder and red flags are universal.
+
 ---
 
 ## Discussions & Ideas
@@ -128,10 +155,10 @@ Prevent overconcentration and size positions properly.
 - [ ] **Correlation analysis** — measure how correlated portfolio stocks are
 - [ ] **Max allocation enforcement** — auto-flag in `/plan-stock` when a stock would exceed target %
 
-### 4. Knowledge Base ✅ DONE (2026-06-14)
+### 4. Knowledge Base ✅ DONE (2026-06-14, updated 2026-06-23)
 Build a knowledge layer for smarter decision-making. Start with knowledge files, add scoring scripts later.
 
-**Phase 1 — Knowledge files (11/11 done):**
+**Phase 1 — Knowledge files (14/14 done):**
 - [x] `knowledge/signals/rsi-guide.md`
 - [x] `knowledge/signals/iv-rank-guide.md`
 - [x] `knowledge/frameworks/ai-capital-flow.md`
@@ -143,11 +170,17 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 - [x] `knowledge/strategies/when-to-csp.md` — IV rank thresholds, delta/DTE rules, earnings avoidance, management rules (added 2026-06-14)
 - [x] `knowledge/strategies/when-to-leaps.md` — IV environment, delta selection, vega risk, capital efficiency (added 2026-06-14)
 - [x] `knowledge/strategies/execution-framework.md` — order types, stop placement, exits, position sizing, conviction-based allocation (added 2026-06-18)
+- [x] `knowledge/frameworks/evidence-ladder.md` — source grading (strong/medium/weak), red flag checklist, per-candidate evidence standard (added 2026-06-23, adapted from serenity-skill)
+- [x] `knowledge/signals/breakout-filter.md` — true/false breakout 3-way filter: volume >1.5x + ATR >1x + moderate IV (added 2026-06-23, adapted from stock-skill/恨铁)
+- [x] `knowledge/signals/market-day-types.md` — 5-type market day classification: Trend/Range/Reversal/Munger/Event with Event Day discipline rules (added 2026-06-23, adapted from stock-skill/恨铁)
 
 **Phase 2 — Scoring scripts:**
 - [x] `scripts/sector-momentum.py` — Mansfield RS + Weinstein Stage + ROC for all 11 GICS sectors
 - [x] `scripts/sector-heatmap.py` — interactive Plotly treemap with period toggle
 - [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard (MVRV, NUPL, cycle composite)
+- [x] `scripts/bottleneck-scorecard.py` — supply-chain bottleneck scoring (8 weighted factors + 8 penalties → 0-100 score). Adapted from serenity-skill (added 2026-06-23)
+- [x] `scripts/sentiment.py` — StockTwits bull/bear + Reddit posts, no API keys (added 2026-06-23, adapted from TradingAgents)
+- [x] `scripts/macro.py` — FRED macro dashboard + Polymarket predictions (added 2026-06-23, adapted from TradingAgents)
 - [ ] `scripts/screener.py` — composite scoring (RSI + fwd P/E + gap-to-target + IV rank)
 - [ ] Wire into `/research-stock-compare` for systematic ranking
 

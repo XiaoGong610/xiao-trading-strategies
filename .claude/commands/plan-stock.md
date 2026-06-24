@@ -48,6 +48,22 @@ If the regime gates you out, explain why and suggest what trigger to watch for (
 
 ---
 
+## Phase 0c: Memory Reflection — Lessons from Past Decisions
+
+Check if we've made previous plans or recommendations for this ticker:
+
+1. Search `research/stocks/$TICKER.md` for prior Pre-Trade Plan entries (format: `# TICKER — Pre-Trade Plan | YYYY-MM-DD`)
+2. Check `portfolio/REVIEW-*.md` files for any mentions of this ticker in past portfolio reviews
+3. If prior plans exist, extract:
+   - What was recommended last time (strategy, entry price, targets)
+   - What actually happened (did the thesis play out? did we enter? at what price?)
+   - Any lessons: was the entry too early/late? Was the stop too tight? Did we miss a catalyst?
+4. Note these lessons in Phase 4 when making the new recommendation — avoid repeating past mistakes.
+
+If no prior plans exist for this ticker, skip this step.
+
+---
+
 ## Phase 1: Research
 
 **Check for existing research FIRST — do NOT re-run research if fresh data exists:**
@@ -89,9 +105,11 @@ Run the data script for current price, technicals, and options data:
 .venv/bin/python3 scripts/technicals.py $TICKER --options
 ```
 
-Read `knowledge/signals/rsi-guide.md` and `knowledge/signals/iv-rank-guide.md` to interpret RSI and IV data correctly. Read `knowledge/signals/ma-guide.md` for SMA alignment and entry level selection. Check `knowledge/signals/volume-guide.md` for volume confirmation and `knowledge/signals/macd-guide.md` for divergences.
+Read `knowledge/signals/rsi-guide.md` and `knowledge/signals/iv-rank-guide.md` to interpret RSI and IV data correctly. Read `knowledge/signals/ma-guide.md` for SMA alignment and entry level selection. Check `knowledge/signals/volume-guide.md` for volume confirmation and `knowledge/signals/macd-guide.md` for divergences. Read `knowledge/signals/market-day-types.md` to classify the current market day (Trend/Range/Reversal/Munger/Event) — Event Days require waiting for the first shock wave before entering.
 
 If the stock is in the semiconductor sector, read `knowledge/sectors/semiconductors.md` for cycle and sub-sector context.
+
+**Anti-hallucination rule:** Treat `technicals.py` output as the source of truth for all price levels, support/resistance, RSI, MACD, ATR, and IV values. Never claim a support level, price target, or technical reading that isn't directly from the script output or a clearly labeled web search result. If two sources conflict, flag the discrepancy rather than inventing a reconciled number.
 
 Use the script's `price`, `technicals`, `support`, `resistance`, and `options` data:
 - Current stock price, 5-day and 1-month trend
@@ -164,9 +182,10 @@ Consult `knowledge/strategies/execution-framework.md` for the full decision fram
 
 ### 5a. Entry Orders
 
-Use the execution framework's decision matrix (sector momentum × price location) to select entry type, then use `technicals.py` output (support levels, SMA, ATR) to set specific prices.
+Use the execution framework's decision matrix (sector momentum × price location) to select entry type, then use `technicals.py` output (support levels, SMA, ATR) to set specific prices. If the entry type is **Breakout buy**, validate with `knowledge/signals/breakout-filter.md` — all three must confirm (volume >1.5x avg + ATR move >1x + IV Rank <50). Grade the signal A-D and only proceed on A or B.
 
 ```
+Market day type: [Trend / Range / Reversal / Munger / Event — from market-day-types.md]
 Entry strategy: [Market buy / Limit buy / Scaled limits / DCA / CSP / Breakout buy]
 Orders:
   - Order 1: [type] [size%] at $X — [rationale: SMA support, prior low, HVN, etc.]

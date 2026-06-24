@@ -11,7 +11,13 @@ This is a strategy-agnostic fundamentals and sentiment analysis. Focus on whethe
 .venv/bin/python3 scripts/technicals.py $ARGUMENTS --options
 ```
 
-**Step 2:** Use web search to gather qualitative information (news, earnings, analyst opinions, institutional activity).
+**Step 2a:** Fetch retail sentiment (no API key needed):
+```bash
+.venv/bin/python3 scripts/sentiment.py $ARGUMENTS --md
+```
+Use the StockTwits bull/bear ratio and Reddit post volume to inform the Market Sentiment section. If StockTwits skews >65% bullish, flag potential retail hype. If >65% bearish, note as contrarian signal.
+
+**Step 2b:** Use web search to gather qualitative information (news, earnings, analyst opinions, institutional activity).
 
 **Step 3: Consult knowledge base**
 - Read `knowledge/signals/rsi-guide.md` for RSI interpretation (sector beta differences, trend context, common mistakes)
@@ -21,10 +27,33 @@ This is a strategy-agnostic fundamentals and sentiment analysis. Focus on whethe
 - Read `knowledge/frameworks/valuation.md` for sector-appropriate P/E benchmarks
 - If the stock is in semiconductors, read `knowledge/sectors/semiconductors.md` for cycle signals and key metrics
 - If the stock is AI supply chain related, read `knowledge/frameworks/ai-capital-flow.md` for bottleneck positioning
+- If evaluating a breakout entry, read `knowledge/signals/breakout-filter.md` for the 3-way true/false breakout filter
 
 Combine all sources to cover the following sections:
 
 ---
+
+## Red Flag Check
+
+Before diving in, read `knowledge/frameworks/evidence-ladder.md` for the red flag checklist. Flag any of these during research — they downgrade confidence:
+
+**Evidence red flags:**
+1. Thesis relies on a single customer rumor
+2. Stock moved mainly on social media attention
+3. Company needs financing before opportunity converts to revenue
+4. Customer unnamed, revenue impact vague
+5. Inventories/receivables rising faster than revenue
+6. Gross margin not improving despite claimed scarcity
+7. Management uses theme language while segment data is unchanged
+
+**US financing risk flags (check for US-listed stocks):**
+8. Active shelf registration (S-3) — company can issue shares at any time
+9. At-the-market (ATM) offering program in place — ongoing dilution risk
+10. Large convertible debt outstanding — dilutive if stock rises above conversion price
+11. Stock-based compensation >10% of revenue — silent dilution eroding shareholder value
+12. Insider selling cluster with no purchases — insiders don't believe in the upside
+
+If 2+ evidence red flags (1-7) fire, note them prominently in the Summary section and reduce conviction by 1-2 points. Financing risk flags (8-12) don't reduce conviction directly but must be noted in Risks.
 
 ## Quick Screen (5 questions — gate before deep dive)
 
@@ -69,6 +98,7 @@ If PASS: write a brief 2-3 line summary of why this stock doesn't pass the scree
 - Institutional ownership % and recent changes (increasing or decreasing?)
 - Notable 13F filers adding/trimming (hedge funds, mutual funds)
 - Insider transactions in last 90 days (cluster buying = strong signal)
+- Major shareholder pledge ratio — are insiders pledging shares as collateral? (forced selling risk)
 - **Alignment signal:** Institutions increasing AND insiders buying = highest conviction. Institutions selling AND insiders selling = red flag.
 
 ## Market Sentiment
@@ -91,6 +121,10 @@ Probabilities must sum to 100%. Every scenario needs an explicit invalidation pr
 ## Risks
 - Key risks to the thesis (rank by likelihood and impact)
 - Upcoming binary events (earnings, FDA, regulatory, macro)
+- **Governance checks** (flag if any are concerning):
+  - Core team turnover frequency — high C-suite turnover = internal instability
+  - Related-party transaction frequency — frequent = potential window-dressing
+  - Channel inventory truth — is reported inventory actually reaching end consumers?
 - **Thesis killer:** What single event or data point would make you abandon this stock entirely?
 
 ## Conviction Score
@@ -114,6 +148,41 @@ For Valuation scoring, use sector-appropriate Forward P/E benchmarks from knowle
 ## Summary
 - Bull case vs. bear case (1-2 sentences each)
 - Overall take: bullish, neutral, or bearish — with reasoning
+- **Red flags triggered:** list any from the Red Flag Check above, or "None"
+- **Financing risks noted:** list any from flags 8-12, or "None"
+
+## What the Market May Be Missing
+
+Assess whether the market is categorizing this company correctly. This is the re-rating/mislabeling framework — it identifies where the real upside (or downside) surprise could come from.
+
+| | Assessment |
+|---|-----------|
+| **Current market category** | How does the market currently price/view this company? (e.g., "cyclical memory maker," "mature SaaS," "speculative biotech") |
+| **Possible new category** | What could the company actually be or become? (e.g., "AI infrastructure bottleneck," "platform compounder," "secular growth") |
+| **Why investors may be slow** | What structural bias, historical pattern, or information gap is keeping the market in the old category? |
+| **What would trigger re-categorization** | Specific event or data point that forces the market to re-price (e.g., "2 more quarters of 80%+ GM proves this isn't cyclical") |
+
+If the current and possible categories are the same (market is pricing it correctly), say so — not every stock is mislabeled. The value of this section is forcing explicit thought about whether there's a category gap.
+
+## Bottleneck Scorecard (supply-chain stocks only)
+
+**Only run this section if the stock is in a supply-chain-heavy sector:** semiconductors, AI infrastructure, power equipment, materials, optical interconnect, advanced packaging, robotics, defense electronics, industrial equipment, or similar hardware/manufacturing sectors.
+
+**Skip for:** pure SaaS/software, financials, REITs, consumer brands, healthcare (non-device), macro trades.
+
+If applicable:
+1. Identify the company's **value-chain layer** (end customer → OEM → module → chip/component → process/packaging → equipment → materials → infrastructure)
+2. Assess 8 factors (0-5 each): demand inflection, chokepoint severity, evidence quality, supplier concentration, expansion difficulty, valuation disconnect, architecture coupling, catalyst timing
+3. Assess penalties (0-5 each): dilution/financing, governance, geopolitics, liquidity, hype risk, accounting quality, cyclicality, alternative design risk
+4. Generate a scorecard JSON and run:
+```bash
+echo 'JSON_CONTENT' | .venv/bin/python3 scripts/bottleneck-scorecard.py - --md
+```
+5. Include the markdown output in this section
+
+**Verdict thresholds:** ≥85 = Top research priority, ≥70 = High, ≥55 = Worth tracking, <55 = Early lead
+
+The bottleneck score is **supplemental** to the conviction score — it measures how constrained and irreplaceable the company is in its supply chain, not general investment quality.
 
 ## Strategy Fit
 

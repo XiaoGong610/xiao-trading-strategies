@@ -39,10 +39,39 @@ Classify the current market environment. This frames everything below.
 - **Correction** — pullback in uptrend → look for support entries, DCA opportunities
 - **Downtrend** — sustained selling, weak breadth → cash priority, defensive only
 
+## Macro Data
+
+**Fetch hard macro numbers first** — ground the analysis in real data, not headlines:
+```bash
+.venv/bin/python3 scripts/macro.py
+```
+This returns FRED economic data (fed funds rate, 10Y/2Y Treasury, yield curve, CPI, core PCE, unemployment, VIX) and Polymarket prediction market probabilities (rate cuts, recession, inflation, tariffs). Use these numbers directly in the sections below. If FRED_API_KEY is not set, Polymarket data still works.
+
+**Data provenance rule:** When citing a specific number (yield, CPI, rate), tag it as `[FRED]`, `[Polymarket]`, or `[web search]`. Never cite a number from training memory without flagging it as `⚠️ training memory — verify`.
+
 ## Market Pulse
 - S&P 500, Nasdaq, Russell 2000 recent performance (1-week, 1-month, YTD)
 - Market sentiment: fear/greed index, VIX level and trend
 - Macro backdrop: Fed policy, inflation, rates, any geopolitical events affecting markets
+- **Polymarket signals:** What are prediction markets pricing for upcoming binary events? (rate cuts, recession probability, tariff outcomes). Include the probability + 1-week change.
+
+## Liquidity Check (Second-Layer Verification)
+
+Cross-check the macro regime with crypto/liquidity signals. These often lead equity moves by days to weeks.
+
+| Signal | Reading | What It Means |
+|--------|---------|---------------|
+| BTC direction (7-day) | Up / Down / Flat | Risk appetite barometer — BTC rising = loose liquidity, falling = tightening |
+| BTC ETF net flows (weekly) | Inflow / Outflow / Flat | Institutional capital entering = trend may continue |
+| Stablecoin market cap (USDT+USDC) | Expanding / Contracting | Sideline capital preparing to enter (expanding) or leaving (contracting) |
+| US 10Y Treasury yield trend | Rising / Falling / Flat | Rising = tightening (headwind for growth), falling = easing (tailwind) |
+
+**How to read:** If all 4 signals align bullish (BTC up, ETF inflows, stablecoins expanding, yields falling), the macro tailwind is confirmed. If they diverge from the equity regime (e.g., stocks rallying but BTC falling + stablecoins contracting), flag the divergence — it often precedes a reversal.
+
+Run the crypto cycle script if BTC/crypto is showing notable moves:
+```bash
+.venv/bin/python3 scripts/crypto-cycle.py
+```
 
 ## Sector Rotation
 

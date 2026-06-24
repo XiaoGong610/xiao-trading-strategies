@@ -73,6 +73,29 @@ Assess where this sector/theme sits in its lifecycle. This gates how aggressivel
 **Evidence:** [2-3 data points — ETF count, media coverage intensity, institutional positioning, earnings growth trajectory]
 **Implication:** [what this means for candidate selection below]
 
+## Value-Chain Layer Ranking (supply-chain sectors only)
+
+**Only include this section for supply-chain-heavy sectors:** semiconductors, AI infrastructure, power equipment, materials, optical interconnect, advanced packaging, robotics, defense electronics, industrial equipment, or similar hardware/manufacturing sectors. **Skip for:** SaaS, financials, REITs, consumer brands, healthcare (non-device).
+
+If applicable, rank the VALUE-CHAIN LAYERS before ranking companies. This prevents the output from being a "popular ticker list."
+
+1. Map the value chain for this sector/theme:
+   - End customers → System integrators → Modules/subsystems → Chips/components → Process/packaging → Equipment/testing → Materials/consumables → Physical infrastructure
+
+2. Identify the **scarce layers** — where are the real constraints?
+   - Low supplier count, long qualification cycles, hard to expand capacity
+   - Customer urgency signals: prepayments, capacity reservations, price acceptance
+   - Look for less obvious upstream layers when evidence supports them
+
+3. Rank layers by: demand pressure × supplier concentration × expansion difficulty
+
+| Priority | Layer | Why It's Constrained | Evidence to Check | What Could Weaken It |
+|----------|-------|---------------------|-------------------|---------------------|
+
+4. **Explicitly downgrade one popular/obvious area** and explain why it ranks lower than expected. This forces intellectual honesty.
+
+Use the layer ranking to inform the Candidate Scoring below — companies controlling scarce layers should score higher on Moat and Catalyst.
+
 ## Top Performers
 - 3-5 stocks leading the sector and why
 - Recent earnings highlights from sector leaders

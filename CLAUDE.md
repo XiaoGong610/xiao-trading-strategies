@@ -291,6 +291,45 @@ Fetches Bitcoin on-chain cycle indicators from BGeometrics free API (MVRV, NUPL,
 
 Free tier: 10 requests/hour, no API key needed. For higher limits, register at bitcoin-data.com and set `BGEOMETRICS_TOKEN` env var.
 
+### `scripts/sentiment.py`
+Fetches retail sentiment from StockTwits and Reddit. No API keys required.
+
+```bash
+.venv/bin/python3 scripts/sentiment.py AAPL              # JSON output
+.venv/bin/python3 scripts/sentiment.py AAPL --md          # markdown output
+.venv/bin/python3 scripts/sentiment.py AAPL --stocktwits  # StockTwits only
+.venv/bin/python3 scripts/sentiment.py AAPL --reddit      # Reddit only
+```
+
+Returns bull/bear ratio from StockTwits and recent Reddit posts from r/wallstreetbets, r/stocks, r/investing. Flags divergence (>65% bullish = retail hype warning, >65% bearish = contrarian signal).
+
+### `scripts/macro.py`
+Macro data dashboard combining FRED economic data and Polymarket prediction markets.
+
+```bash
+.venv/bin/python3 scripts/macro.py                              # full dashboard
+.venv/bin/python3 scripts/macro.py --json                        # JSON output
+.venv/bin/python3 scripts/macro.py --fred                        # FRED only (needs FRED_API_KEY)
+.venv/bin/python3 scripts/macro.py --polymarket                  # Polymarket only (no key needed)
+.venv/bin/python3 scripts/macro.py --polymarket "Fed rate cut"   # specific prediction topic
+```
+
+FRED data: fed funds rate, 10Y/2Y Treasury, yield curve, CPI, core PCE, unemployment, VIX. Requires free API key from https://fred.stlouisfed.org/docs/api/api_key.html — set `FRED_API_KEY` env var.
+
+Polymarket data: market-implied probabilities for forward events (rate cuts, recession, inflation, tariffs). No key needed.
+
+### `scripts/bottleneck-scorecard.py`
+Scores supply-chain / hardware stocks by constraint severity (0-100). Adapted from serenity-skill methodology. Best for semiconductors, AI infra, power equipment, materials, robotics, defense. Not useful for SaaS, financials, REITs, consumer brands.
+
+```bash
+.venv/bin/python3 scripts/bottleneck-scorecard.py --template              # blank JSON template
+.venv/bin/python3 scripts/bottleneck-scorecard.py scorecard.json          # JSON output
+.venv/bin/python3 scripts/bottleneck-scorecard.py scorecard.json --md     # markdown output
+echo '{"ticker":"AEHR",...}' | .venv/bin/python3 scripts/bottleneck-scorecard.py -  # stdin
+```
+
+Scores 8 weighted factors (demand inflection, chokepoint severity, evidence quality, supplier concentration, expansion difficulty, valuation disconnect, architecture coupling, catalyst timing) minus penalties (dilution, governance, geopolitics, liquidity, hype risk, accounting quality, cyclicality, alternative design risk). Verdicts: ≥85 Top priority, ≥70 High, ≥55 Worth tracking, <55 Early lead.
+
 ### `scripts/chart-watchlist.py`
 Interactive RSI vs Forward P/E scatter plot for all watching stocks. Bottom-left quadrant = oversold + cheap (best opportunities). Dot size inversely proportional to gap-to-target.
 
@@ -335,7 +374,7 @@ Panels: Market Regime, Sector Momentum, Top Picks, RSI vs FwdPE Scatter, Convict
 
 Reference docs in `knowledge/` for investment decision-making. Skills consult these for context and nuance.
 
-- `signals/` — RSI, IV rank, MACD, MA, volume interpretation guides
-- `frameworks/` — AI capital flow model, valuation benchmarks, crypto 4-year cycle, sector momentum
+- `signals/` — RSI, IV rank, MACD, MA, volume interpretation guides, breakout filter, market day types
+- `frameworks/` — AI capital flow model, valuation benchmarks, crypto 4-year cycle, sector momentum, evidence ladder (source grading + red flags)
 - `sectors/` — sector-specific metrics and cycle dynamics (semiconductors)
 - `strategies/` — when to sell CSPs, when to buy LEAPs, **execution framework** (order types, stops, exits, position sizing)
