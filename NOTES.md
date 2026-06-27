@@ -155,10 +155,18 @@ Prevent overconcentration and size positions properly.
 - [ ] **Correlation analysis** — measure how correlated portfolio stocks are
 - [ ] **Max allocation enforcement** — auto-flag in `/plan-stock` when a stock would exceed target %
 
-### 4. Knowledge Base ✅ DONE (2026-06-14, updated 2026-06-23)
+### CC Sharpe Framework & Tax Rules (2026-06-27)
+Two additions to the knowledge base:
+1. **`knowledge/strategies/when-to-cc.md`** — 4-gate CC Sharpe check before selling covered calls: IV Rank >50, premium yield >8% annualized, IV > realized vol, willing to sell at strike. Composite score 0-100 (>60 = sell, <40 = don't). Also covers: rolled CC management (don't apply profit rules to artificial P&L), coverage rules (never cover 100%), and common mistakes.
+2. **`knowledge/frameworks/tax-rules.md`** — Multi-account tax optimization. Core rule: sell losers in taxable accounts first (harvest loss), sell winners in tax-free accounts first (no tax on gains). Covers wash sale rules across accounts, holding period awareness, and where-to-hold guide for tax efficiency. Wired into `/portfolio-review` sell recommendations.
+
+### Weekly Trading Plan Output (2026-06-27)
+Added Step 7 to `/portfolio-review` — every review now ends with a concrete weekly trading plan saved to `portfolio/plans/PLAN-YYYY-MM-DD.md`. Covers: DCA schedule with changes highlighted, one-time orders (limits, LEAPs, CCs), position management actions, key dates (earnings, expirations), and risk budget (capital deployment, cash runway).
+
+### 4. Knowledge Base ✅ DONE (2026-06-14, updated 2026-06-27)
 Build a knowledge layer for smarter decision-making. Start with knowledge files, add scoring scripts later.
 
-**Phase 1 — Knowledge files (14/14 done):**
+**Phase 1 — Knowledge files (16/16 done):**
 - [x] `knowledge/signals/rsi-guide.md`
 - [x] `knowledge/signals/iv-rank-guide.md`
 - [x] `knowledge/frameworks/ai-capital-flow.md`
@@ -173,6 +181,8 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 - [x] `knowledge/frameworks/evidence-ladder.md` — source grading (strong/medium/weak), red flag checklist, per-candidate evidence standard (added 2026-06-23, adapted from serenity-skill)
 - [x] `knowledge/signals/breakout-filter.md` — true/false breakout 3-way filter: volume >1.5x + ATR >1x + moderate IV (added 2026-06-23, adapted from stock-skill/恨铁)
 - [x] `knowledge/signals/market-day-types.md` — 5-type market day classification: Trend/Range/Reversal/Munger/Event with Event Day discipline rules (added 2026-06-23, adapted from stock-skill/恨铁)
+- [x] `knowledge/strategies/when-to-cc.md` — CC Sharpe 4-gate check (IV Rank, yield, IV vs RV, exit willingness), composite score, coverage rules, rolled CC note (added 2026-06-27)
+- [x] `knowledge/frameworks/tax-rules.md` — multi-account tax optimization: sell losers taxable first, winners tax-free first, wash sales, holding periods (added 2026-06-27)
 
 **Phase 2 — Scoring scripts:**
 - [x] `scripts/sector-momentum.py` — Mansfield RS + Weinstein Stage + ROC for all 11 GICS sectors
@@ -210,23 +220,23 @@ Set up Claude Code cloud triggers to run jobs on a recurring schedule.
 - [ ] Pre-earnings: auto-flag stocks in watchlist with earnings approaching within 7 days
 - [ ] Explore Claude Code `/schedule` for cron-based remote agent triggers
 
-### 8. Visual Dashboard & Charts 🔄 IN PROGRESS
-Interactive visualizations to help interpret signals at a glance. Two phases:
+### 8. Visual Dashboard & Charts ✅ DONE (2026-06-18, updated 2026-06-27)
+Interactive visualizations to help interpret signals at a glance.
 
-**Phase 1 — Plotly chart scripts (5 done, 1 remaining):**
-- [x] `scripts/sector-heatmap.py` — sector performance treemap, market-cap weighted, period toggles, reading guide
-- [x] `scripts/sector-momentum.py` — terminal dashboard with MRS, Weinstein Stage, ROC, momentum classification
-- [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard (MVRV, NUPL, composite score)
-- [x] `scripts/chart-watchlist.py` — RSI vs fwd P/E scatter plot, sector-colored, gap-to-target sizing, quadrant labels (added 2026-06-14)
-- [x] `scripts/chart-earnings.py` — earnings calendar timeline with urgency color-coding (red/orange/yellow/green), terminal summary (added 2026-06-14)
+**Phase 1 — Plotly chart scripts (5/5 done):**
+- [x] `scripts/sector-heatmap.py` — sector performance treemap
+- [x] `scripts/sector-momentum.py` — terminal dashboard with MRS, Weinstein Stage, ROC
+- [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard
+- [x] `scripts/chart-watchlist.py` — RSI vs fwd P/E scatter plot
+- [x] `scripts/chart-earnings.py` — earnings calendar timeline
+
+**Phase 2 — Streamlit web app ✅ DONE (2026-06-18):**
+- [x] `scripts/app.py` — local web dashboard at `localhost:8501`
+- [x] Panels: Market Regime, Sector Momentum, Top Picks, RSI vs FwdPE Scatter, Conviction Scores, Earnings Calendar, Near Entry Target, Research Freshness
+- [x] Research-focused (no portfolio data — that stays in `/portfolio-review`)
+
+**Remaining:**
 - [ ] `scripts/chart-performance.py` — portfolio P&L over time (once we have trade history)
-
-**Phase 2 — Streamlit web app (full interactive dashboard):**
-- [ ] `scripts/app.py` — local web dashboard at `localhost:8501`
-- [ ] Combines: data tables + charts + filters (sector, strategy, RSI range) in one page
-- [ ] Built on top of existing `dashboard.py` logic
-- [ ] Live-updating with `streamlit run scripts/app.py`
-- [ ] Add `streamlit` to `.venv` dependencies
 
 ### 9. Multi-Timeframe Analysis ⬇️ LOW
 Daily RSI tells one story; weekly/monthly tell another. Combining timeframes gives higher conviction signals.
@@ -242,11 +252,10 @@ Daily RSI tells one story; weekly/monthly tell another. Combining timeframes giv
 
 **Decision:** Leveraged ETFs (TSLL, CONL) are structurally bad for long-term holds due to daily-reset decay and path dependency. Portfolio review found $46K in TSLL across 3 accounts — recommended selling all. GoBig account learned the hard way: TSLL calls lost 73-96% even while TSLA was up. **Buy LEAPs on the underlying instead.** Not building a strategy skill for this.
 
-### 10. Tax Optimization 📅 SEASONAL
+### 10. Tax Optimization 🔄 PARTIALLY DONE (2026-06-27)
 Maximize after-tax returns. Critical before year-end.
 
-- [ ] **Wash sale tracking** — flag if you sell a stock at a loss and rebuy within 30 days
-- [ ] **Tax-loss harvesting** — identify positions with unrealized losses that could offset gains
-- [ ] **Short-term vs. long-term gains** — track holding periods (>1 year = favorable rate)
+- [x] **Tax rules knowledge base** — `knowledge/frameworks/tax-rules.md` with multi-account sell order, wash sale rules, holding period awareness, where-to-hold guide
+- [x] **Tax-aware sell recommendations** — `/portfolio-review` now checks account type before recommending sells (losers in taxable first, winners in tax-free first)
+- [ ] **Wash sale tracking** — auto-flag if selling a stock at a loss and rebuying within 30 days across accounts
 - [ ] **End-of-year review** — annual skill to scan portfolio for tax optimization before Dec 31
-- [ ] Add to knowledge base: `knowledge/frameworks/tax-rules.md`

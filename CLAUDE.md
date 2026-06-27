@@ -167,7 +167,8 @@ knowledge/         # Decision-making reference docs (signals, frameworks, sector
   strategies/      # When to use each strategy, rules, edge cases
 portfolio/         # Multi-account portfolio management
   accounts/        # Per-account files: goals, positions, constraints, flags (gitignored)
-  REVIEW-*.md      # Point-in-time portfolio reviews (historical log)
+  plans/           # Weekly trading plans — DCA schedule, orders, position management (gitignored)
+  REVIEW-*.md      # Point-in-time portfolio reviews (historical log, gitignored)
 charts/            # Generated interactive HTML charts
 scripts/           # Python scripts (technicals.py, update-index.py, dashboard.py)
 leaders.md         # ThetaGang.com top traders reference
@@ -375,6 +376,7 @@ Panels: Market Regime, Sector Momentum, Top Picks, RSI vs FwdPE Scatter, Convict
 Reference docs in `knowledge/` for investment decision-making. Skills consult these for context and nuance.
 
 - `signals/` — RSI, IV rank, MACD, MA, volume interpretation guides, breakout filter, market day types
-- `frameworks/` — AI capital flow model, valuation benchmarks, crypto 4-year cycle, sector momentum, evidence ladder (source grading + red flags)
+- `frameworks/` — AI capital flow model, valuation benchmarks, crypto 4-year cycle, sector momentum, evidence ladder (source grading + red flags), **tax rules** (multi-account sell order, wash sales, tax-loss harvesting)
 - `sectors/` — sector-specific metrics and cycle dynamics (semiconductors)
-- `strategies/` — when to sell CSPs, when to buy LEAPs, **execution framework** (order types, stops, exits, position sizing)
+- `strategies/` — when to sell CSPs, **when to sell CCs** (CC Sharpe 4-gate check), when to buy LEAPs, **execution framework** (order types, stops, exits, position sizing)
+- `reference/` — influencer tracking (X/Twitter), ThetaGang.com leaders
