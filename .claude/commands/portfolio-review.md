@@ -110,11 +110,16 @@ For each position across all accounts:
 - **HOLD** — on track, no changes needed
 - **ACCELERATE DCA** — oversold + thesis intact → increase DCA pace
 - **REDUCE** — overbought + overweight → trim or pause DCA
-- **SELL CCs** — holding shares + not selling covered calls = missed income
+- **SELL CCs** — holding shares + not selling covered calls = missed income. Run CC Sharpe check first (`knowledge/strategies/when-to-cc.md`).
 - **ADD CSP** — IV rich + at support → sell premium
 - **ADD LEAPS** — IV cheap + high conviction → buy leverage
 - **REVIEW** — thesis may be changing, needs `/research-stock` refresh
 - **EXIT** — thesis broken or position no longer fits goals
+
+**Tax-aware sell order:** When recommending EXIT or REDUCE on a position held across multiple accounts, consult `knowledge/frameworks/tax-rules.md` for the correct account priority:
+- Selling a **loser** → taxable account first (harvest the tax loss)
+- Selling a **winner** → tax-free account first (no tax on gains)
+- Flag any position approaching 1-year holding mark in taxable accounts
 
 ### Options Review
 
@@ -170,8 +175,57 @@ Recommend adjustments: increase for high-conviction underweight names, decrease/
 | Candidate | Why | Next Step |
 |-----------|-----|-----------|
 
-## Step 7: Save Review
+## Step 7: Next Week's Trading Plan
 
-Save output to `portfolio/REVIEW-YYYY-MM-DD.md`.
+Summarize everything into a concrete weekly plan the user can execute. This is the single most actionable output.
+
+### DCA Schedule (recurring buys)
+
+Show the PROPOSED recurring buy schedule with any changes highlighted:
+
+| Ticker | Current $/Day | Proposed $/Day | Change | Why |
+|--------|--------------|----------------|--------|-----|
+| ... | ... | ... | ... | ... |
+| **Total** | $X | $X | | |
+
+### One-Time Orders (this week)
+
+Specific orders to place in the broker — shares, limits, LEAPs, CCs, CSPs:
+
+| Order | Type | Detail | Rationale |
+|-------|------|--------|-----------|
+| ... | Limit buy / LEAP / CC / CSP | Ticker, price, quantity | Why now |
+
+### Position Management (existing positions)
+
+Actions on current holdings — trim, roll, close, hold:
+
+| Action | Ticker | Account | Detail | Deadline |
+|--------|--------|---------|--------|----------|
+| ... | ... | ... | ... | ... |
+
+### Key Dates Next Week
+
+| Date | Event | Stock | Action If... |
+|------|-------|-------|-------------|
+| ... | Earnings / Expiry / Ex-div | ... | Beat → do X / Miss → do Y |
+
+### Risk Budget
+
+How much new capital is being deployed and is it within risk limits:
+
+| Metric | Value |
+|--------|-------|
+| Total new capital this week | $X |
+| Cash remaining after deployment | $X |
+| Runway at current DCA pace | X weeks |
+| Max single-stock risk | X% of portfolio |
+
+## Step 8: Save Outputs
+
+1. **Portfolio review** → `portfolio/REVIEW-YYYY-MM-DD.md` (Steps 1-6: analysis, positions, alignment)
+2. **Weekly trading plan** → `portfolio/plans/PLAN-YYYY-MM-DD.md` (Step 7: DCA schedule, orders, position management, key dates, risk budget)
+
+The plan file is the actionable output — what to do next week. The review file is the analysis that supports it. Keep them separate so the user can reference the plan without re-reading the full review.
 
 **Do NOT auto-update account files** — only update when the user shares fresh screenshots. The account files are refreshed at Step 0, not at the end.

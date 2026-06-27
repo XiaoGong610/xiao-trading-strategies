@@ -27,7 +27,8 @@ This is a pure options mechanics analysis. Do NOT cover company fundamentals, gr
 Use the script's output for IV, price, support/resistance levels, and expiry data. Supplement with web search only for qualitative info the script can't provide.
 
 **Step 2: Consult knowledge base**
-- Read `knowledge/strategies/when-to-csp.md` — apply the ideal setup checklist and IV Rank × RSI decision matrix
+- Read `knowledge/strategies/when-to-csp.md` — apply the ideal setup checklist and IV Rank × RSI decision matrix (for CSP trades)
+- Read `knowledge/strategies/when-to-cc.md` — run the CC Sharpe 4-gate check and score BEFORE recommending any covered call. If CC Sharpe Score < 40, explicitly recommend against selling CCs.
 - Read `knowledge/signals/iv-rank-guide.md` — if IV Rank < 25, flag: "Premium too thin — consider LEAPs or shares instead"
 - Read `knowledge/signals/rsi-guide.md` — interpret RSI in sector context (high-beta sectors hit extremes routinely)
 - Run `.venv/bin/python3 scripts/sector-momentum.py --json` and consult `knowledge/frameworks/sector-momentum.md` — if sector is in Stage 4 downtrend, flag that support levels may not hold
