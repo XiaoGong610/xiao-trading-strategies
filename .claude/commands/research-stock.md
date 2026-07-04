@@ -19,6 +19,18 @@ Use the StockTwits bull/bear ratio and Reddit post volume to inform the Market S
 
 **Step 2b:** Use web search to gather qualitative information (news, earnings, analyst opinions, institutional activity).
 
+**Step 2c: Sector context check**
+
+Identify the stock's sector and find the matching scan file in `research/sectors/` (e.g., `semiconductors.md`, `energy.md`, `software.md`, `healthcare.md`). Check its last-modified date.
+
+- **If fresh (<14 days):** Read the most recent scan entry (up to the first `---` separator after the header) and use its momentum classification, lifecycle stage, and sector risks to contextualize this stock's technicals. Include a **Sector Context** subsection in the Company Overview.
+- **If stale (≥14 days) or missing:** Flag it to the user: _"⚠️ Sector scan for [sector] is [X days] stale. Sector context may be outdated. Consider running `/research-sector [sector]` to refresh."_ Still read whatever exists, but note the staleness caveat.
+
+The sector scan provides: momentum classification (Accelerating/Pulling Back/Sideways/Downtrend), Mansfield RS, Weinstein Stage, and sub-sector themes. Use these to:
+- Adjust RSI interpretation (oversold in a downtrending sector ≠ oversold in a pulling-back sector)
+- Inform entry timing (pulling back in uptrend = best window, downtrend = patience needed)
+- Contextualize valuation (sector re-rating vs. individual story)
+
 **Step 3: Consult knowledge base**
 - Read `knowledge/signals/rsi-guide.md` for RSI interpretation (sector beta differences, trend context, common mistakes)
 - Read `knowledge/signals/ma-guide.md` — check SMA alignment (bullish stack vs tangled) and which SMA to use for entry levels
