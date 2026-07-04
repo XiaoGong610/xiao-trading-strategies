@@ -19,6 +19,26 @@ Use the StockTwits bull/bear ratio and Reddit post volume to inform the Market S
 
 **Step 2b:** Use web search to gather qualitative information (news, earnings, analyst opinions, institutional activity).
 
+**Step 2b-ii: Influencer check**
+
+Read `knowledge/reference/influencers.md` for the list of tracked accounts. For each influencer whose focus area matches this stock's sector, web search their recent posts:
+
+```
+"@handle" TICKER OR sector_keyword 2026
+```
+
+**When to search (match by sector):**
+- Semiconductors, optical, photonics, AI supply chain → search **@aleabitoreddit** (Serenity)
+- All sectors → search **@maojietrading**, **@AlexMoonvestCN** if their focus areas are filled in
+
+**What to capture:**
+- Thesis alignment or disagreement with our research → note in Market Sentiment section
+- New supply chain insights → flag for `knowledge/frameworks/ai-capital-flow.md` update
+- Position changes (bought/sold/trimmed) → note as a data point, not a recommendation
+- If no relevant posts found, skip — don't force it
+
+**Quality rule:** Influencer views are ONE input, not the conclusion. Always validate against our own fundamentals and technicals. Note the source clearly: _"Serenity (@aleabitoreddit) noted on [date] that..."_
+
 **Step 2c: Sector context check**
 
 Identify the stock's sector and find the matching scan file in `research/sectors/` (e.g., `semiconductors.md`, `energy.md`, `software.md`, `healthcare.md`). Check its last-modified date.
