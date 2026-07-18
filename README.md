@@ -18,7 +18,8 @@ A set of Claude Code custom skills for stock research, portfolio management, and
 3. Market overview       → /research-market (regime, sector rotation)
 4. Portfolio review      → /portfolio-review (screenshots → account update → recommendations)
 5. Trading plan          → portfolio/plans/PLAN-YYYY-MM-DD.md (DCA, orders, management)
-6. Dashboard             → scripts/app.py (Streamlit visual dashboard)
+6. Dashboard             → scripts/watchlist.py (priority dashboard + charts)
+                            scripts/app.py (Streamlit full dashboard, optional)
 ```
 
 ## Skills
@@ -47,6 +48,14 @@ A set of Claude Code custom skills for stock research, portfolio management, and
 | `/strategy-theta-gang pick AAPL CSP` | Compare strike/expiry combos |
 | `/strategy-theta-gang roll AAPL 170P 2026-05-16 CSP` | Analyze whether to roll a position |
 
+### Watchlist
+| Command | Description |
+|---------|-------------|
+| `/watchlist triage` | Tier stocks, show priority scores, identify refresh queue |
+| `/watchlist add TICKER` | Quick-add a candidate from any source |
+| `/watchlist refresh` | Auto-refresh top priority stocks |
+| `/watchlist remove TICKER` | Remove a stock from the watchlist |
+
 ### Utility
 | Command | Description |
 |---------|-------------|
@@ -59,8 +68,7 @@ research/
   sectors/             # Sector-level scans (gitignored)
   stocks/              # Per-stock research & plans (gitignored)
     archive/           # Removed stocks (gitignored)
-    0-INDEX.md         # Auto-generated stock index
-    1-DASHBOARD.md     # Auto-generated trading dashboard
+    0-WATCHLIST.md     # Auto-generated watchlist dashboard (priority scores, RSI, fwd P/E, earnings)
   comparisons/         # Head-to-head stock comparisons (gitignored)
 knowledge/             # Decision-making reference docs (committed)
   signals/             # RSI, IV rank, volume, MA, MACD, breakout filter, market day types
@@ -75,8 +83,7 @@ portfolio/             # Multi-account portfolio management
 charts/                # Generated HTML charts (gitignored)
 scripts/               # Python scripts (committed)
   technicals.py        # Market data fetcher (price, technicals, options)
-  dashboard.py         # Trading dashboard with live prices, RSI, fwd P/E
-  watchlist.py         # Watchlist manager — tier stocks, identify refresh queue
+  watchlist.py         # Consolidated watchlist: triage, dashboard, charts (0-WATCHLIST.md + watchlist-dashboard.html)
   app.py               # Streamlit interactive dashboard
   sector-momentum.py   # Mansfield RS + Weinstein Stage + ROC momentum
   sector-heatmap.py    # Interactive Plotly sector performance treemap
@@ -84,9 +91,6 @@ scripts/               # Python scripts (committed)
   sentiment.py         # StockTwits + Reddit retail sentiment
   macro.py             # FRED macro data + Polymarket predictions
   bottleneck-scorecard.py # Supply-chain stock scoring (0-100)
-  update-index.py      # Auto-generate 0-INDEX.md from frontmatter
-  chart-watchlist.py   # RSI vs fwd P/E scatter plot
-  chart-earnings.py    # Earnings calendar timeline
 .claude/commands/      # Claude Code custom skills (committed)
 NOTES.md               # Project decisions, discussions, and TODOs
 ```
@@ -121,6 +125,6 @@ NOTES.md               # Project decisions, discussions, and TODOs
 2. Use with [Claude Code](https://claude.ai/code) — skills are automatically available as slash commands
 3. Set up Python: `python3 -m venv .venv && pip install yfinance plotly matplotlib pandas numpy streamlit`
 4. Optional: set `FRED_API_KEY` env var for macro data (free from [FRED](https://fred.stlouisfed.org/docs/api/api_key.html))
-5. Run the dashboard: `.venv/bin/python3 -m streamlit run scripts/app.py`
+5. Run the dashboard: `.venv/bin/python3 scripts/watchlist.py` (primary) or `.venv/bin/python3 -m streamlit run scripts/app.py` (full Streamlit)
 
 Analysis files are gitignored since they contain personal trading data. Knowledge base and scripts are committed.

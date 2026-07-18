@@ -100,4 +100,4 @@ strategies: [dca]
 ---
 ```
 
-**Update index:** Run `.venv/bin/python3 scripts/update-index.py` to regenerate `0-INDEX.md`.
+**Update watchlist:** Run `.venv/bin/python3 scripts/watchlist.py` to regenerate `0-WATCHLIST.md`.

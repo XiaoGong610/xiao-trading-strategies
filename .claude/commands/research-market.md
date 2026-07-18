@@ -157,6 +157,6 @@ Rank 3-5 sectors to investigate further:
 
 Be opinionated — don't just list everything. Focus on what's actionable right now. Prefer Emerging/Accelerating themes over Mature/Exhausting ones. The user may pursue any strategy (buy-and-hold, DCA, theta gang, swing trading), so keep recommendations strategy-agnostic.
 
-Save the output to `research/sectors/market-overview.md`.
+Save the output to `research/sectors/0-market-overview.md`.
 Start the entry with a date separator: `---` followed by `# Market Overview | YYYY-MM-DD`.
 If the file already exists, prepend the new scan above all previous entries. Never remove historical entries.

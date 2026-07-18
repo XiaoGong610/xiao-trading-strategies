@@ -248,7 +248,7 @@ conviction: (overall score from Conviction Score)
 
 If updating an existing file, update the `conviction` field in frontmatter.
 
-**Update index & dashboard:**
+**Update watchlist:**
 ```bash
-.venv/bin/python3 scripts/update-index.py && .venv/bin/python3 scripts/dashboard.py
+.venv/bin/python3 scripts/watchlist.py
 ```

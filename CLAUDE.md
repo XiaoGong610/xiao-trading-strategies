@@ -33,8 +33,9 @@ Start with: "Claude, what should I pay attention to?"
                        Regime, sector rotation, key risks
 4. Sector scans      → /research-sector on hot/changed sectors (skip if <14 days old)
 5. Plans             → /plan-stock on top 2-3 actionable picks (with execution plan)
-6. Dashboard         → .venv/bin/python3 -m streamlit run scripts/app.py
-                       Visual dashboard with all fresh data
+6. Dashboard         → .venv/bin/python3 scripts/watchlist.py
+                       Consolidated watchlist with priority scores, RSI, P/E, sector momentum
+                       Also: .venv/bin/python3 -m streamlit run scripts/app.py for visual dashboard
 ```
 
 **Watchlist triage first** — this prevents wasting time researching 48 stocks. The script auto-identifies which stocks actually need attention (typically 10-15, not 48).
@@ -149,6 +150,7 @@ Research → Strategy → Execute → Manage
 | | `/strategy-dca` | DCA schedule and sizing |
 | | `/strategy-leaps` | LEAP Calls analysis |
 | | `/strategy-theta-gang` | Theta gang: `analyze`, `pick`, `roll`, `leaders` |
+| **watchlist** | `/watchlist` | Triage, add stocks, auto-refresh top priorities |
 | **util** | `/util-chart` | Interactive price chart with strategy overlays |
 
 ## Folder Structure
@@ -157,8 +159,7 @@ Research → Strategy → Execute → Manage
 research/
   sectors/         # Sector-level scans (e.g., software.md, semiconductors.md)
   stocks/          # Per-stock files: research, plans, strategy analysis (one file per stock)
-    0-INDEX.md     # Auto-generated stock index (by scripts/update-index.py)
-    1-DASHBOARD.md # Auto-generated trading dashboard (by scripts/dashboard.py)
+    0-WATCHLIST.md # Auto-generated consolidated watchlist (by scripts/watchlist.py) — priority scores, RSI, fwd P/E, sector momentum, earnings, gap-to-target
   comparisons/     # Head-to-head stock comparisons (e.g., semiconductors-2026-05-10.md)
 knowledge/         # Decision-making reference docs (signals, frameworks, sector logic)
   signals/         # RSI, IV rank interpretation guides
@@ -170,7 +171,7 @@ portfolio/         # Multi-account portfolio management
   plans/           # Weekly trading plans — DCA schedule, orders, position management (gitignored)
   REVIEW-*.md      # Point-in-time portfolio reviews (historical log, gitignored)
 charts/            # Generated interactive HTML charts
-scripts/           # Python scripts (technicals.py, update-index.py, dashboard.py)
+scripts/           # Python scripts (technicals.py, watchlist.py, etc.)
 leaders.md         # ThetaGang.com top traders reference
 NOTES.md           # Project decisions, discussions, and TODOs
 ```
@@ -188,7 +189,7 @@ Each file contains:
 
 The user manages 5 accounts: HOLD (covered calls), ThetaGang (premium selling), Roth IRA (aggressive/all strategies), BrokerageLink (401k DCA engine), GoBig (LEAPs).
 
-**Stock lifecycle status** — tracked via the `status` field in frontmatter and indexed in `research/stocks/0-INDEX.md`:
+**Stock lifecycle status** — tracked via the `status` field in frontmatter and indexed in `research/stocks/0-WATCHLIST.md`:
 
 | Status | Meaning | Location |
 |--------|---------|----------|
@@ -196,7 +197,7 @@ The user manages 5 accounts: HOLD (covered calls), ThetaGang (premium selling), 
 | `watching` | Actively monitoring with entry criteria / plan | `research/stocks/` |
 | `removed` | No longer interested | `research/stocks/` (archived) |
 
-All skills that create or modify stock files must update both the file's frontmatter `status` and `research/stocks/0-INDEX.md`.
+All skills that create or modify stock files must update the file's frontmatter `status` and run `scripts/watchlist.py` to regenerate `research/stocks/0-WATCHLIST.md`.
 
 - Each file accumulates historical analysis entries (research, plans, strategy analysis)
 - **Ordering rule:** newest analysis on top, oldest at bottom
@@ -248,20 +249,6 @@ Fetches structured market data for a ticker. Data backbone for skills.
 
 Returns JSON: `price`, `technicals` (RSI, MACD, SMAs, BBands, ATR), `trend`, `support`, `resistance`, `volume_profile_hvn`, `fundamentals`, and optionally `options`.
 
-### `scripts/update-index.py`
-Auto-generates `research/stocks/0-INDEX.md` from frontmatter in stock files. Groups by status, flags stale research (>7 days).
-
-```bash
-.venv/bin/python3 scripts/update-index.py
-```
-
-### `scripts/dashboard.py`
-Generates trading dashboard with live prices, RSI, forward P/E, gap-to-target, earnings calendar. Outputs to terminal + saves to `research/stocks/1-DASHBOARD.md`.
-
-```bash
-.venv/bin/python3 scripts/dashboard.py          # terminal + file
-.venv/bin/python3 scripts/dashboard.py --json   # JSON output
-```
 
 ### `scripts/sector-momentum.py`
 Quantitative sector momentum analysis using three proven frameworks: Mansfield Relative Strength (vs S&P 500), Weinstein Stage Analysis (30-week SMA), and Rate of Change momentum. Classifies each sector into actionable categories (Accelerating Up, Pulling Back, Sideways, Downtrend, Capitulation) with strategy implications.
@@ -331,36 +318,35 @@ echo '{"ticker":"AEHR",...}' | .venv/bin/python3 scripts/bottleneck-scorecard.py
 
 Scores 8 weighted factors (demand inflection, chokepoint severity, evidence quality, supplier concentration, expansion difficulty, valuation disconnect, architecture coupling, catalyst timing) minus penalties (dilution, governance, geopolitics, liquidity, hype risk, accounting quality, cyclicality, alternative design risk). Verdicts: ≥85 Top priority, ≥70 High, ≥55 Worth tracking, <55 Early lead.
 
-### `scripts/chart-watchlist.py`
-Interactive RSI vs Forward P/E scatter plot for all watching stocks. Bottom-left quadrant = oversold + cheap (best opportunities). Dot size inversely proportional to gap-to-target.
-
-```bash
-.venv/bin/python3 scripts/chart-watchlist.py              # generate chart + open browser
-.venv/bin/python3 scripts/chart-watchlist.py --no-open     # don't open browser
-```
-
-### `scripts/chart-earnings.py`
-Earnings calendar timeline for watchlist stocks. Color-coded countdown bars (red=imminent, orange=soon, yellow=upcoming, green=safe). Also prints terminal summary.
-
-```bash
-.venv/bin/python3 scripts/chart-earnings.py              # generate chart + open browser
-.venv/bin/python3 scripts/chart-earnings.py --no-open     # don't open browser
-.venv/bin/python3 scripts/chart-earnings.py --all         # include non-watching stocks
-```
-
 ### `scripts/watchlist.py`
-Watchlist manager — auto-tiers watching stocks into Active (refresh weekly), Passive (check monthly), and Remove candidates. Identifies the refresh queue for the weekly session.
+Consolidated watchlist manager. Tiers stocks, scores refresh urgency, fetches live data (RSI, fwd P/E, sector momentum, earnings countdown, gap-to-target), and generates `research/stocks/0-WATCHLIST.md` + `charts/watchlist-dashboard.html` (tabbed: RSI vs P/E scatter + earnings calendar).
 
 ```bash
-.venv/bin/python3 scripts/watchlist.py              # terminal dashboard
+.venv/bin/python3 scripts/watchlist.py              # terminal dashboard + saves 0-WATCHLIST.md
+.venv/bin/python3 scripts/watchlist.py --top 10      # show top 10 in refresh queue
+.venv/bin/python3 scripts/watchlist.py --auto        # top N tickers only, one per line (for piping)
 .venv/bin/python3 scripts/watchlist.py --json        # JSON output
+.venv/bin/python3 scripts/watchlist.py --no-save     # terminal only, don't write 0-WATCHLIST.md
 .venv/bin/python3 scripts/watchlist.py --update      # write tier to stock frontmatter
+.venv/bin/python3 scripts/watchlist.py --add TICKER                          # quick-add candidate
+.venv/bin/python3 scripts/watchlist.py --add TICKER --sector Energy          # with sector
+.venv/bin/python3 scripts/watchlist.py --add TICKER --source "friend tip"    # with source
 ```
+
+Tiered refresh cadence (conviction-based):
+- **Conv 8+:** refresh every 14 days
+- **Conv 6-7:** refresh every 28 days
+- **Conv <6:** refresh every 42 days
+
+Priority scoring for refresh queue (highest first):
+- Earnings proximity (+40/25/10), sector momentum (+15 to -5), gap-to-target (+25/15/5), staleness (capped +20), conviction (×2)
+- New candidates get +35 bonus to surface quickly
 
 Classification logic:
 - **Active:** conviction ≥7 OR within 15% of entry target OR earnings <30 days
+- **Candidate:** new stock (`status: candidate`), needs first `/research-stock`
 - **Passive:** conviction 5-6, no near-term catalyst
-- **Remove:** no conviction + stale >30 days, or conviction <5, or >50% above target
+- **Remove:** no conviction + stale >60 days, or conviction <5, or >50% above target
 
 ### `scripts/app.py`
 Interactive Streamlit dashboard combining all research data into one view.

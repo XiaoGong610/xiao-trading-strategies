@@ -311,7 +311,7 @@ If the file already exists and has frontmatter:
 - Update `entry_target` and `strategies` based on Phase 4 results
 - Prepend the new analysis entry below the frontmatter
 
-**Update index & dashboard:**
+**Update watchlist:**
 ```bash
-.venv/bin/python3 scripts/update-index.py && .venv/bin/python3 scripts/dashboard.py
+.venv/bin/python3 scripts/watchlist.py
 ```

@@ -28,7 +28,7 @@ Cost-aware top-down funnel:
 - `portfolio/` — active positions
 - `trades/` — closed trade log
 - Status lifecycle: `researched → watching → in-portfolio → removed`
-- `0-INDEX.md` groups stocks by actionability (Ready / Wait / Watching / Not Planned)
+- `0-WATCHLIST.md` groups stocks by actionability (Ready / Wait / Watching / Not Planned)
 
 ### Multi-Strategy Framework (2026-05-09)
 Four strategies: Buy & Hold, DCA, LEAP Calls, Theta Gang. Research recommends strategy fit. Plan runs all applicable strategy skills and compares.
@@ -53,7 +53,7 @@ Three-pillar quantitative momentum system: Mansfield Relative Strength (vs S&P 5
 BTC halving cycle analysis with on-chain indicators (MVRV, NUPL, Pi Cycle, Hash Ribbon, Puell Multiple). Current cycle peaked at $126K on Oct 6, 2025 (18 months post-halving — textbook). On-chain metrics suggest dampened drawdown with higher floor ($50-63K). Affects COIN/CRCL/MSTR position sizing. See `knowledge/frameworks/crypto-cycles.md`.
 
 ### Knowledge Base Wired Into All Skills (2026-06-14)
-Full audit and update of all 14 skills. Every skill now consults relevant knowledge files instead of reinventing guidance inline. Key changes: added `--options` flag to technicals.py calls for IV data, added `dashboard.py` to trade lifecycle skills, fixed naming bugs (`/plan` → `/plan-stock`, `/roll` → `/strategy-theta-gang roll`), added CAPE to market regime, added crypto-cycle.py trigger in scan-market.
+Full audit and update of all 14 skills. Every skill now consults relevant knowledge files instead of reinventing guidance inline. Key changes: added `--options` flag to technicals.py calls for IV data, added `dashboard.py` (later consolidated into `watchlist.py` — see 2026-07-18) to trade lifecycle skills, fixed naming bugs (`/plan` → `/plan-stock`, `/roll` → `/strategy-theta-gang roll`), added CAPE to market regime, added crypto-cycle.py trigger in scan-market.
 
 ### GICS Sector Misclassification (2026-06-06)
 META, GOOG, and APP are classified as Communication Services by GICS but functionally behave as Technology/Ad-Tech. When using sector momentum framework, treat these as hybrid — check both Communication (GICS) and Technology (functional). Don't blindly apply Communication downtrend signals to these names.
@@ -93,6 +93,15 @@ Integrated supply-chain bottleneck analysis from [serenity-skill](https://github
 3. **Value-chain layer ranking** in `/research-sector` — for supply-chain sectors, rank the constrained LAYERS before ranking companies. Prevents "popular ticker list" syndrome. Requires explicitly downgrading one popular area.
 
 Key design decision: bottleneck scorecard is supplemental (not a replacement for conviction score) because it only applies to supply-chain-heavy sectors. Evidence ladder and red flags are universal.
+
+### Watchlist Consolidation (2026-07-18)
+Consolidated 5 scripts into one unified `scripts/watchlist.py`:
+- **Deleted:** `scripts/update-index.py`, `scripts/dashboard.py`, `scripts/chart-watchlist.py`, `scripts/chart-earnings.py`
+- **Deleted outputs:** `research/stocks/0-INDEX.md`, `research/stocks/1-DASHBOARD.md`, `charts/watchlist-scatter.html`, `charts/earnings-calendar.html`
+- **New outputs:** `research/stocks/0-WATCHLIST.md` (replaces both index and dashboard), `charts/watchlist-dashboard.html` (single tabbed HTML with RSI vs P/E scatter + earnings calendar)
+- **New features:** tiered refresh cadence (conv 8+ = 14d, 6-7 = 28d, <6 = 42d), priority scoring (earnings > sector momentum > gap-to-target > staleness > conviction), `--add TICKER` for quick candidate pipeline, `--auto` for piping top N into scheduled agents, `--no-save` for terminal-only, `candidate` status with +35 priority bonus, sector momentum integration via parallel `sector-momentum.py --json` call
+- **New skill:** `/watchlist` with actions: triage, add, refresh, remove
+- **Rationale:** Five separate scripts with overlapping data fetches and inconsistent outputs. Single tool reduces token cost, simplifies workflow, and enables priority-based refresh instead of flat staleness checks.
 
 ---
 
@@ -138,11 +147,14 @@ Multi-account portfolio advisor with per-account goals, constraints, and positio
 - [x] Gitignore account files (contain sensitive data)
 - [x] Remove trade lifecycle skills (`trade-open`, `trade-close`, `trade-review`, `trade-watch`, `trade-portfolio`) — agent advises, doesn't track transactions
 
-### 2. Smart Watchlist ➡️ MEDIUM
+### 2. Smart Watchlist 🔄 MOSTLY DONE (2026-07-18)
 Enhance watchlist to bridge research → portfolio action.
 
+- [x] Tiered refresh cadence with priority scoring (conv 8+ = 14d, 6-7 = 28d, <6 = 42d) — replaces simple stale flag
+- [x] `--add TICKER` for candidate pipeline from any source (friend, news, sector scan)
+- [x] Sector momentum integration in watchlist (reads `sector-momentum.py --json` in parallel)
+- [x] Consolidated dashboard: `0-WATCHLIST.md` + `charts/watchlist-dashboard.html` (replaced 0-INDEX.md, 1-DASHBOARD.md, watchlist-scatter.html, earnings-calendar.html)
 - [ ] Add `entry_trigger` field to research/stocks frontmatter (e.g., `"RSI < 35 or pullback to $380"`)
-- [ ] Enhance `dashboard.py` to show entry trigger status per watching stock
 - [ ] Consider alert/notification when a watching stock hits its entry trigger
 - ~~target_accounts field~~ — decided account-agnostic is better (2026-06-18)
 
@@ -219,16 +231,18 @@ Set up Claude Code cloud triggers to run jobs on a recurring schedule.
 - [ ] Weekly: re-run `/research-market` for sector rotation updates
 - [ ] Pre-earnings: auto-flag stocks in watchlist with earnings approaching within 7 days
 - [ ] Explore Claude Code `/schedule` for cron-based remote agent triggers
+- **Note (2026-07-18):** `watchlist.py --auto` outputs top N tickers for piping into scheduled agents. The infrastructure is built, just needs wiring to a cron trigger.
 
-### 8. Visual Dashboard & Charts ✅ DONE (2026-06-18, updated 2026-06-27)
+### 8. Visual Dashboard & Charts ✅ DONE (2026-06-18, updated 2026-07-18)
 Interactive visualizations to help interpret signals at a glance.
 
-**Phase 1 — Plotly chart scripts (5/5 done):**
-- [x] `scripts/sector-heatmap.py` — sector performance treemap
-- [x] `scripts/sector-momentum.py` — terminal dashboard with MRS, Weinstein Stage, ROC
-- [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard
-- [x] `scripts/chart-watchlist.py` — RSI vs fwd P/E scatter plot
-- [x] `scripts/chart-earnings.py` — earnings calendar timeline
+**Phase 1 — Plotly chart scripts (5/5 done, consolidated 2026-07-18):**
+- [x] `scripts/sector-heatmap.py` — sector performance treemap (standalone, serves `/research-market`)
+- [x] `scripts/sector-momentum.py` — terminal dashboard with MRS, Weinstein Stage, ROC (standalone, serves `/research-market`)
+- [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard (standalone)
+- [x] ~~`scripts/chart-watchlist.py`~~ — consolidated into `scripts/watchlist.py` (2026-07-18)
+- [x] ~~`scripts/chart-earnings.py`~~ — consolidated into `scripts/watchlist.py` (2026-07-18)
+- [x] `scripts/watchlist.py` — single tabbed `charts/watchlist-dashboard.html` with RSI vs P/E scatter + earnings calendar (2026-07-18)
 
 **Phase 2 — Streamlit web app ✅ DONE (2026-06-18):**
 - [x] `scripts/app.py` — local web dashboard at `localhost:8501`
@@ -243,7 +257,7 @@ Daily RSI tells one story; weekly/monthly tell another. Combining timeframes giv
 
 - [ ] Add weekly and monthly RSI to dashboard alongside daily
 - [ ] **Confluence signals** — daily oversold + weekly at support + monthly uptrend = highest conviction entry
-- [ ] Update `scripts/dashboard.py` to fetch and display multi-timeframe RSI
+- [ ] Update `scripts/watchlist.py` to fetch and display multi-timeframe RSI
 - [ ] Add to knowledge base: `knowledge/signals/multi-timeframe.md`
 - [ ] Consider adding weekly/monthly SMA alignment (e.g., price above monthly SMA 10 = long-term uptrend intact)
 

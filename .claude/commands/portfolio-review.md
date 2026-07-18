@@ -68,7 +68,7 @@ Read the latest market overview:
 
 Run the dashboard for watchlist context:
 ```bash
-.venv/bin/python3 scripts/dashboard.py --json
+.venv/bin/python3 scripts/watchlist.py --json
 ```
 
 ## Step 2: Cross-Account Analysis
