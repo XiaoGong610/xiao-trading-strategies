@@ -73,13 +73,14 @@ If any answer is "no" → **FAIL**. Move the strike higher or don't sell the CC.
 After passing all 4 gates, calculate a composite score:
 
 ```
-CC Sharpe Score = (IV Rank × 0.35) + (Yield Score × 0.35) + (IV vs RV Edge × 0.15) + (Catalyst Clearance × 0.15)
+CC Sharpe Score = (IV Rank × 0.35) + (Yield Score × 0.35) + (IV vs RV Edge × 0.15) + (Earnings Gate × 0.15)
 
 Components (each scaled 0-100):
   IV Rank:           Use directly (0-100)
   Yield Score:       <8% ann = 20, 8-12% = 50, 12-20% = 75, >20% = 100
   IV vs RV Edge:     IV < RV = 0, IV ≈ RV = 50, IV > RV by 10%+ = 100
-  Catalyst Clearance: Earnings within DTE = 0, Earnings 2-4 weeks after = 50, No catalysts = 100
+  Earnings Gate:     Earnings <7 days before expiry = 0, 7-14 days before = 25,
+                     within 7 days after = 50, 14+ days after = 75, no earnings in window = 100
 
 Verdicts:
   Score > 60  →  SELL CC — good risk-adjusted trade

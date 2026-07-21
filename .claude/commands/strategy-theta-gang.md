@@ -27,7 +27,7 @@ This is a pure options mechanics analysis. Do NOT cover company fundamentals, gr
 Use the script's output for IV, price, support/resistance levels, and expiry data. Supplement with web search only for qualitative info the script can't provide.
 
 **Step 2: Consult knowledge base**
-- Read `knowledge/strategies/when-to-csp.md` — apply the ideal setup checklist and IV Rank × RSI decision matrix (for CSP trades)
+- Read `knowledge/strategies/when-to-csp.md` — calculate the **CSP Score** (6-component composite: IV Rank, VRP Edge, AnnYield, Buffer %, Support, Earnings Gate) for CSP trades. If CSP Score < 45, explicitly recommend against selling CSPs.
 - Read `knowledge/strategies/when-to-cc.md` — run the CC Sharpe 4-gate check and score BEFORE recommending any covered call. If CC Sharpe Score < 40, explicitly recommend against selling CCs.
 - Read `knowledge/signals/iv-rank-guide.md` — if IV Rank < 25, flag: "Premium too thin — consider LEAPs or shares instead"
 - Read `knowledge/signals/rsi-guide.md` — interpret RSI in sector context (high-beta sectors hit extremes routinely)
@@ -51,10 +51,12 @@ Suggest 1-2 setups. For each:
 - **Expiration**: specific date, DTE (target 30-45 DTE sweetspot)
 - **Premium**: estimated credit received per share and per contract
 - **Greeks snapshot**: delta, theta ($/day earned), vega exposure, gamma risk
-- **Probability of profit**
+- **Probability of profit** (PoP ≈ 1 - |delta|)
 - **Max profit / Max loss / Breakeven**
+- **Buffer %**: (stock price - breakeven) / stock price × 100
 - **Buying power reduction**
 - **Annualized return**: if held to expiry, and if closed at 50% profit
+- **CSP Score** (for CSP trades) or **CC Sharpe Score** (for CC trades) — display the composite score with component breakdown
 
 ## Risk Assessment
 - Gamma risk (especially if DTE < 21)
@@ -63,7 +65,8 @@ Suggest 1-2 setups. For each:
 - What would trigger a roll or early close?
 
 ## Verdict
-- Go / no-go for theta gang right now
+- **CSP Score** or **CC Sharpe Score** with full component breakdown — display prominently before the go/no-go decision
+- Go / no-go for theta gang right now (CSP Score > 65 = go, 45-65 = marginal, < 45 = skip; CC Sharpe > 60 = go, 40-60 = marginal, < 40 = skip)
 - If go: best specific trade with reasoning
 - Check what other traders are doing on this ticker at [thetagang.com/symbols/TICKER](https://thetagang.com/symbols/TICKER) — filter by strategy type, look at winners/losers to validate your setup
 
@@ -115,7 +118,10 @@ Build a comparison table with 3-5 candidates. Follow these rules:
 - **Iron Condor**: sell both sides at ~16 delta, buy wings further out
 
 For each candidate, include:
-| Strike | Expiry (DTE) | Delta | Premium | PoP | Max Profit | Max Loss | Breakeven | Annualized Return |
+| Strike | Expiry (DTE) | Delta | Premium | PoP | Max Profit | Max Loss | Breakeven | Buffer % | AnnYield | CSP/CC Score |
+
+For CSP candidates, calculate the CSP Score (from `knowledge/strategies/when-to-csp.md`).
+For CC candidates, calculate the CC Sharpe Score (from `knowledge/strategies/when-to-cc.md`).
 
 ## Theta Decay Analysis
 - How much theta ($/day) does each candidate earn?
