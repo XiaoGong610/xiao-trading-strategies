@@ -282,7 +282,8 @@ def main():
                         help="Don't open in browser")
     args = parser.parse_args()
 
-    output_path = Path(__file__).parent.parent / "charts" / "sector-heatmap.html"
+    from datetime import date
+    output_path = Path(__file__).parent.parent / "research" / "sectors" / f"sector-heatmap-{date.today().isoformat()}.html"
 
     print("Fetching sector market caps...")
     market_caps = fetch_sector_market_caps()

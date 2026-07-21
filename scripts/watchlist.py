@@ -939,7 +939,8 @@ def main():
         generate_dashboard_html(classified)
 
 
-DASHBOARD_HTML_PATH = Path("charts") / "watchlist-dashboard.html"
+from datetime import date as _date
+DASHBOARD_HTML_PATH = Path("research/stocks") / f"0-watchlist-dashboard-{_date.today().isoformat()}.html"
 
 # Sector color palette for scatter plot
 SECTOR_COLORS = {

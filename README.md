@@ -35,7 +35,7 @@ A set of Claude Code custom skills for stock research, portfolio management, and
 ### Portfolio & Planning
 | Command | Description |
 |---------|-------------|
-| `/portfolio-review` | Cross-account analysis, DCA review, weekly trading plan output |
+| `/portfolio-review` | Execution tracking, cross-account analysis, options intelligence (CSP Score/CC Sharpe), sector momentum, earnings risk, DCA optimization, weekly plan |
 | `/plan-stock AAPL` | Orchestrator — context, research, strategy, execution plan with orders |
 
 ### Strategy
@@ -80,10 +80,13 @@ portfolio/             # Multi-account portfolio management
   accounts/            # Per-account files: goals, positions, constraints (gitignored)
   plans/               # Weekly trading plans (gitignored)
   REVIEW-*.md          # Point-in-time portfolio reviews (gitignored)
-charts/                # Generated HTML charts (gitignored)
+# HTMLs are date-named in their source folders (not in a separate charts/ dir):
+#   research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html
+#   research/sectors/sector-heatmap-YYYY-MM-DD.html
+#   portfolio/PLAN-YYYY-MM-DD.html
 scripts/               # Python scripts (committed)
   technicals.py        # Market data fetcher (price, technicals, options)
-  watchlist.py         # Consolidated watchlist: triage, dashboard, charts (0-WATCHLIST.md + watchlist-dashboard.html)
+  watchlist.py         # Consolidated watchlist: triage, dashboard (0-WATCHLIST.md + 0-watchlist-dashboard-YYYY-MM-DD.html)
   app.py               # Streamlit interactive dashboard
   sector-momentum.py   # Mansfield RS + Weinstein Stage + ROC momentum
   sector-heatmap.py    # Interactive Plotly sector performance treemap

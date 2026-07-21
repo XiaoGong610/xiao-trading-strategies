@@ -140,7 +140,7 @@ Research → Strategy → Execute → Manage
 
 | Category | Skill | Purpose |
 |----------|-------|---------|
-| **portfolio** | `/portfolio-review` | Cross-account analysis: positions vs goals, concentration, DCA review |
+| **portfolio** | `/portfolio-review` | Cross-account analysis: execution tracking, concentration, sector momentum, options intelligence (CSP Score/CC Sharpe), DCA optimization, earnings risk, weekly plan |
 | **research** | `/research-market` | Broad market overview, sector rotation, regime classification |
 | | `/research-sector` | Deep-dive a sector or theme, rank candidates |
 | | `/research-stock` | Full stock deep-dive: fundamentals, earnings, conviction score |
@@ -170,7 +170,10 @@ portfolio/         # Multi-account portfolio management
   accounts/        # Per-account files: goals, positions, constraints, flags (gitignored)
   plans/           # Weekly trading plans — DCA schedule, orders, position management (gitignored)
   REVIEW-*.md      # Point-in-time portfolio reviews (historical log, gitignored)
-charts/            # Generated interactive HTML charts
+charts/            # REMOVED — HTMLs now date-named in their source folders:
+                   #   research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html
+                   #   research/sectors/sector-heatmap-YYYY-MM-DD.html
+                   #   portfolio/PLAN-YYYY-MM-DD.html
 scripts/           # Python scripts (technicals.py, watchlist.py, etc.)
 leaders.md         # ThetaGang.com top traders reference
 NOTES.md           # Project decisions, discussions, and TODOs
@@ -319,7 +322,7 @@ echo '{"ticker":"AEHR",...}' | .venv/bin/python3 scripts/bottleneck-scorecard.py
 Scores 8 weighted factors (demand inflection, chokepoint severity, evidence quality, supplier concentration, expansion difficulty, valuation disconnect, architecture coupling, catalyst timing) minus penalties (dilution, governance, geopolitics, liquidity, hype risk, accounting quality, cyclicality, alternative design risk). Verdicts: ≥85 Top priority, ≥70 High, ≥55 Worth tracking, <55 Early lead.
 
 ### `scripts/watchlist.py`
-Consolidated watchlist manager. Tiers stocks, scores refresh urgency, fetches live data (RSI, fwd P/E, sector momentum, earnings countdown, gap-to-target), and generates `research/stocks/0-WATCHLIST.md` + `charts/watchlist-dashboard.html` (tabbed: RSI vs P/E scatter + earnings calendar).
+Consolidated watchlist manager. Tiers stocks, scores refresh urgency, fetches live data (RSI, fwd P/E, sector momentum, earnings countdown, gap-to-target), and generates `research/stocks/0-WATCHLIST.md` + `research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html` (tabbed: RSI vs P/E scatter + earnings calendar).
 
 ```bash
 .venv/bin/python3 scripts/watchlist.py              # terminal dashboard + saves 0-WATCHLIST.md

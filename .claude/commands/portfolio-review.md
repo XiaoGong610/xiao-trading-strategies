@@ -116,6 +116,17 @@ Flag:
 |---------|------|--------|-------|
 | **Total** | | | |
 
+**DCA runway alert:** For accounts running daily DCA (e.g., BrokerageLink), calculate cash runway = cash ÷ daily DCA spend.
+
+| Runway | Signal | Action |
+|--------|--------|--------|
+| < 3 weeks | 🔴 **CRITICAL** | DCA will stop. Sell non-thesis positions or reduce DCA immediately. |
+| 3-4 weeks | ⚠️ **LOW** | Plan cash infusion (sells, transfers) within 1-2 weeks. |
+| 4-6 weeks | Minimum comfortable | Monitor weekly. |
+| 6+ weeks | ✅ Healthy | No action needed. |
+
+If any DCA account is below 4 weeks runway, flag it in Step 6 "Do This Week" recommendations with specific sells to extend runway.
+
 ### 2d. Portfolio Metrics
 
 | Metric | Value |
@@ -278,6 +289,8 @@ Show the PROPOSED recurring buy schedule with any changes highlighted:
 | **Total** | $X | $X | | |
 
 ### One-Time Orders (this week)
+
+**Plan-before-trade check:** Before recommending any NEW trade (sell CCs, sell CSPs, new entry, LEAP purchase), verify that `research/stocks/TICKER.md` contains a Pre-Trade Plan entry (`# TICKER — Pre-Trade Plan`). If no plan exists, flag: "⚠️ No /plan-stock run — run before executing" instead of giving specific strike/expiry recommendations. Exceptions: simple sells of no-thesis positions and management of existing options (rolls, closes) don't need a full /plan-stock.
 
 Specific orders to place in the broker — shares, limits, LEAPs, CCs, CSPs:
 

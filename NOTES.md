@@ -94,6 +94,26 @@ Integrated supply-chain bottleneck analysis from [serenity-skill](https://github
 
 Key design decision: bottleneck scorecard is supplemental (not a replacement for conviction score) because it only applies to supply-chain-heavy sectors. Evidence ladder and red flags are universal.
 
+### Portfolio Review Upgrade (2026-07-20)
+Seven enhancements to `/portfolio-review`:
+1. **Execution tracking (Step 0b)** — reads prior plan, shows done/not-done scorecard, flags carry-forward items. Caught TSLL/TSLA CCs/AMZN CC roll deferred 3 weeks (33% execution rate).
+2. **Options intelligence (Step 3)** — CC Sharpe screen on uncovered shares, CSP Score gate before recommending CSPs, Buffer % monitoring on sold puts, earnings-through-DTE check on sold calls.
+3. **Portfolio metrics (Step 2d)** — total value change, weighted avg conviction, cash runway, options notional exposure.
+4. **Sector momentum overlay (Step 2e)** — maps positions to GICS sectors, flags overweight in downtrending sectors (caught 58.7% Consumer Disc. in Downtrend via TSLA+AMZN).
+5. **Earnings risk dashboard (Step 3)** — all positions with earnings in 14 days + options exposure through earnings.
+6. **Watchlist pipeline (Step 4)** — surfaces watchlist stocks below entry target not yet in portfolio.
+7. **DCA optimization (Step 5)** — gap%, RSI, conviction columns + overpaying/missing accumulation/RSI pacing flags + DCA cash runway alert (< 4 weeks = LOW, < 3 weeks = CRITICAL).
+
+Also added: plan-before-trade check in Step 7 (verify `/plan-stock` exists before recommending new trades), CSP capital feasibility check (strike × 100 vs account cash).
+
+### HTML Rehoming & Date Naming (2026-07-20)
+Removed `charts/` folder. HTMLs now saved date-named in their source folders to preserve history:
+- Watchlist dashboard → `research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html`
+- Sector heatmap → `research/sectors/sector-heatmap-YYYY-MM-DD.html`
+- Portfolio plan → `portfolio/PLAN-YYYY-MM-DD.html`
+
+Updated `scripts/watchlist.py` and `scripts/sector-heatmap.py` output paths.
+
 ### CSP Score Framework & Graded Earnings Gate (2026-07-20)
 Inspired by [PutFinder](https://putfinder.com) (a friend's rules-based CSP screening engine). Three additions:
 1. **CSP Score** in `knowledge/strategies/when-to-csp.md` — 6-component composite score (0-100) as the CSP equivalent of CC Sharpe. Components: IV Rank (20%), VRP Edge (10%), AnnYield (25%), Buffer % (20%), Support (10%), Earnings Gate (15%). Verdicts: >65 = SELL, 45-65 = MARGINAL, <45 = SKIP.
@@ -252,7 +272,7 @@ Interactive visualizations to help interpret signals at a glance.
 - [x] `scripts/crypto-cycle.py` — BTC on-chain cycle dashboard (standalone)
 - [x] ~~`scripts/chart-watchlist.py`~~ — consolidated into `scripts/watchlist.py` (2026-07-18)
 - [x] ~~`scripts/chart-earnings.py`~~ — consolidated into `scripts/watchlist.py` (2026-07-18)
-- [x] `scripts/watchlist.py` — single tabbed `charts/watchlist-dashboard.html` with RSI vs P/E scatter + earnings calendar (2026-07-18)
+- [x] `scripts/watchlist.py` — single tabbed `research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html` with RSI vs P/E scatter + earnings calendar (2026-07-18, rehomed 2026-07-20)
 
 **Phase 2 — Streamlit web app ✅ DONE (2026-06-18):**
 - [x] `scripts/app.py` — local web dashboard at `localhost:8501`
