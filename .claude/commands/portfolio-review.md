@@ -52,6 +52,23 @@ constraints:
 
 **If the user hasn't shared screenshots** in this conversation, read the existing account files and note their `last_updated` date. If stale (>7 days), ask the user: "Your account data is from [date]. Want to share updated screenshots before I run the review?"
 
+## Step 0b: Execution Tracking — Prior Plan Accountability
+
+Find the most recent plan file: `portfolio/plans/PLAN-*.md` (sort by date, take latest). If no prior plan exists, skip this step.
+
+1. **Read the prior plan's "One-Time Orders" and "Position Management" tables.**
+2. **For each item, check against current account files** — did the position change? Was the option rolled/closed? Was the stock sold?
+3. **Show an execution scorecard:**
+
+| # | Item (from prior plan) | Status | Weeks Pending |
+|---|------------------------|--------|---------------|
+| 1 | ... | ✅ Done / ❌ Not Done / ⚠️ Partial | 0 / 1 / 2+ |
+
+4. **Flag CARRY-FORWARD items** — anything "Not Done" that also appeared in the plan before that (check second-most-recent plan). These are chronically deferred actions that need a decision: do it, defer with reason, or drop it.
+5. **Execution rate:** Done ÷ total. If < 50%, note: "Execution rate is low — consider whether plans are too ambitious or if there are blocking issues."
+
+This step goes first so the user sees accountability before new analysis.
+
 ## Step 1: Read Account Files & Market Context
 
 Read all account files:
@@ -66,7 +83,7 @@ portfolio/accounts/gobig.md
 Read the latest market overview:
 - `research/sectors/market-overview.md` — market regime, key risks
 
-Run the dashboard for watchlist context:
+Run the watchlist for context (keep parsed JSON available — referenced in Steps 2-5):
 ```bash
 .venv/bin/python3 scripts/watchlist.py --json
 ```
@@ -98,6 +115,36 @@ Flag:
 | Account | Cash | Cash % | Notes |
 |---------|------|--------|-------|
 | **Total** | | | |
+
+### 2d. Portfolio Metrics
+
+| Metric | Value |
+|--------|-------|
+| Total portfolio value | $X |
+| Change since last review | +/-$X (+/-X%) — compare against prior `portfolio/REVIEW-*.md` total |
+| Weighted avg conviction | X.X — sum of (conviction × position weight) for each held stock |
+| Cash runway at DCA pace | X weeks — total cash across all accounts ÷ weekly DCA spend |
+| Options: notional at risk (sold puts) | $X — sum of strike × 100 × contracts for all sold puts |
+| Options: upside capped (sold calls) | $X — sum of strike × 100 × contracts for all sold calls |
+
+For conviction scores, pull from the watchlist JSON (`conviction` field) or from `research/stocks/{TICKER}.md` frontmatter. For positions not on the watchlist, use conviction 5.0 (neutral).
+
+### 2e. Sector Momentum Overlay
+
+Run sector momentum:
+```bash
+.venv/bin/python3 scripts/sector-momentum.py --json
+```
+
+Map each portfolio position to its GICS sector (use the stock's `sector` field from watchlist JSON or research file frontmatter) and cross-reference:
+
+| Sector | Portfolio % | Momentum | Weinstein Stage | Strategy Implication |
+|--------|------------|----------|-----------------|---------------------|
+
+**Flag misalignments:**
+- Portfolio overweight (>20%) in sectors classified as "Downtrend" or Weinstein Stage 3-4 — consider reducing exposure or pausing DCA.
+- Portfolio underweight (<5%) in sectors classified as "Accelerating Up" — check watchlist for entry candidates in that sector.
+- Any position in a Stage 4 (decline) sector — flag for review regardless of individual stock thesis.
 
 ## Step 3: Position-Level Review
 
@@ -134,6 +181,34 @@ Flag:
 - LEAPs below 90 DTE (roll or close)
 - Covered calls near the money (assignment risk)
 
+### Options Intelligence (enhanced)
+
+**Uncovered shares → CC Sharpe screen:** For every held stock with 100+ uncovered shares, calculate the CC Sharpe Score per `knowledge/strategies/when-to-cc.md`. If CC Sharpe > 60, flag: "SELL CC — Sharpe [score]" with suggested delta/DTE. If < 40, note: "CC not justified — premium too thin."
+
+**CSP recommendations → CSP Score gate:** Before recommending "ADD CSP" on any position, calculate the CSP Score (6-component composite: IV Rank, VRP Edge, AnnYield, Buffer %, Support, Earnings Gate) per `knowledge/strategies/when-to-csp.md`. If CSP Score < 45, do not recommend — note "CSP Score [X] < 45 — skip." Only recommend CSPs that score > 45.
+
+**Sold puts → Buffer % monitoring:**
+
+| Put | Strike | Premium | Breakeven | Stock Price | Buffer % | Status |
+|-----|--------|---------|-----------|-------------|----------|--------|
+
+Buffer % = (Stock Price - Breakeven) / Stock Price × 100. Flag any with Buffer < 5% as "⚠️ THIN BUFFER — roll or close."
+
+**Sold calls → distance and earnings check:** For each sold call, show distance-to-strike % = (Strike - Stock Price) / Stock Price × 100. If earnings falls within DTE, flag: "⚠️ EARNINGS IN WINDOW — [X] days before expiry."
+
+### Earnings Risk Dashboard
+
+For all held positions, check `earnings_days` from the watchlist JSON. For positions not on the watchlist, check `next_earnings` from `research/stocks/{TICKER}.md` frontmatter.
+
+| Ticker | Earnings Date | Days Out | Shares | $ Exposure | Options Through Earnings? | Max Risk |
+|--------|--------------|----------|--------|------------|--------------------------|----------|
+
+Flag:
+- Positions with earnings in next 14 days → ensure they appear in Step 7 "Key Dates."
+- Sold puts through earnings → calculate max assignment cost if stock gaps down.
+- Sold calls through earnings → flag assignment risk if stock could gap above strike.
+- Positions with NO research file or stale research (>30 days) going into earnings → flag: "⚠️ RESEARCH NEEDED before earnings."
+
 ## Step 4: Research-to-Portfolio Alignment
 
 Compare the research conviction scores against actual portfolio weights:
@@ -143,14 +218,28 @@ Compare the research conviction scores against actual portfolio weights:
 
 **Key question:** Are your biggest positions your highest-conviction ideas? If not, what's blocking alignment (taxes, timing, inertia)?
 
+### Watchlist Pipeline: Ready-to-Enter Stocks
+
+From the watchlist JSON (loaded in Step 1), filter for stocks where `gap_pct < 0` (price below entry target) that are NOT currently held in any portfolio account.
+
+| Ticker | Conv | Price | Entry Target | Gap% | Sector | Strategies | Why Not In Portfolio? |
+|--------|------|-------|-------------|------|--------|------------|---------------------|
+
+For each stock shown, prompt: "This is below your entry target. Should we plan an entry this week?" If the list is empty, note: "No watchlist stocks are below entry targets right now."
+
 ## Step 5: DCA Schedule Review
 
-If the user has active DCA schedules (recurring buys):
+If the user has active DCA schedules (recurring buys), pull conviction, gap-to-target, and RSI from the watchlist JSON:
 
-| DCA | $/Day | Position Size | Conviction | Assessment | Change? |
-|-----|-------|--------------|------------|------------|---------|
+| DCA | $/Day | Position Size | Conv | Gap% | RSI | Assessment | Change? |
+|-----|-------|--------------|------|------|-----|------------|---------|
 
-Recommend adjustments: increase for high-conviction underweight names, decrease/pause for overweight or low-conviction names.
+**Flags:**
+- **Overpaying?** DCA into stocks >20% above entry target (`gap_pct > 20`) — consider pausing or reducing until price returns to target zone.
+- **Missing accumulation?** High-conviction stocks (conv ≥ 8) with NO active DCA and position underweight vs. conviction-based target — flag: "No DCA on high-conviction underweight name."
+- **RSI-based pacing:** RSI < 35 → "ACCELERATE — oversold." RSI > 70 → "PAUSE — overbought, let it cool." RSI 35-70 → "MAINTAIN."
+
+Recommend adjustments: increase for high-conviction underweight names at or below target, decrease/pause for overweight, above-target, or low-conviction names.
 
 ## Step 6: Recommendations
 
@@ -223,7 +312,7 @@ How much new capital is being deployed and is it within risk limits:
 
 ## Step 8: Save Outputs
 
-1. **Portfolio review** → `portfolio/REVIEW-YYYY-MM-DD.md` (Steps 1-6: analysis, positions, alignment)
+1. **Portfolio review** → `portfolio/REVIEW-YYYY-MM-DD.md` (Steps 0b-6: execution tracking, analysis, positions, alignment)
 2. **Weekly trading plan** → `portfolio/plans/PLAN-YYYY-MM-DD.md` (Step 7: DCA schedule, orders, position management, key dates, risk budget)
 
 The plan file is the actionable output — what to do next week. The review file is the analysis that supports it. Keep them separate so the user can reference the plan without re-reading the full review.
