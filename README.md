@@ -113,8 +113,8 @@ NOTES.md               # Project decisions, discussions, and TODOs
 | `frameworks/evidence-ladder.md` | Source grading, 12 red flags, evidence standards |
 | `frameworks/tax-rules.md` | Multi-account tax optimization, wash sales, sell order |
 | `sectors/semiconductors.md` | Semi cycles, Qual cycle, optical sub-layer, AI overlay |
-| `strategies/when-to-csp.md` | CSP setup checklist, IV×RSI matrix, management rules |
-| `strategies/when-to-cc.md` | CC Sharpe 4-gate check, coverage rules, rolled CC handling |
+| `strategies/when-to-csp.md` | **CSP Score** (6-component composite), Buffer %, graded Earnings Gate, IV×RSI matrix |
+| `strategies/when-to-cc.md` | CC Sharpe 4-gate check, graded Earnings Gate, coverage rules, rolled CC handling |
 | `strategies/when-to-leaps.md` | LEAP delta/expiry selection, IV<30 gate, vega risk |
 | `strategies/execution-framework.md` | Order types, ATR-based stops, scaled exits, position sizing |
 | `reference/influencers.md` | High-signal X/Twitter accounts for research |

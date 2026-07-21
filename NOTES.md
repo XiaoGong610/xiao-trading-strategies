@@ -94,6 +94,16 @@ Integrated supply-chain bottleneck analysis from [serenity-skill](https://github
 
 Key design decision: bottleneck scorecard is supplemental (not a replacement for conviction score) because it only applies to supply-chain-heavy sectors. Evidence ladder and red flags are universal.
 
+### CSP Score Framework & Graded Earnings Gate (2026-07-20)
+Inspired by [PutFinder](https://putfinder.com) (a friend's rules-based CSP screening engine). Three additions:
+1. **CSP Score** in `knowledge/strategies/when-to-csp.md` — 6-component composite score (0-100) as the CSP equivalent of CC Sharpe. Components: IV Rank (20%), VRP Edge (10%), AnnYield (25%), Buffer % (20%), Support (10%), Earnings Gate (15%). Verdicts: >65 = SELL, 45-65 = MARGINAL, <45 = SKIP.
+2. **Buffer %** — `(stock - breakeven) / stock × 100`. Measures downside cushion more intuitively than delta alone. Thresholds: <5% thin, 5-8% moderate, 8-12% good, 12-18% strong, >18% very safe.
+3. **Graded Earnings Gate** — replaces binary "earnings within DTE = skip" with 5-tier scoring: <7d before = 0 (disqualify), 7-14d before = 25, within 7d after = 50, 14+d after = 75, no earnings = 100. Applied to both CSP Score and CC Sharpe (replaces old Catalyst Clearance).
+
+Updated `/strategy-theta-gang` skill to calculate and display CSP Score with component breakdown, Buffer % in trade tables, and PutFinder design credit.
+
+First test on AMZN: CSP Score = 44.3 (SKIP) — correctly identified VRP Edge = 0 (options underpriced), Earnings Gate = 25 (all expiries hold through July 30), and thin Buffer % as disqualifying factors. The framework quantified what was previously a judgment call.
+
 ### Watchlist Consolidation (2026-07-18)
 Consolidated 5 scripts into one unified `scripts/watchlist.py`:
 - **Deleted:** `scripts/update-index.py`, `scripts/dashboard.py`, `scripts/chart-watchlist.py`, `scripts/chart-earnings.py`
@@ -187,13 +197,13 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 - [x] `knowledge/frameworks/sector-momentum.md` — Mansfield RS + Weinstein Stage + ROC (added 2026-06-06)
 - [x] `knowledge/frameworks/macro-regimes.md` — now embedded in `/research-market` regime classification
 - [x] `knowledge/sectors/semiconductors.md` — cycle dynamics, sub-sectors, HBM/NAND drivers, key metrics, AI overlay (added 2026-06-14)
-- [x] `knowledge/strategies/when-to-csp.md` — IV rank thresholds, delta/DTE rules, earnings avoidance, management rules (added 2026-06-14)
+- [x] `knowledge/strategies/when-to-csp.md` — **CSP Score** 6-component composite (IV Rank, VRP Edge, AnnYield, Buffer %, Support, Earnings Gate), delta/DTE rules, graded earnings gate, management rules (added 2026-06-14, CSP Score added 2026-07-20)
 - [x] `knowledge/strategies/when-to-leaps.md` — IV environment, delta selection, vega risk, capital efficiency (added 2026-06-14)
 - [x] `knowledge/strategies/execution-framework.md` — order types, stop placement, exits, position sizing, conviction-based allocation (added 2026-06-18)
 - [x] `knowledge/frameworks/evidence-ladder.md` — source grading (strong/medium/weak), red flag checklist, per-candidate evidence standard (added 2026-06-23, adapted from serenity-skill)
 - [x] `knowledge/signals/breakout-filter.md` — true/false breakout 3-way filter: volume >1.5x + ATR >1x + moderate IV (added 2026-06-23, adapted from stock-skill/恨铁)
 - [x] `knowledge/signals/market-day-types.md` — 5-type market day classification: Trend/Range/Reversal/Munger/Event with Event Day discipline rules (added 2026-06-23, adapted from stock-skill/恨铁)
-- [x] `knowledge/strategies/when-to-cc.md` — CC Sharpe 4-gate check (IV Rank, yield, IV vs RV, exit willingness), composite score, coverage rules, rolled CC note (added 2026-06-27)
+- [x] `knowledge/strategies/when-to-cc.md` — CC Sharpe 4-gate check (IV Rank, yield, IV vs RV, exit willingness), composite score, coverage rules, rolled CC note, graded Earnings Gate (added 2026-06-27, Earnings Gate upgraded 2026-07-20)
 - [x] `knowledge/frameworks/tax-rules.md` — multi-account tax optimization: sell losers taxable first, winners tax-free first, wash sales, holding periods (added 2026-06-27)
 
 **Phase 2 — Scoring scripts:**

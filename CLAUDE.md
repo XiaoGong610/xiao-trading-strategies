@@ -364,5 +364,5 @@ Reference docs in `knowledge/` for investment decision-making. Skills consult th
 - `signals/` — RSI, IV rank, MACD, MA, volume interpretation guides, breakout filter, market day types
 - `frameworks/` — AI capital flow model, valuation benchmarks, crypto 4-year cycle, sector momentum, evidence ladder (source grading + red flags), **tax rules** (multi-account sell order, wash sales, tax-loss harvesting)
 - `sectors/` — sector-specific metrics and cycle dynamics (semiconductors)
-- `strategies/` — when to sell CSPs, **when to sell CCs** (CC Sharpe 4-gate check), when to buy LEAPs, **execution framework** (order types, stops, exits, position sizing)
+- `strategies/` — when to sell CSPs (**CSP Score** 6-component composite, Buffer %, graded Earnings Gate), **when to sell CCs** (CC Sharpe 4-gate check, graded Earnings Gate), when to buy LEAPs, **execution framework** (order types, stops, exits, position sizing)
 - `reference/` — influencer tracking (X/Twitter), ThetaGang.com leaders
