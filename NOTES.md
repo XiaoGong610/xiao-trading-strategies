@@ -183,19 +183,26 @@ Enhance watchlist to bridge research → portfolio action.
 - [x] Tiered refresh cadence with priority scoring (conv 8+ = 14d, 6-7 = 28d, <6 = 42d) — replaces simple stale flag
 - [x] `--add TICKER` for candidate pipeline from any source (friend, news, sector scan)
 - [x] Sector momentum integration in watchlist (reads `sector-momentum.py --json` in parallel)
-- [x] Consolidated dashboard: `0-WATCHLIST.md` + `charts/watchlist-dashboard.html` (replaced 0-INDEX.md, 1-DASHBOARD.md, watchlist-scatter.html, earnings-calendar.html)
+- [x] Consolidated dashboard: `0-WATCHLIST.md` + `research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html` (rehomed from charts/ with date naming, 2026-07-20)
+- [x] Watchlist-to-portfolio pipeline — `/portfolio-review` Step 4 surfaces watchlist stocks below entry target not in portfolio (2026-07-20)
 - [ ] Add `entry_trigger` field to research/stocks frontmatter (e.g., `"RSI < 35 or pullback to $380"`)
 - [ ] Consider alert/notification when a watching stock hits its entry trigger
 - ~~target_accounts field~~ — decided account-agnostic is better (2026-06-18)
 
-### 3. Risk & Portfolio Management 🔄 PARTIALLY DONE
+### 3. Risk & Portfolio Management ✅ MOSTLY DONE (updated 2026-07-20)
 Prevent overconcentration and size positions properly.
 
 - [x] **Cross-account aggregation** — done in `/portfolio-review` (2026-06-18). Shows total exposure per ticker across all 5 accounts.
 - [x] **Allocation framework** — conviction-based targets (9-10 → 5-8%, 7-8 → 3-5%, etc.) in execution framework
 - [x] **Position sizing** — 2% risk rule in `knowledge/strategies/execution-framework.md`
+- [x] **Max allocation enforcement** — `/portfolio-review` Step 4 compares conviction vs weight, flags misalignment. Plan-before-trade check prevents blind trades. (2026-07-20)
+- [x] **Sector momentum overlay** — `/portfolio-review` Step 2e maps positions to sectors, flags overweight in downtrending sectors (2026-07-20)
+- [x] **Execution tracking** — `/portfolio-review` Step 0b reads prior plan, shows done/not-done scorecard, flags carry-forwards (2026-07-20)
+- [x] **DCA cash runway alerts** — flags when DCA account cash drops below 4 weeks (<3 wks = critical). Caught BL at 2.3 weeks. (2026-07-20)
+- [x] **Options intelligence** — CC Sharpe on uncovered shares, CSP Score gate, Buffer % on sold puts, earnings-through-DTE check (2026-07-20)
+- [x] **Earnings risk dashboard** — all held positions with earnings in 14 days + options exposure through earnings (2026-07-20)
 - [ ] **Correlation analysis** — measure how correlated portfolio stocks are
-- [ ] **Max allocation enforcement** — auto-flag in `/plan-stock` when a stock would exceed target %
+- [ ] **Portfolio performance tracking** — total P&L over time, benchmark comparison (needs trade history)
 
 ### CC Sharpe Framework & Tax Rules (2026-06-27)
 Two additions to the knowledge base:
