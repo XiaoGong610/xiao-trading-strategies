@@ -287,6 +287,7 @@ Interactive visualizations to help interpret signals at a glance.
 - [x] Research-focused (no portfolio data — that stays in `/portfolio-review`)
 
 **Remaining:**
+- [ ] `scripts/portfolio-dashboard.py` — generate the 3-tab portfolio HTML dashboard from plan markdown + account files + watchlist JSON. Currently generated inline by the LLM in `/portfolio-review` Step 8; a dedicated script would be more consistent and faster.
 - [ ] `scripts/chart-performance.py` — portfolio P&L over time (once we have trade history)
 
 ### 9. Multi-Timeframe Analysis ⬇️ LOW

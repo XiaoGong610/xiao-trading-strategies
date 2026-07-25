@@ -327,7 +327,34 @@ How much new capital is being deployed and is it within risk limits:
 
 1. **Portfolio review** → `portfolio/REVIEW-YYYY-MM-DD.md` (Steps 0b-6: execution tracking, analysis, positions, alignment)
 2. **Weekly trading plan** → `portfolio/plans/PLAN-YYYY-MM-DD.md` (Step 7: DCA schedule, orders, position management, key dates, risk budget)
+3. **HTML dashboard** → `portfolio/PLAN-YYYY-MM-DD.html` — interactive 3-tab dashboard. Open in browser after generating.
 
 The plan file is the actionable output — what to do next week. The review file is the analysis that supports it. Keep them separate so the user can reference the plan without re-reading the full review.
+
+### HTML Dashboard (3 tabs)
+
+Generate an interactive HTML file at `portfolio/PLAN-YYYY-MM-DD.html` with dark theme, Plotly charts, and 3 tabs:
+
+**Tab 1: Portfolio Overview**
+- Execution alert bar (execution rate, carry-forward cost)
+- Metric cards: total portfolio value (with WoW change), total cash, BL DCA runway
+- Metric cards: top 3 concentration %, earnings exposure $, biggest risk
+- Concentration donut charts (Plotly): by stock + by sector (labels inside, small positions grouped into "Other")
+- Key risks & concerns (numbered, color-coded by severity)
+
+**Tab 2: Holdings & Performance**
+- Sector breakdown table: every held stock grouped by GICS sector with value, WoW performance %, conviction score, sector momentum badge
+- Bottom rows: sectors with 0% exposure + candidates (highlighted in red)
+- Account summary bars (colored, proportional width)
+- Earnings exposure table (next 14 days): date, ticker, $ exposure, options through earnings, risk level
+
+**Tab 3: Trading Plan**
+- Top 3 priorities (cards with severity border colors, carry-forward badges)
+- DCA schedule table (with conv badges, RSI, gap%, paused items struck through)
+- One-time orders table (with action type badges: SELL/CLOSE/ADJUST/HOLD)
+- Key dates timeline (colored dots: red=hot, orange=warm, with event tags)
+- Risk budget metric cards (4-grid: DCA this week, sale proceeds, cash after sells, biggest risk)
+
+Open the HTML in the browser after generating: `open portfolio/PLAN-YYYY-MM-DD.html`
 
 **Do NOT auto-update account files** — only update when the user shares fresh screenshots. The account files are refreshed at Step 0, not at the end.
