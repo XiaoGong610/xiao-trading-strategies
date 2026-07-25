@@ -19,16 +19,16 @@ Bitcoin follows a ~4-year cycle driven by **halving events** that cut miner bloc
 | 1st | Nov 2012 | ~$12 | $1,150 | Dec 2013 | ~13 | $170 | -85% |
 | 2nd | Jul 2016 | ~$650 | $19,700 | Dec 2017 | ~17 | $3,200 | -84% |
 | 3rd | May 2020 | ~$8,700 | $69,000 | Nov 2021 | ~18 | $15,500 | -77% |
-| 4th | Apr 2024 | ~$64,000 | **$126,000** | **Oct 2025** | **~18** | ~$68,000? | **-44% so far** |
+| 4th | Apr 2024 | ~$64,000 | **$126,000** | **Oct 2025** | **~18** | ~$58,000? | **-49% so far** |
 
 **Key observation:** Every cycle has peaked 13-18 months post-halving. The current cycle peaked at exactly 18 months (Oct 2025) — textbook timing.
 
 ## Current Cycle (4th — April 2024 Halving)
 
-**Where we are (June 2026):** ~26 months post-halving, ~8 months past the Oct 2025 peak.
+**Where we are (July 2026):** ~28 months post-halving, ~9 months past the Oct 2025 peak.
 
 - **ATH:** $126,000 (October 6, 2025)
-- **Current price:** ~$68-71K (-44% from ATH)
+- **Current price:** ~$64K (-49% from ATH)
 - **Pattern match:** Peak timing (18 months) matches perfectly. Drawdown magnitude (-44%) is milder than prior cycles.
 
 ### Bull Case: Mid-Cycle Correction, Not the End
@@ -89,7 +89,7 @@ These indicators tell you **where in the cycle you are**. Use them together — 
   - **0-1:** Fair value — accumulation or early recovery
   - **<0:** Undervalued — cycle bottom zone (buy aggressively)
 - **Track record:** Picked every cycle top within 2 weeks
-- **Current reading (Jun 2026): 0.41** — near fair value. Well below euphoria. Suggests we're in intermediate recovery, not at an extreme in either direction
+- **Current reading (Jul 2026): 1.22** — fair to moderate. Improved from Jun (0.41) but well below euphoria. BTC +22.4% above realized price ($52,431)
 - **Source:** [bitcoinmagazinepro.com/charts/mvrv-zscore](https://www.bitcoinmagazinepro.com/charts/mvrv-zscore/)
 
 **2. NUPL (Net Unrealized Profit/Loss)**
@@ -100,7 +100,7 @@ These indicators tell you **where in the cycle you are**. Use them together — 
   - **0.25-0.50:** Hope/Fear — early recovery or early decline
   - **0-0.25:** Anxiety — bearish, approaching capitulation
   - **<0:** Capitulation — cycle bottom zone (buy)
-- **Current reading (Jun 2026): 0.28** — Hope/Fear zone. Past capitulation but not in optimism yet
+- **Current reading (Jul 2026): 0.18** — Anxiety zone (0-0.25). Deteriorated from Jun (0.28). Approaching capitulation threshold (<0)
 - **Key insight for this cycle:** NUPL never reached euphoria (>0.75) despite BTC hitting $126K — suggesting the 2025 top was driven more by ETF flows than retail FOMO. This is unusual and may support the "dampened cycle" thesis.
 
 **3. Pi Cycle Top Indicator**
@@ -149,32 +149,35 @@ These indicators tell you **where in the cycle you are**. Use them together — 
 
 ## Current Cycle Dashboard (Update Periodically)
 
-| Indicator | Reading (Jun 2026) | Zone | Signal |
+| Indicator | Reading (Jul 2026) | Zone | Signal |
 |-----------|-------------------|------|--------|
-| MVRV Z-Score | 0.41 | Fair value (0-1) | Neutral — not cheap, not expensive |
-| NUPL | 0.28 | Hope/Fear (0.25-0.50) | Past capitulation, not yet optimistic |
-| Pi Cycle | No cross | N/A | No top signal active |
-| Puell Multiple | ~1.0 (est.) | Normal | Miners recovering, not stressed |
+| MVRV Z-Score | 1.22 | Fair-Moderate (1-3) | Markup territory — but BTC is -49%, conflicting |
+| NUPL | 0.18 | Anxiety (0-0.25) | Deteriorating — approaching capitulation (<0) |
+| Cycle Composite | 1.18/10 | Maximum Opportunity | Deep value zone — historically best long-term entries |
+| Puell Multiple | 2.8 (component) | Normal-Low | Miners stressed but not extreme |
 | Hash Ribbon | Recovery signal Q1 2026 | Post-capitulation | Historically bullish — buy signal fired |
-| BTC vs. Mining Cost | BTC ~$68K vs. ~$87K avg cost | Below cost | Miners unprofitable — late-stage stress |
+| BTC vs. Realized Price | $64K vs $52K (+22%) | Above realized | Not yet capitulation (would need BTC < realized) |
+| Mining Difficulty | -20% from ATH | Capitulation confirmed | Largest drop since China 2021 ban |
 
-**Dashboard interpretation:** On-chain metrics do NOT confirm this is a typical cycle crash. MVRV never reached euphoria (peaked at 2.5 vs. 3.5+ in prior tops). NUPL never hit greed (>0.75). The Hash Ribbon buy signal has fired. This looks more like an **intermediate correction within an elongated cycle** than a classic blow-off top and crash.
+**Dashboard interpretation (Jul 2026 update):** The picture has worsened since June. NUPL dropped from 0.28 to 0.18 (now in Anxiety zone, approaching capitulation). Cycle composite at 1.18/10 screams "maximum opportunity" — historically the best 12-24 month forward returns. But BTC is still +22% above realized price ($52K), so true capitulation (BTC < realized price) hasn't happened yet. Miner capitulation IS confirmed (difficulty -20%), which historically marks late-stage bear.
 
-**Key divergence from our initial framework:** The halving timing (18 months to peak) says "cycle topped." But on-chain metrics say "the top wasn't euphoric enough to be a real top." This tension is the central question for crypto positioning in 2026.
+**Key development — MSTR thesis broken:** Strategy sold 3,620 BTC in May-Jul 2026 and is trading at 0.77x mNAV. The "never sell" narrative — which provided a perceived floor for BTC demand — is gone. $1.5B+ annual preferred dividends force ongoing capital actions. This removes a structural buyer and adds a potential forced seller.
+
+**Updated central tension:** On-chain metrics say "near bottom, accumulate." But the MSTR unwind adds a new systemic risk that didn't exist in prior cycles. Best approach: slow DCA into highest-quality names (COIN, IBIT), save dry powder for potential $50-55K BTC retest in Q3-Q4 2026.
 
 ## How to Use This Framework
 
 ### For Stock Selection
 
-| BTC Scenario | COIN | CRCL | MSTR | Miners (MARA, RIOT) |
-|-------------|------|------|------|---------------------|
-| **Recovery to $100K+** | $250-300+ (snap back) | Benefits from USDC growth | $250-300+ (highest beta) | Strong rally |
-| **Stabilize $60-75K** | $180-220 (base case) | Stable (interest income) | $130-170 (range bound) | Sideways |
-| **Crash to $40-50K** | $80-120 (subscription floor) | Survives (rate income) | $40-70 (margin call risk) | Severe pain |
+| BTC Scenario | COIN | CRCL | MSTR | IBIT | Miners (MARA, RIOT) |
+|-------------|------|------|------|------|---------------------|
+| **Recovery to $100K+** | $250-300+ (snap back) | Benefits from USDC growth | $150-200 (but 0.77x mNAV may persist) | $56-62 | Strong rally |
+| **Stabilize $60-75K** | $150-200 (base case) | Stable (interest income) | $80-110 (forced selling overhang) | $34-42 | Sideways |
+| **Crash to $40-50K** | $80-120 (subscription floor) | Survives (rate income) | $30-50 (forced liquidation risk) | $22-28 | Severe pain |
 
 ### For Entry Timing
 
-- **RSI <25 on crypto stocks** = contrarian buy signal regardless of cycle position (currently: COIN at 24, MSTR at 11)
+- **RSI <25 on crypto stocks** = contrarian buy signal regardless of cycle position (Jul 2026: COIN 44, MSTR 40, CRCL 42, GLXY 45 — all recovered from extreme oversold)
 - **DCA is the right strategy** — nobody can call the exact bottom in a crypto cycle. Average in over 8-12 weeks.
 - **Position sizing matters more than timing** — keep crypto exposure to 5-10% of portfolio max given the volatility profile
 
