@@ -499,48 +499,95 @@ def _build_holdings_table(holdings, watchlist, sector_map):
     for sector in sectors:
         sectors[sector].sort(key=lambda x: -x['value'])
 
+    def _conv_badge(c):
+        if c is None: return '<span style="color:#484f58">—</span>'
+        v = float(c)
+        if v >= 8: cls, bg = '#3fb950', '#3fb95022'
+        elif v >= 7: cls, bg = '#58a6ff', '#58a6ff22'
+        elif v >= 6: cls, bg = '#d29922', '#d2992222'
+        else: cls, bg = '#8b949e', '#8b949e22'
+        return (f'<span style="display:inline-block;padding:2px 8px;border-radius:12px;'
+                f'font-size:12px;font-weight:600;background:{bg};color:{cls};">{v:.1f}</span>')
+
+    def _rsi_cell(r):
+        if r is None: return '<span style="color:#484f58">—</span>'
+        v = float(r)
+        if v < 30: color = '#3fb950'    # oversold — bullish
+        elif v > 70: color = '#f85149'  # overbought — bearish
+        elif v < 40: color = '#66bb6a'
+        elif v > 60: color = '#ffa726'
+        else: color = '#8b949e'
+        return f'<span style="color:{color};font-weight:500">{v:.0f}</span>'
+
+    def _pe_cell(p):
+        if p is None: return '<span style="color:#484f58">—</span>'
+        v = float(p)
+        if v < 15: color = '#3fb950'     # cheap
+        elif v > 50: color = '#f85149'   # expensive
+        elif v > 30: color = '#d29922'
+        else: color = '#8b949e'
+        return f'<span style="color:{color}">{v:.1f}x</span>'
+
+    def _alloc_bar(pct):
+        """Mini inline allocation bar."""
+        width = min(pct * 3, 100)  # scale: 33% = full bar
+        if pct > 15: color = '#f85149'
+        elif pct > 5: color = '#58a6ff'
+        else: color = '#30363d'
+        return (f'<div style="display:flex;align-items:center;gap:6px;">'
+                f'<div style="flex:1;background:#21262d;border-radius:3px;height:6px;'
+                f'min-width:60px;overflow:hidden;">'
+                f'<div style="width:{width}%;background:{color};height:100%;'
+                f'border-radius:3px;"></div></div>'
+                f'<span style="font-size:12px;min-width:40px;text-align:right;">'
+                f'{pct:.1f}%</span></div>')
+
     rows = []
+    row_idx = 0
     for sector in sorted(sectors.keys(),
                          key=lambda s: -sum(d['value'] for d in sectors[s])):
         sector_total = sum(d['value'] for d in sectors[sector])
         sector_pct = sector_total / total_portfolio * 100
         color = SECTOR_COLORS.get(sector, '#888')
+        n_stocks = len(sectors[sector])
 
         rows.append(
-            f'<tr style="background:#161b22;font-weight:600;">'
-            f'<td style="border-left:3px solid {color};padding-left:12px;">{sector}</td>'
+            f'<tr style="background:#161b22;font-weight:600;border-top:2px solid #30363d;">'
+            f'<td style="border-left:4px solid {color};padding-left:12px;">'
+            f'{sector} <span style="color:#484f58;font-weight:400;font-size:12px;">'
+            f'({n_stocks})</span></td>'
             f'<td></td><td></td>'
-            f'<td style="text-align:right;">${sector_total/1000:.0f}K</td>'
-            f'<td style="text-align:right;">{sector_pct:.1f}%</td>'
+            f'<td style="text-align:right;font-size:15px;">${sector_total/1000:.0f}K</td>'
+            f'<td>{_alloc_bar(sector_pct)}</td>'
             f'<td></td><td></td><td></td></tr>'
         )
 
         for d in sectors[sector]:
             pct = d['value'] / total_portfolio * 100
-            conv = f"{d['conviction']:.1f}" if d['conviction'] else "—"
-            rsi = f"{d['rsi']:.0f}" if d['rsi'] else "—"
-            pe = f"{d['fwd_pe']:.1f}x" if d['fwd_pe'] else "—"
-            shares = f"{d['shares']:,.1f}" if d['shares'] else "opts"
+            shares = f"{d['shares']:,.1f}" if d['shares'] else '<span style="color:#484f58">opts</span>'
             value = f"${d['value']:,.0f}" if d['value'] > 0 else "—"
+            bg = '#161b2280' if row_idx % 2 == 0 else 'transparent'
+            row_idx += 1
 
             rows.append(
-                f'<tr>'
-                f'<td style="padding-left:28px;color:#8b949e;">{d["ticker"]}</td>'
-                f'<td>{d["accounts"]}</td>'
-                f'<td style="text-align:right;">{shares}</td>'
+                f'<tr style="background:{bg};">'
+                f'<td style="padding-left:28px;font-weight:500;">{d["ticker"]}</td>'
+                f'<td style="color:#8b949e;font-size:12px;">{d["accounts"]}</td>'
+                f'<td style="text-align:right;color:#8b949e;">{shares}</td>'
                 f'<td style="text-align:right;">{value}</td>'
-                f'<td style="text-align:right;">{pct:.1f}%</td>'
-                f'<td style="text-align:center;">{conv}</td>'
-                f'<td style="text-align:center;">{rsi}</td>'
-                f'<td style="text-align:center;">{pe}</td></tr>'
+                f'<td>{_alloc_bar(pct)}</td>'
+                f'<td style="text-align:center;">{_conv_badge(d["conviction"])}</td>'
+                f'<td style="text-align:center;">{_rsi_cell(d["rsi"])}</td>'
+                f'<td style="text-align:center;">{_pe_cell(d["fwd_pe"])}</td></tr>'
             )
 
     return (
-        '<table><thead><tr>'
-        '<th>Sector / Ticker</th><th>Accounts</th>'
+        '<table style="font-size:13px;"><thead><tr>'
+        '<th style="min-width:140px;">Sector / Ticker</th>'
+        '<th>Accounts</th>'
         '<th style="text-align:right;">Shares</th>'
-        '<th style="text-align:right;">Value</th>'
-        '<th style="text-align:right;">% Port</th>'
+        '<th style="text-align:right;min-width:90px;">Value</th>'
+        '<th style="min-width:130px;">% Portfolio</th>'
         '<th style="text-align:center;">Conv</th>'
         '<th style="text-align:center;">RSI</th>'
         '<th style="text-align:center;">Fwd P/E</th>'
