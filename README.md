@@ -12,14 +12,16 @@ A set of Claude Code custom skills for stock research, portfolio management, and
 
 ## Weekly Workflow
 
+Portfolio drives everything. Holdings determine what gets researched.
+
 ```
-1. Watchlist triage      → scripts/watchlist.py (tier stocks, identify refresh queue)
-2. Refresh stale stocks  → /research-stock on active tier
-3. Market overview       → /research-market (regime, sector rotation)
-4. Portfolio review      → /portfolio-review (screenshots → account update → recommendations)
-5. Trading plan          → portfolio/plans/PLAN-YYYY-MM-DD.md (DCA, orders, management)
-6. Dashboard             → scripts/watchlist.py (priority dashboard + charts)
-                            scripts/app.py (Streamlit full dashboard, optional)
+1. Update accounts       → screenshots → portfolio/accounts/*.md
+2. Add new picks         → watchlist.py --add TICKER
+3. Triage                → watchlist.py --no-save (identify refresh queue, detect portfolio gaps)
+4. Research              → /research-market (always) → /research-sector (batch stale) → /research-stock
+5. Plan                  → /plan-stock on top 2-3 picks (user decides)
+6. Portfolio review      → /portfolio-review → produces trading plan
+7. Final dashboard       → watchlist.py (saves 0-WATCHLIST.md + unified HTML dashboard)
 ```
 
 ## Skills
@@ -81,12 +83,12 @@ portfolio/             # Multi-account portfolio management
   plans/               # Weekly trading plans (gitignored)
   REVIEW-*.md          # Point-in-time portfolio reviews (gitignored)
 # HTMLs are date-named in their source folders (not in a separate charts/ dir):
-#   research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html
+#   research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html (unified 5-tab dashboard)
 #   research/sectors/sector-heatmap-YYYY-MM-DD.html
-#   portfolio/PLAN-YYYY-MM-DD.html
 scripts/               # Python scripts (committed)
   technicals.py        # Market data fetcher (price, technicals, options)
-  watchlist.py         # Consolidated watchlist: triage, dashboard (0-WATCHLIST.md + 0-watchlist-dashboard-YYYY-MM-DD.html)
+  watchlist.py         # Consolidated watchlist: triage, portfolio awareness, 0-WATCHLIST.md
+  dashboard.py         # Unified 5-tab HTML dashboard (portfolio, RSI vs P/E, earnings, holdings, trading plan)
   app.py               # Streamlit interactive dashboard
   sector-momentum.py   # Mansfield RS + Weinstein Stage + ROC momentum
   sector-heatmap.py    # Interactive Plotly sector performance treemap

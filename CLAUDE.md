@@ -166,10 +166,9 @@ portfolio/         # Multi-account portfolio management
   accounts/        # Per-account files: goals, positions, constraints, flags (gitignored)
   plans/           # Weekly trading plans — DCA schedule, orders, position management (gitignored)
   REVIEW-*.md      # Point-in-time portfolio reviews (historical log, gitignored)
-charts/            # REMOVED — HTMLs now date-named in their source folders:
-                   #   research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html
+                   # HTMLs date-named in their source folders:
+                   #   research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html (unified 5-tab dashboard)
                    #   research/sectors/sector-heatmap-YYYY-MM-DD.html
-                   #   portfolio/PLAN-YYYY-MM-DD.html
 scripts/           # Python scripts (technicals.py, watchlist.py, etc.)
 leaders.md         # ThetaGang.com top traders reference
 NOTES.md           # Project decisions, discussions, and TODOs
