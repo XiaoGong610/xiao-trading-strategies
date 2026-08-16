@@ -18,51 +18,45 @@ You are a top-tier, experienced personal portfolio advisor and research analyst.
 
 ## Weekly Session Workflow
 
-Each week follows two phases. Not every step runs every week — skip what's fresh.
-
-### Phase 1: Research (account-agnostic)
-
-Start with: "Claude, what should I pay attention to?"
+Portfolio drives everything. Holdings determine what gets researched, not the other way around.
 
 ```
-1. Watchlist triage  → .venv/bin/python3 scripts/watchlist.py
-                       Tier stocks: active/passive/remove. Identify refresh queue.
-2. Refresh stale     → /research-stock on the REFRESH QUEUE (stale active stocks only)
-                       Don't refresh passive or remove candidates weekly.
-3. Market overview   → /research-market (skip if <7 days old)
-                       Regime, sector rotation, key risks
-4. Sector scans      → /research-sector on hot/changed sectors (skip if <14 days old)
-5. Plans             → /plan-stock on top 2-3 actionable picks (with execution plan)
-6. Dashboard         → .venv/bin/python3 scripts/watchlist.py
-                       Consolidated watchlist with priority scores, RSI, P/E, sector momentum
-                       Also: .venv/bin/python3 -m streamlit run scripts/app.py for visual dashboard
+1. UPDATE ACCOUNTS    → User shares brokerage screenshots (or starts fresh).
+                        Refresh portfolio/accounts/*.md.
+
+2. ADD NEW PICKS      → User mentions new stocks (friend tips, news, ideas).
+                        Add as candidates: .venv/bin/python3 scripts/watchlist.py --add TICKER
+
+3. TRIAGE             → .venv/bin/python3 scripts/watchlist.py --no-save
+                        Cross-ref portfolio + watchlist, identify refresh queue.
+                        Portfolio gaps (held but no research file) auto-create candidate stubs.
+                        Terminal-only output — don't save yet.
+
+4. RESEARCH (top-down, demand-driven)
+   a. /research-market        — always run (non-negotiable, even if recent)
+   b. /research-sector        — batch all stale sectors needed by the refresh queue
+                                 (don't loop: identify all stale sectors upfront, refresh, then move on)
+   c. /research-stock         — top refresh queue items, prioritized by score
+                                 Portfolio gap candidates: $10K+ positions now, sub-$5K can wait
+
+5. DISCUSS → /plan-stock     — Bounce ideas on which 2-3 stocks deserve full plans.
+                                User decides, Claude runs. Don't auto-run on everything.
+
+6. /portfolio-review          — With all fresh data: cross-account analysis, concentration,
+                                options management, DCA review → produces the TRADING PLAN
+                                (specific actions per account for next week)
+
+7. FINAL DASHBOARD            → .venv/bin/python3 scripts/watchlist.py
+                                Regenerate 0-WATCHLIST.md + HTML with all fresh data.
+                                Also: .venv/bin/python3 -m streamlit run scripts/app.py
 ```
 
-**Watchlist triage first** — this prevents wasting time researching 48 stocks. The script auto-identifies which stocks actually need attention (typically 10-15, not 48).
-
-**Output:** "Here are the stocks to act on, at these prices, target X% allocation."
-
-### Phase 2: Portfolio (account-specific)
-
-User shares brokerage screenshots.
-
-```
-1. Update accounts   → refresh portfolio/accounts/*.md from screenshots
-2. Portfolio review   → /portfolio-review
-                       Cross-account concentration, DCA review, options management
-3. Recommendations   → account-specific actions:
-                       "Sell TSLL in Roth, add MU DCA in BrokerageLink,
-                        sell 3 TSLA CCs in ThetaGang at $450 Jul"
-```
-
-**Output:** Specific actions per account, respecting each account's goals, constraints, and tax status.
-
-### What to Skip
-
-- **Dashboard + portfolio review:** never skip (core of every session)
-- **Market overview:** skip if <7 days old and no major macro event
-- **Sector scans:** skip if <14 days old and sector hasn't moved
-- **Full research funnel:** only when looking for new ideas or regime shifts (monthly)
+**Key principles:**
+- **Portfolio first** — holdings determine research priorities, not the other way around
+- **Batch sectors** — identify all stale sectors upfront from the refresh queue, refresh them all, then do stock research
+- **Market overview is non-negotiable** — always run, even if recent. It's cheap and frames everything.
+- **Triage by size** — portfolio gap candidates with >$10K exposure get researched immediately, small positions can wait
+- **One dashboard at the end** — don't save intermediate outputs; the final run reflects all fresh data
 
 ---
 
