@@ -660,6 +660,60 @@ def _action_badge(text: str) -> str:
     return ''
 
 
+def _style_plan_cell(text: str, header: str) -> str:
+    """Apply smart styling to plan table cells based on column header and content."""
+    import re
+    clean = text.strip().strip('*')
+
+    # Conviction column — colored badges
+    if header.lower() in ('conv', 'conviction'):
+        try:
+            v = float(clean)
+            if v >= 8: cls, bg = '#3fb950', '#3fb95022'
+            elif v >= 7: cls, bg = '#58a6ff', '#58a6ff22'
+            elif v >= 6: cls, bg = '#d29922', '#d2992222'
+            else: cls, bg = '#8b949e', '#8b949e22'
+            return (f'<span style="display:inline-block;padding:2px 8px;border-radius:12px;'
+                    f'font-size:12px;font-weight:600;background:{bg};color:{cls};">{v}</span>')
+        except ValueError:
+            pass
+
+    # RSI column — color-coded
+    if header.lower() == 'rsi':
+        try:
+            v = float(clean)
+            if v < 30: color = '#3fb950'
+            elif v > 70: color = '#f85149'
+            elif v < 40: color = '#66bb6a'
+            elif v > 60: color = '#ffa726'
+            else: color = '#8b949e'
+            return f'<span style="color:{color};font-weight:500">{v:.0f}</span>'
+        except ValueError:
+            pass
+
+    # Gap% column — green negative (below target), red positive (above)
+    if header.lower() in ('gap%', 'gap'):
+        m = re.match(r'([+-]?[\d.]+)%', clean)
+        if m:
+            v = float(m.group(1))
+            color = '#3fb950' if v < 0 else '#d29922' if v < 20 else '#f85149'
+            return f'<span style="color:{color}">{v:+.1f}%</span>'
+
+    # Change column — badges for changes
+    if header.lower() == 'change':
+        if 'PAUSED' in text.upper():
+            return '<span class="badge badge-gray">PAUSED</span>'
+        if 'RESUMED' in text.upper():
+            return '<span class="badge badge-green">RESUMED</span>'
+        m = re.match(r'([+-]\$[\d,]+)', clean)
+        if m:
+            val = m.group(1)
+            cls = 'badge-red' if val.startswith('-') else 'badge-green'
+            return f'<span class="badge {cls}">{val}</span>'
+
+    return None  # no special styling
+
+
 def _render_plan_md(md: str) -> str:
     """Convert plan markdown to richly styled HTML matching the old PLAN dashboard."""
     import re
@@ -675,9 +729,15 @@ def _render_plan_md(md: str) -> str:
     .priority{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;
               padding:14px 18px;background:#161b22;border-radius:8px;border-left:4px solid;line-height:1.5}
     .priority .num{font-size:22px;font-weight:700;min-width:28px}
+    .plan-table{border-spacing:0}
     .plan-table tr.paused{color:#8b949e;text-decoration:line-through}
     .plan-table tr.paused .badge{opacity:0.6}
     .plan-table td{vertical-align:top}
+    .plan-table tr:nth-child(even){background:#161b2260}
+    .plan-metric{display:inline-block;background:#161b22;border:1px solid #30363d;border-radius:8px;
+                 padding:10px 16px;margin:4px 8px 4px 0}
+    .plan-metric .label{color:#8b949e;font-size:11px;text-transform:uppercase;letter-spacing:0.5px}
+    .plan-metric .val{font-size:18px;font-weight:700;margin-top:2px}
     .section-box{background:#161b22;border:1px solid #30363d;border-radius:8px;
                  padding:14px 18px;margin:12px 0}
     </style>"""
@@ -686,6 +746,7 @@ def _render_plan_md(md: str) -> str:
     html_parts = [badge_css]
     in_table = False
     table_rows: list = []
+    table_headers_raw: list = []
     current_section = ''
     in_summary = False
     summary_count = 0
@@ -695,12 +756,13 @@ def _render_plan_md(md: str) -> str:
         return any('~~' in c or 'Paused' in c or 'paused' in c for c in cells)
 
     def flush_table():
-        nonlocal in_table, table_rows
+        nonlocal in_table, table_rows, table_headers_raw
         if not table_rows:
             return
         header = table_rows[0]
         data_rows = table_rows[1:]
         cols = [_md_inline(c.strip()) for c in header]
+        raw_headers = [c.strip().strip('*') for c in header]
 
         thead = '<tr>' + ''.join(f'<th>{c}</th>' for c in cols) + '</tr>'
         tbody_rows = []
@@ -716,13 +778,13 @@ def _render_plan_md(md: str) -> str:
             # Color-code left border based on action column
             style = ''
             all_cells_text = ' '.join(cells)
-            if any(k in all_cells_text for k in ['SELL', 'TAKE PROFIT', 'CLOSE']):
+            if any(k in all_cells_text for k in ['SELL', 'TAKE PROFIT', 'CLOSE', 'SKIP']):
                 style = ' style="border-left:3px solid #f85149;"'
-            elif any(k in all_cells_text for k in ['BUY', 'RESUME', 'RESUMED']):
+            elif any(k in all_cells_text for k in ['BUY', 'RESUME', 'RESUMED', 'ACCEPT']):
                 style = ' style="border-left:3px solid #3fb950;"'
             elif any(k in all_cells_text for k in ['ROLL', 'MONITOR']):
                 style = ' style="border-left:3px solid #d29922;"'
-            elif any(k in all_cells_text for k in ['HOLD', 'DELIBERATE']):
+            elif any(k in all_cells_text for k in ['HOLD', 'DELIBERATE', 'WAIT']):
                 style = ' style="border-left:3px solid #58a6ff;"'
             elif any(k in all_cells_text for k in ['LET EXPIRE']):
                 style = ' style="border-left:3px solid #8b949e;"'
@@ -731,13 +793,18 @@ def _render_plan_md(md: str) -> str:
             if cells[0].strip('* ').upper() == 'TOTAL':
                 style = ' style="border-top:2px solid #30363d;font-weight:600;"'
 
-            # Process each cell: inline markdown + detect badges for Type column
+            # Process each cell
             rendered = []
             for i, cell in enumerate(cells):
+                hdr = raw_headers[i] if i < len(raw_headers) else ''
+                # Try smart styling first
+                styled = _style_plan_cell(cell, hdr)
+                if styled:
+                    rendered.append(f'<td>{styled}</td>')
+                    continue
                 processed = _md_inline(cell)
-                # If header is "Type" or "Change", try adding badge
-                header_name = cols[i].strip().lower() if i < len(cols) else ''
-                if header_name in ('type', 'change', 'action'):
+                # Try action badge for Type/Change/Action columns
+                if hdr.lower() in ('type', 'change', 'action'):
                     badge = _action_badge(cell)
                     if badge:
                         processed = badge
@@ -774,6 +841,27 @@ def _render_plan_md(md: str) -> str:
         if '3 Things That Matter' in stripped or 'Summary' in stripped and '#' in stripped:
             in_summary = True
             summary_count = 0
+
+        # Detect header metric lines: **Regime:**, **Portfolio:**, **Execution rate**
+        if stripped.startswith('**Regime:'):
+            html_parts.append(
+                f'<div class="plan-metric"><div class="label">Regime</div>'
+                f'<div class="val" style="font-size:14px;">{_md_inline(stripped)}</div></div>')
+            continue
+        if stripped.startswith('**Portfolio:') or stripped.startswith('**Portfolio '):
+            html_parts.append(
+                f'<div class="plan-metric" style="border-left:3px solid #3fb950;">'
+                f'<div class="label">Portfolio</div>'
+                f'<div class="val" style="font-size:14px;">{_md_inline(stripped)}</div></div>')
+            continue
+        if stripped.startswith('**Execution rate'):
+            # Color based on rate
+            color = '#f85149' if '25%' in stripped or '< 50%' in stripped else '#d29922'
+            html_parts.append(
+                f'<div class="plan-metric" style="border-left:3px solid {color};">'
+                f'<div class="label">Execution</div>'
+                f'<div class="val" style="font-size:14px;">{_md_inline(stripped)}</div></div>')
+            continue
 
         # Headers
         if stripped.startswith('# ') and not stripped.startswith('## '):
