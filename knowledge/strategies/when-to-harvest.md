@@ -20,12 +20,15 @@ Both are valid. Thesis exits override mechanical exits (if the thesis breaks, se
 
 **Logic:** You sold time decay. Once most of the decay is captured, close and redeploy.
 
-| Trigger | Action |
-|---------|--------|
-| 50-65% of max profit captured | Close. Remaining premium isn't worth the risk of reversal. |
-| <14 DTE | Close or roll. Gamma risk increases, diminishing returns. |
-| Underlying moves against you (ITM) | Roll out/up/down, or accept assignment if happy with the price. |
-| IV crushes post-earnings | Close for quick profit if >30% captured in <5 days. |
+| Profit Captured | Time Elapsed | Action |
+|----------------|-------------|--------|
+| **50%+ profit** | **<50% of DTE** | **Close and redeploy.** You captured the edge in half the time — remaining premium has poor risk/reward. Capital efficiency wins. |
+| 50% profit | 50-75% of DTE | Hold to 65%. Theta accelerating in your favor. |
+| 50%+ profit | >75% of DTE | Close. Gamma risk increasing, diminishing returns. |
+| <30% profit | >50% of DTE | Monitor. Consider rolling if thesis intact. |
+| Any profit | <14 DTE | Close or roll. Gamma risk dominates. |
+| >30% profit | <5 days (IV crush) | Close. Post-earnings IV crush = windfall, take it. |
+| Underwater | Underlying ITM | Roll out/up/down, or accept assignment if happy with the price. |
 
 **Don't do:** Hold sold options to expiry for the last 10-20% of premium. Risk/reward inverts near expiry.
 
