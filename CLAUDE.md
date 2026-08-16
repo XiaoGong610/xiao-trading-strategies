@@ -34,10 +34,13 @@ All skills work independently — `/research-stock`, `/strategy-theta-gang`, `/p
 
 4. RESEARCH (top-down, demand-driven)
    a. /research-market        — always run (non-negotiable, even if recent)
-   b. /research-sector        — batch all stale sectors needed by the refresh queue
+   b. Influencer check        — pull recent tweets from tracked accounts (knowledge/reference/influencers.md)
+                                 via X MCP. Surface new stock mentions, thesis changes, supply chain insights.
+                                 This informs which sectors/stocks to prioritize in steps c-d.
+   c. /research-sector        — batch all stale sectors needed by the refresh queue
                                  Staleness: 7 days if you hold stocks in that sector, 14 days otherwise
                                  (don't loop: identify all stale sectors upfront, refresh, then move on)
-   c. /research-stock         — top refresh queue items, prioritized by score
+   d. /research-stock         — top refresh queue items, prioritized by score
                                  Portfolio gap candidates: $10K+ positions now, sub-$5K can wait
 
 5. DISCUSS → /plan-stock     — Bounce ideas on which 2-3 stocks deserve full plans.
