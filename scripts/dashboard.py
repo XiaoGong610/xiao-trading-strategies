@@ -64,6 +64,15 @@ ACCOUNT_COLORS = {
     "GOBIG": "#f85149",
 }
 
+# Full display names for portfolio overview
+ACCOUNT_DISPLAY = {
+    'BROKERAGELINK': 'BrokerageLink (401k)',
+    'ROTH IRA': 'Roth IRA',
+    'HOLD': 'Hold (Covered Calls)',
+    'THETAGANG': 'ThetaGang',
+    'GOBIG': 'GoBig (LEAPs)',
+}
+
 
 # --- Data loading ---
 
@@ -214,12 +223,12 @@ def _build_overview(accounts, holdings, sector_map, date_str):
     account_bars = ""
     for a in sorted(accounts, key=lambda x: -x['total_value']):
         pct = (a['total_value'] / total_value * 100) if total_value > 0 else 0
-        abbrev = ACCOUNT_ABBREV.get(a['name'], a['name'])
+        display_name = ACCOUNT_DISPLAY.get(a['name'], a['name'])
         color = ACCOUNT_COLORS.get(a['name'], '#888')
         cash_pct = (a['cash'] / a['total_value'] * 100) if a['total_value'] > 0 else 0
         account_bars += (
             f'<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">'
-            f'<div style="width:60px;color:#8b949e;font-size:13px;text-align:right;">{abbrev}</div>'
+            f'<div style="width:160px;color:#8b949e;font-size:13px;text-align:right;">{display_name}</div>'
             f'<div style="flex:1;background:#21262d;border-radius:4px;height:28px;position:relative;overflow:hidden;">'
             f'<div style="width:{pct}%;background:{color};height:100%;border-radius:4px;opacity:0.85;"></div>'
             f'<div style="position:absolute;top:4px;left:8px;font-size:12px;font-weight:600;">'
