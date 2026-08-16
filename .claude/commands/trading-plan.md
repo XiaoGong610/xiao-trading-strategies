@@ -53,29 +53,15 @@ Carry forward anything marked "Not Done" with weeks pending. These appear first 
 
 ---
 
-## Step 2: Plan-Stock Coverage Check
+## Step 2: Plan-Stock Coverage Gate
 
-For each NEW trade recommendation from the portfolio review (new entry, new CC, new CSP, new LEAP), check if `/plan-stock` has been run:
+Before generating the plan, check that every NEW trade recommendation (new entry, new CC, new CSP, new LEAP) is backed by a recent `/plan-stock`. This is a **gate**, not documentation — resolve gaps now, don't just note them.
 
-1. Read `research/stocks/{TICKER}.md`
-2. Look for a Pre-Trade Plan entry (`# TICKER — Pre-Trade Plan` or `# TICKER — Plan`)
-3. Check its date — is it recent (<14 days)?
+1. For each new trade recommendation (>$2K deployment), read `research/stocks/{TICKER}.md` and check for a Pre-Trade Plan entry dated within 14 days.
+2. **If missing or stale:** Ask the user: "TICKER needs a fresh /plan-stock before I can recommend specific entry/exit. Run it now, or proceed without?" If user says yes, run `/plan-stock {TICKER}` and integrate the output. If user says proceed, note the gap briefly in the plan header (not as a table).
+3. **Exceptions (no /plan-stock needed):** Selling existing positions, rolling/closing options, DCA pace changes, adjustments <$1K.
 
-| Recommendation | Has /plan-stock? | Age | Status |
-|---------------|-----------------|-----|--------|
-| Buy MRVL at $220 | Yes, 2026-08-01 | 14d | ✅ Backed |
-| Sell TSLA CCs $370 | No plan | — | ⚠️ Missing |
-| Start LLY position | Yes, 2026-07-25 | 21d | ⚠️ Stale |
-
-**For missing or stale plans on high-value recommendations (>$2K deployment):**
-- Call `/plan-stock {TICKER}` to get proper entry price, stop placement, position sizing, and strategy comparison.
-- Integrate the plan-stock output into the trading plan.
-
-**Exceptions that DON'T need /plan-stock:**
-- Selling existing positions (no thesis position, trimming overweight)
-- Rolling or closing existing options
-- DCA pace changes (covered by watchlist data)
-- Tiny adjustments (<$1K)
+**Do NOT include a Plan-Stock Coverage table in the final plan output.** This is an internal check, not user-facing content.
 
 ---
 

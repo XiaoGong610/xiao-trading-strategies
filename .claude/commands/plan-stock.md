@@ -85,6 +85,8 @@ If no prior plans exist for this ticker, skip this step.
 
 **Why this matters:** `/research-stock` and `/plan-stock` serve different purposes. Research answers "should I own this?" (thesis conviction, strategy-agnostic). Plan answers "how should I enter?" (strategy-specific, price/IV-dependent). If conviction is already established, don't waste tokens re-establishing it — go straight to strategy execution.
 
+**Skill boundary: Do NOT update conviction scores.** Conviction is owned by `/research-stock`. This skill reads the existing conviction and uses it for position sizing — it does not change it. If new information during planning suggests conviction should change, note it as a recommendation ("consider upgrading conviction to X based on Y") but do not modify the frontmatter conviction field. Entry targets may be updated based on technical analysis (support levels, valuation changes).
+
 **Sector Context** (from Phase 0b):
 - Theme lifecycle stage: [from sector scan]
 - Sector tailwinds/headwinds: [key factors affecting all stocks in this space]
