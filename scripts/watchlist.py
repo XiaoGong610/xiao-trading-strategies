@@ -103,6 +103,9 @@ SECTOR_TO_GICS = {
     "Utilities": "Utilities",
     "Consumer Staples": "Consumer Staples",
     "Leveraged ETF / South Korea": None,  # no GICS mapping
+    "Leveraged ETF / EVs & Autonomy": "Consumer Disc.",  # TSLL → same as TSLA
+    "Technology/Semiconductors": "Technology",  # MPWR
+    "Aerospace & Defense": "Industrials",  # SPCX
     "null": None,  # placeholder for stocks without sector data
 }
 
