@@ -310,3 +310,19 @@ Maximize after-tax returns. Critical before year-end.
 - [x] **Tax-aware sell recommendations** — `/portfolio-review` now checks account type before recommending sells (losers in taxable first, winners in tax-free first)
 - [ ] **Wash sale tracking** — auto-flag if selling a stock at a loss and rebuying within 30 days across accounts
 - [ ] **End-of-year review** — annual skill to scan portfolio for tax optimization before Dec 31
+
+### 11. Harvest Decision Framework ⬜ TODO
+
+Unified logic for when to take profit, trim, or exit across all position types. Currently exit logic is scattered and inconsistent — the IGV LEAP incident (Aug 15) showed the system auto-recommended selling a +105% LEAP in an accelerating sector with 7 months left.
+
+**Scope:**
+- **Sold options (CCs/CSPs):** Close at 50-65% profit — this is fine (theta harvest)
+- **Bought options (LEAPs):** Multi-factor matrix added to `when-to-leaps.md` (Aug 15). Sector momentum + time remaining + conviction + gain size
+- **Shares (DCA'd):** When to trim overweight, when to pause DCA, when to accelerate. Gap-to-target + conviction-decay triggers
+- **Shares (lump sum):** Scaled exit at targets (already in execution-framework.md) but needs conviction-decay logic
+- **Leveraged ETFs:** Structural decay monitoring, bounce-and-sell triggers
+- **Concentration management:** When a position grows to >15% from appreciation (AMZN 28%), systematic trim rules vs. intentional hold
+
+**Key principle:** Different instruments have different exit logic. Don't apply theta-gang rules to directional bets.
+
+**Deliverable:** `knowledge/strategies/when-to-harvest.md` — decision matrices per position type, integrated into `/portfolio-review` Step 3 and `/trading-plan` Step 5.
