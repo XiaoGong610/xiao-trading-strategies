@@ -205,7 +205,14 @@ Order duration: GTC / cancel after 30 days
 - Earnings <7 days → half pace
 - Stock >20% above SMA20 → half pace
 
-**Scaled order spacing:** Use ATR to space orders — prevents clustering. Default: Entry 1 at support, Entry 2 at support minus 1 ATR, Entry 3 at support minus 2 ATR. Sizing: 40% / 30% / 30%.
+**Scaled entry principle: Never lump-sum into a new position.** Always scale in with multiple orders at different price levels. This is a core principle, not optional.
+
+- **Default split:** 40% starter / 30% second tranche / 30% third tranche
+- **Spacing:** Use ATR to space orders — Entry 1 at target, Entry 2 at target minus 1 ATR, Entry 3 at target minus 2 ATR
+- **Earnings within 14 days:** Cap pre-earnings entry at 40% max. Hold 60% for post-earnings deployment based on outcome (beat/miss/inline → different prices).
+- **Why:** Lump-sum at entry target feels precise but assumes perfect timing. Scaling in captures better average cost if the stock dips further, and limits damage if the thesis is wrong or earnings surprise.
+
+The only exception is tiny positions (<$1K) where splitting adds unnecessary complexity.
 
 ### 5b. Protection
 
