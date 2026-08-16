@@ -67,11 +67,28 @@ This is why **IV Rank < 30 is the single most important filter**. You want vega 
 
 | Situation | Action |
 |-----------|--------|
-| **100%+ gain** | Take profits on at least half. Let the rest ride with a trailing mental stop. |
+| **100%+ gain** | Evaluate — don't auto-sell. See the decision matrix below. |
 | **Thesis plays out** (catalyst hits, price target reached) | Close the position. Don't get greedy. |
 | **90 DTE remaining** | Roll out 6-12 months. Never let a winning LEAP decay into expiry. |
 | **Thesis breaks** (fundamental change, not just a red day) | Cut losses immediately. Defined risk only works if you respect it. |
 | **Stock drops but thesis intact** | Hold or add if IV is still low. Don't panic — you bought time for a reason. |
+
+### LEAP Profit-Taking Decision Matrix
+
+LEAPs are **bought options** — you paid for time and directional upside. The 50-65% profit-taking rule is for **sold options** (CCs, CSPs) where you're harvesting theta decay. Different logic applies:
+
+| Factor | Hold (let it run) | Take profit |
+|--------|-------------------|-------------|
+| Sector momentum | Accelerating / Steady Uptrend | Pulling Back / Downtrend |
+| Time remaining | >120 DTE (plenty of time) | <90 DTE (theta accelerating) |
+| Conviction | ≥7 and unchanged/rising | Dropped or thesis weakening |
+| # Contracts | 1 (can't split) | 2+ (can sell half) |
+| Gain | 100-200% (still has room) | 300%+ (extraordinary, lock some in) |
+| Underlying trend | Above all SMAs, MACD bullish | Breaking below SMA50, MACD bearish |
+
+**Default:** If sector is accelerating, conviction is high, and >120 DTE remains — **hold.** Set a trailing mental stop (e.g., close if profit drops below 50% of peak) instead of selling into strength.
+
+**Exception:** At 300%+ gain or <90 DTE, take partial profit regardless of momentum — protect asymmetric wins.
 
 ## LEAPs vs. Shares — Capital Efficiency
 
