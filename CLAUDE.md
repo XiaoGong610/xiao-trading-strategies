@@ -18,7 +18,7 @@ You are a top-tier, experienced personal portfolio advisor and research analyst.
 
 ## Weekly Session Workflow
 
-Portfolio drives everything. Holdings determine what gets researched, not the other way around.
+All skills work independently — `/research-stock`, `/strategy-theta-gang`, `/plan-stock`, etc. can be used standalone without sharing a portfolio. The weekly session below is the full end-to-end flow when the user wants a complete portfolio check-in.
 
 ```
 1. UPDATE ACCOUNTS    → User shares brokerage screenshots (or starts fresh).
@@ -43,22 +43,27 @@ Portfolio drives everything. Holdings determine what gets researched, not the ot
 5. DISCUSS → /plan-stock     — Bounce ideas on which 2-3 stocks deserve full plans.
                                 User decides, Claude runs. Don't auto-run on everything.
 
-6. /portfolio-review          — With all fresh data: cross-account analysis, concentration,
-                                options management, DCA review → produces the TRADING PLAN
-                                (specific actions per account for next week)
+6. /portfolio-review          — Analysis: cross-account concentration, options intelligence,
+                                DCA review, sector exposure → REVIEW-YYYY-MM-DD.md
+                                Answers: "How is my portfolio doing?"
 
-7. FINAL DASHBOARD            → .venv/bin/python3 scripts/watchlist.py
+7. /trading-plan              — Checks /plan-stock coverage on recommendations, generates
+                                DCA schedule, orders, position management, key dates, risk budget
+                                → PLAN-YYYY-MM-DD.md. Answers: "What should I do this week?"
+
+8. FINAL DASHBOARD            → .venv/bin/python3 scripts/watchlist.py
                                 Regenerate 0-WATCHLIST.md + unified HTML dashboard
                                 (portfolio overview, RSI vs P/E, earnings, holdings, trading plan).
                                 Also: .venv/bin/python3 -m streamlit run scripts/app.py
 ```
 
 **Key principles:**
-- **Portfolio first** — holdings determine research priorities, not the other way around
+- **Portfolio-aware** — when portfolio is shared, holdings inform research priorities and surface gaps
 - **Batch sectors** — identify all stale sectors upfront from the refresh queue, refresh them all, then do stock research
 - **Market overview is non-negotiable** — always run, even if recent. It's cheap and frames everything.
 - **Triage by size** — portfolio gap candidates with >$10K exposure get researched immediately, small positions can wait
 - **One dashboard at the end** — don't save intermediate outputs; the final run reflects all fresh data
+- **Skills are modular** — any skill can be used standalone without the full workflow
 
 ---
 
@@ -136,7 +141,8 @@ Research → Strategy → Execute → Manage
 
 | Category | Skill | Purpose |
 |----------|-------|---------|
-| **portfolio** | `/portfolio-review` | Cross-account analysis: execution tracking, concentration, sector momentum, options intelligence (CSP Score/CC Sharpe), DCA optimization, earnings risk, weekly plan |
+| **portfolio** | `/portfolio-review` | Analysis: cross-account concentration, sector momentum, options intelligence, DCA review, earnings risk |
+| | `/trading-plan` | Prescription: DCA schedule, one-time orders, position management, key dates, risk budget |
 | **research** | `/research-market` | Broad market overview, sector rotation, regime classification |
 | | `/research-sector` | Deep-dive a sector or theme, rank candidates |
 | | `/research-stock` | Full stock deep-dive: fundamentals, earnings, conviction score |

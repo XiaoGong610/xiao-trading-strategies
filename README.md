@@ -12,7 +12,7 @@ A set of Claude Code custom skills for stock research, portfolio management, and
 
 ## Weekly Workflow
 
-Portfolio drives everything. Holdings determine what gets researched.
+All skills work independently. The weekly session below is the full end-to-end flow for a portfolio check-in.
 
 ```
 1. Update accounts       → screenshots → portfolio/accounts/*.md
@@ -20,8 +20,9 @@ Portfolio drives everything. Holdings determine what gets researched.
 3. Triage                → watchlist.py --no-save (identify refresh queue, detect portfolio gaps)
 4. Research              → /research-market (always) → /research-sector (batch stale) → /research-stock
 5. Plan                  → /plan-stock on top 2-3 picks (user decides)
-6. Portfolio review      → /portfolio-review → produces trading plan
-7. Final dashboard       → watchlist.py (saves 0-WATCHLIST.md + unified HTML dashboard)
+6. Portfolio review      → /portfolio-review (analysis: how am I doing?)
+7. Trading plan          → /trading-plan (prescription: what should I do?)
+8. Final dashboard       → watchlist.py (saves 0-WATCHLIST.md + unified HTML dashboard)
 ```
 
 ## Skills
@@ -37,7 +38,8 @@ Portfolio drives everything. Holdings determine what gets researched.
 ### Portfolio & Planning
 | Command | Description |
 |---------|-------------|
-| `/portfolio-review` | Execution tracking, cross-account analysis, options intelligence (CSP Score/CC Sharpe), sector momentum, earnings risk, DCA optimization, weekly plan |
+| `/portfolio-review` | Analysis — cross-account concentration, options intelligence, sector momentum, earnings risk, DCA review |
+| `/trading-plan` | Prescription — DCA schedule, orders, position management, key dates, risk budget |
 | `/plan-stock AAPL` | Orchestrator — context, research, strategy, execution plan with orders |
 
 ### Strategy
