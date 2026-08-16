@@ -52,9 +52,9 @@ All skills work independently — `/research-stock`, `/strategy-theta-gang`, `/p
                                 → PLAN-YYYY-MM-DD.md. Answers: "What should I do this week?"
 
 8. FINAL DASHBOARD            → .venv/bin/python3 scripts/watchlist.py
-                                Regenerate 0-WATCHLIST.md + unified HTML dashboard
-                                (portfolio overview, RSI vs P/E, earnings, holdings, trading plan).
-                                Also: .venv/bin/python3 -m streamlit run scripts/app.py
+                                Regenerate 0-WATCHLIST.md + unified HTML dashboard.
+                                Or run dashboard.py directly for just the HTML:
+                                .venv/bin/python3 scripts/dashboard.py
 ```
 
 **Key principles:**
