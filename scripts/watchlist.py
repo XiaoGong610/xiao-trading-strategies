@@ -59,6 +59,7 @@ VERY_STALE_DAYS = 60
 # --- Priority scoring constants ---
 DEFAULT_TOP_N = 5
 CANDIDATE_BONUS = 35          # new stocks get high priority
+HELD_CANDIDATE_BONUS = 50     # held stocks with no thesis — always research
 STALENESS_SCALE = 3           # +1 point per N days stale
 STALENESS_CAP = 20            # max staleness bonus
 
@@ -730,6 +731,12 @@ def load_and_classify() -> list[dict]:
         if ticker in holdings:
             s['held_in'] = holdings[ticker]
             s['total_held_value'] = sum(h.get('value') or 0 for h in holdings[ticker])
+            # Held candidates get boosted score — no holding without thesis
+            if s['tier'] == 'candidate':
+                boost = HELD_CANDIDATE_BONUS - CANDIDATE_BONUS  # +15 on top
+                s['priority_score'] += boost
+                s['score_breakdown'].insert(0, f"HELD no thesis (+{HELD_CANDIDATE_BONUS})")
+                s['needs_refresh'] = True
         else:
             s['held_in'] = []
             s['total_held_value'] = 0

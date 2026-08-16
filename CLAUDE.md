@@ -61,7 +61,7 @@ All skills work independently — `/research-stock`, `/strategy-theta-gang`, `/p
 - **Portfolio-aware** — when portfolio is shared, holdings inform research priorities and surface gaps
 - **Batch sectors** — identify all stale sectors upfront from the refresh queue, refresh them all, then do stock research
 - **Market overview is non-negotiable** — always run, even if recent. It's cheap and frames everything.
-- **Triage by size** — portfolio gap candidates with >$10K exposure get researched immediately, small positions can wait
+- **No holding without thesis** — portfolio gaps (held stocks with no research) are always researched, not optional. Prioritize by position size ($10K+ first)
 - **One dashboard at the end** — don't save intermediate outputs; the final run reflects all fresh data
 - **Skills are modular** — any skill can be used standalone without the full workflow
 
