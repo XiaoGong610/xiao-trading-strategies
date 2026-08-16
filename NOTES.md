@@ -177,7 +177,7 @@ Multi-account portfolio advisor with per-account goals, constraints, and positio
 - [x] Gitignore account files (contain sensitive data)
 - [x] Remove trade lifecycle skills (`trade-open`, `trade-close`, `trade-review`, `trade-watch`, `trade-portfolio`) — agent advises, doesn't track transactions
 
-### 2. Smart Watchlist 🔄 MOSTLY DONE (2026-07-18)
+### 2. Smart Watchlist ✅ DONE (updated 2026-08-15)
 Enhance watchlist to bridge research → portfolio action.
 
 - [x] Tiered refresh cadence with priority scoring (conv 8+ = 14d, 6-7 = 28d, <6 = 42d) — replaces simple stale flag
@@ -185,6 +185,7 @@ Enhance watchlist to bridge research → portfolio action.
 - [x] Sector momentum integration in watchlist (reads `sector-momentum.py --json` in parallel)
 - [x] Consolidated dashboard: `0-WATCHLIST.md` + `research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html` (rehomed from charts/ with date naming, 2026-07-20)
 - [x] Watchlist-to-portfolio pipeline — `/portfolio-review` Step 4 surfaces watchlist stocks below entry target not in portfolio (2026-07-20)
+- [x] Portfolio awareness in watchlist (2026-08-15) — parses `portfolio/accounts/*.md`, auto-creates candidate stubs for held tickers missing research files, HELD column in all outputs (terminal, markdown, HTML hover + thicker scatter border), portfolio summary line
 - [ ] Add `entry_trigger` field to research/stocks frontmatter (e.g., `"RSI < 35 or pullback to $380"`)
 - [ ] Consider alert/notification when a watching stock hits its entry trigger
 - ~~target_accounts field~~ — decided account-agnostic is better (2026-06-18)

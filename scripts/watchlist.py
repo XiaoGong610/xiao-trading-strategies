@@ -36,6 +36,16 @@ except ImportError:
 
 STOCKS_DIR = Path("research/stocks")
 WATCHLIST_FILE = STOCKS_DIR / "0-WATCHLIST.md"
+ACCOUNTS_DIR = Path("portfolio/accounts")
+
+# Abbreviations for account names in compact displays
+ACCOUNT_ABBREV = {
+    'BROKERAGELINK': 'BL',
+    'ROTH IRA': 'Roth',
+    'HOLD': 'HOLD',
+    'THETAGANG': 'TG',
+    'GOBIG': 'GB',
+}
 
 # --- Tiered refresh cadence ---
 REFRESH_CADENCE = {
@@ -92,6 +102,7 @@ SECTOR_TO_GICS = {
     "Utilities": "Utilities",
     "Consumer Staples": "Consumer Staples",
     "Leveraged ETF / South Korea": None,  # no GICS mapping
+    "null": None,  # placeholder for stocks without sector data
 }
 
 
@@ -110,6 +121,185 @@ def parse_frontmatter(filepath: Path) -> dict:
                 value = [v.strip().strip('"').strip("'") for v in value[1:-1].split(',')]
             fm[key] = value
     return fm
+
+
+# --- Portfolio parsing helpers ---
+
+def _parse_number(s: str) -> float | None:
+    """Parse a number from a table cell, handling commas and tildes."""
+    try:
+        return float(s.strip().replace(',', '').replace('~', ''))
+    except (ValueError, AttributeError):
+        return None
+
+
+def _parse_dollar(s: str) -> float | None:
+    """Parse a dollar value like '$10,764' or '~$93'."""
+    if '$' not in str(s):
+        return None
+    try:
+        return float(str(s).strip().replace('$', '').replace(',', '').replace('~', '').strip())
+    except (ValueError, AttributeError):
+        return None
+
+
+def _parse_pct(s: str) -> float | None:
+    """Parse a percentage like '5.63%'."""
+    m = re.search(r'([\d.]+)%', str(s))
+    if m:
+        try:
+            return float(m.group(1))
+        except ValueError:
+            pass
+    return None
+
+
+def parse_portfolio_holdings() -> dict[str, list[dict]]:
+    """Parse all portfolio account files and extract holdings.
+
+    Returns: {TICKER: [{account, shares, value, pct_of_acct, is_option}, ...]}
+    """
+    if not ACCOUNTS_DIR.exists():
+        return {}
+
+    holdings: dict[str, list[dict]] = {}
+
+    for filepath in ACCOUNTS_DIR.glob("*.md"):
+        content = filepath.read_text(encoding="utf-8")
+        fm = parse_frontmatter(filepath)
+        account = fm.get('account_name', filepath.stem.upper())
+
+        in_sold = False
+
+        for line in content.split('\n'):
+            # Track section headers — skip "Sold" sections
+            if re.match(r'^#{1,4}\s+', line):
+                in_sold = bool(re.search(r'[Ss]old', line))
+
+                # Parse headers like "### AMZN — 801 shares ($219,858 — 97.26%)"
+                hdr = re.match(
+                    r'^#{1,4}\s+([A-Z]{1,5})\s+[—–-]\s+([\d,.]+)\s+shares?\s*\(\$([\d,.]+)',
+                    line,
+                )
+                if hdr and not in_sold:
+                    ticker = hdr.group(1)
+                    shares = float(hdr.group(2).replace(',', ''))
+                    value = float(hdr.group(3).replace(',', ''))
+                    pct = _parse_pct(line)
+                    existing = holdings.get(ticker, [])
+                    if not any(h['account'] == account and not h.get('is_option')
+                               for h in existing):
+                        holdings.setdefault(ticker, []).append({
+                            'account': account, 'shares': shares,
+                            'value': value, 'pct_of_acct': pct,
+                        })
+                continue
+
+            if in_sold:
+                continue
+
+            # Skip non-table rows and separators
+            if not line.startswith('|') or '---' in line:
+                continue
+
+            cells = [c.strip() for c in line.split('|')[1:-1]]
+            if len(cells) < 3:
+                continue
+
+            first = cells[0].strip('*').strip()
+
+            # Skip header rows
+            if first.lower() in ('ticker', 'option', 'strike', 'trade',
+                                  'acquired', '#', 'detail'):
+                continue
+
+            # Equity row: first cell is a valid ticker (1-5 uppercase letters)
+            if re.match(r'^[A-Z]{1,5}$', first):
+                ticker = first
+                shares = _parse_number(cells[1]) if len(cells) > 1 else None
+                value = _parse_dollar(cells[3]) if len(cells) > 3 else None
+                pct = _parse_pct(cells[4]) if len(cells) > 4 else None
+
+                existing = holdings.get(ticker, [])
+                if not any(h['account'] == account and not h.get('is_option')
+                           for h in existing):
+                    holdings.setdefault(ticker, []).append({
+                        'account': account, 'shares': shares,
+                        'value': value, 'pct_of_acct': pct,
+                    })
+                continue
+
+            # Option row: "TICKER $STRIKE Call/Put ..."
+            opt_m = re.match(r'([A-Z]{1,5})\s+\$[\d.]+\s+(?:Call|Put)', first)
+            if opt_m:
+                ticker = opt_m.group(1)
+                existing = holdings.get(ticker, [])
+                if not any(h['account'] == account for h in existing):
+                    value = _parse_dollar(cells[3]) if len(cells) > 3 else None
+                    holdings.setdefault(ticker, []).append({
+                        'account': account, 'shares': None,
+                        'value': value, 'pct_of_acct': None,
+                        'is_option': True,
+                    })
+
+    return holdings
+
+
+def ensure_portfolio_coverage(holdings: dict[str, list[dict]]) -> list[str]:
+    """Create candidate research stubs for held tickers missing research files.
+
+    Returns list of newly created ticker symbols.
+    """
+    STOCKS_DIR.mkdir(parents=True, exist_ok=True)
+    created = []
+
+    for ticker in sorted(holdings.keys()):
+        filepath = STOCKS_DIR / f"{ticker}.md"
+        if filepath.exists():
+            continue
+
+        date_str = datetime.now().strftime("%Y-%m-%d")
+        accounts = [h['account'] for h in holdings[ticker]]
+        total_value = sum(h.get('value') or 0 for h in holdings[ticker])
+
+        content = f"""---
+ticker: {ticker}
+status: candidate
+added_date: {date_str}
+sector: null
+source: "portfolio-gap (held in {', '.join(accounts)}, ~${total_value:,.0f})"
+---
+"""
+        filepath.write_text(content, encoding="utf-8")
+        created.append(ticker)
+
+    return created
+
+
+# --- Display helpers for portfolio holdings ---
+
+def _held_terminal(s: dict) -> str:
+    """Format held indicator for terminal (5 chars wide)."""
+    if not s.get('held_in'):
+        return "    —"
+    v = s.get('total_held_value', 0)
+    if v >= 1000:
+        return f"${v / 1000:.0f}K".rjust(5)
+    return " held"
+
+
+def _held_md(s: dict) -> str:
+    """Format held indicator for markdown."""
+    held_in = s.get('held_in', [])
+    if not held_in:
+        return "—"
+    accounts = [ACCOUNT_ABBREV.get(h['account'], h['account']) for h in held_in]
+    total = s.get('total_held_value', 0)
+    if total >= 1000:
+        return f"{','.join(accounts)} ${total / 1000:.0f}K"
+    elif total > 0:
+        return f"{','.join(accounts)} ${total:.0f}"
+    return ','.join(accounts)
 
 
 def find_last_update(filepath: Path) -> str | None:
@@ -447,6 +637,16 @@ def classify_stock(stock: dict, price: float | None, sector_momentum: str | None
 
 def load_and_classify() -> list[dict]:
     """Load all watching/candidate stocks and classify them."""
+    # Scan portfolio and create candidate stubs for held-but-untracked tickers
+    print("Scanning portfolio...", file=sys.stderr)
+    holdings = parse_portfolio_holdings()
+    if holdings:
+        created = ensure_portfolio_coverage(holdings)
+        if created:
+            print(f"  Created {len(created)} research stubs: {', '.join(created)}",
+                  file=sys.stderr)
+        print(f"  {len(holdings)} tickers held across portfolio", file=sys.stderr)
+
     if not STOCKS_DIR.exists():
         return []
 
@@ -523,6 +723,16 @@ def load_and_classify() -> list[dict]:
         result['filepath'] = s.get('filepath')
         result['last_update'] = s.get('last_update')
         classified.append(result)
+
+    # Enrich with portfolio holdings data
+    for s in classified:
+        ticker = s['ticker']
+        if ticker in holdings:
+            s['held_in'] = holdings[ticker]
+            s['total_held_value'] = sum(h.get('value') or 0 for h in holdings[ticker])
+        else:
+            s['held_in'] = []
+            s['total_held_value'] = 0
 
     return classified
 
@@ -642,7 +852,12 @@ def print_dashboard(classified: list[dict], top_n: int = DEFAULT_TOP_N):
     n_passive = len(passive)
     n_remove = len(remove)
     n_refresh = len(needs_refresh)
-    print(f"\n  {n_active} active | {n_cand} candidate | {n_passive} passive | {n_remove} remove | {n_refresh} need refresh\n")
+    n_held = sum(1 for s in classified if s.get('held_in'))
+    total_held_val = sum(s.get('total_held_value', 0) for s in classified if s.get('held_in'))
+    print(f"\n  {n_active} active | {n_cand} candidate | {n_passive} passive | {n_remove} remove | {n_refresh} need refresh")
+    if n_held:
+        print(f"  Portfolio: {n_held} held stocks tracked (${total_held_val / 1000:.0f}K)")
+    print()
 
     # Candidates
     if candidates:
@@ -654,15 +869,16 @@ def print_dashboard(classified: list[dict], top_n: int = DEFAULT_TOP_N):
             price_str = f"${s['price']:.2f}" if s['price'] else "—"
             rsi_str = rsi_flag(s.get('rsi'))
             pe_str = pe_flag(s.get('fwd_pe'))
-            print(f"    {s['ticker']:6s} | score {s['priority_score']:3d} | {price_str:>9s} | RSI {rsi_str} | PE {pe_str} | {sector_str}{mom}")
+            held_str = _held_terminal(s)
+            print(f"    {s['ticker']:6s} | score {s['priority_score']:3d} | {price_str:>9s} | RSI {rsi_str} | PE {pe_str} | {held_str} | {sector_str}{mom}")
         print()
 
     # Active — full table with market data
     cadence_note = "conv 8+: 14d, 6-7: 28d, <6: 42d"
     print(f"  ACTIVE ({len(active)} — cadence: {cadence_note})")
     print(f"  {'-' * (width - 4)}")
-    print(f"    {'TICKER':6s} | {'CONV':>4s} | {'PRICE':>9s} | {'RSI':>6s} | {'FwdPE':>6s} | {'GAP':>7s} | {'EARN':>5s} | {'STATUS':8s} | REASONS")
-    print(f"    {'-'*6} | {'-'*4} | {'-'*9} | {'-'*6} | {'-'*6} | {'-'*7} | {'-'*5} | {'-'*8} | {'-'*20}")
+    print(f"    {'TICKER':6s} | {'CONV':>4s} | {'PRICE':>9s} | {'RSI':>6s} | {'FwdPE':>6s} | {'GAP':>7s} | {'EARN':>5s} | {'HELD':>5s} | {'STATUS':8s} | REASONS")
+    print(f"    {'-'*6} | {'-'*4} | {'-'*9} | {'-'*6} | {'-'*6} | {'-'*7} | {'-'*5} | {'-'*5} | {'-'*8} | {'-'*20}")
     for s in active:
         conv = f"{s['conviction']:.1f}" if s['conviction'] else "  ?"
         price_str = f"${s['price']:.2f}" if s['price'] else "      —"
@@ -674,8 +890,9 @@ def print_dashboard(classified: list[dict], top_n: int = DEFAULT_TOP_N):
             status = f"🔄 {s['priority_score']:3d}"
         else:
             status = "  ✅    "
+        held_str = _held_terminal(s)
         reasons_str = ", ".join(s['reasons'][:2])
-        print(f"    {s['ticker']:6s} | {conv:>4s} | {price_str:>9s} | {rsi_str} | {pe_str} | {gap:>7s} | {earn:>5s} | {status} | {reasons_str}")
+        print(f"    {s['ticker']:6s} | {conv:>4s} | {price_str:>9s} | {rsi_str} | {pe_str} | {gap:>7s} | {earn:>5s} | {held_str} | {status} | {reasons_str}")
 
     print()
 
@@ -689,8 +906,9 @@ def print_dashboard(classified: list[dict], top_n: int = DEFAULT_TOP_N):
             rsi_str = rsi_flag(s.get('rsi'))
             pe_str = pe_flag(s.get('fwd_pe'))
             stale = f"{s['stale_days']}d" if s['stale_days'] < 999 else "never"
+            held_str = _held_terminal(s)
             reasons_str = ", ".join(s['reasons'][:2])
-            print(f"    {s['ticker']:6s} | conv {conv} | {price_str:>9s} | RSI {rsi_str} | PE {pe_str} | stale {stale:>5s} | {reasons_str}")
+            print(f"    {s['ticker']:6s} | conv {conv} | {price_str:>9s} | RSI {rsi_str} | PE {pe_str} | {held_str} | stale {stale:>5s} | {reasons_str}")
         print()
 
     # Remove candidates
@@ -780,7 +998,12 @@ def generate_watchlist_md(classified: list[dict], top_n: int = DEFAULT_TOP_N) ->
     n_remove = len(remove)
     n_refresh = len(needs_refresh)
 
+    n_held = sum(1 for s in classified if s.get('held_in'))
+    total_held_val = sum(s.get('total_held_value', 0) for s in classified if s.get('held_in'))
     lines.append(f"**{n_active}** active | **{n_cand}** candidate | **{n_passive}** passive | **{n_remove}** remove | **{n_refresh}** need refresh")
+    if n_held:
+        lines.append(f"")
+        lines.append(f"Portfolio: **{n_held}** held stocks tracked (${total_held_val / 1000:.0f}K)")
     lines.append(f"")
 
     # Refresh queue
@@ -801,12 +1024,13 @@ def generate_watchlist_md(classified: list[dict], top_n: int = DEFAULT_TOP_N) ->
     if candidates:
         lines.append(f"## Candidates ({len(candidates)} — need /research-stock)")
         lines.append(f"")
-        lines.append(f"| Ticker | Score | Price | RSI | Fwd P/E | Sector | Momentum |")
-        lines.append(f"|--------|-------|-------|-----|---------|--------|----------|")
+        lines.append(f"| Ticker | Score | Price | RSI | Fwd P/E | Held | Sector | Momentum |")
+        lines.append(f"|--------|-------|-------|-----|---------|------|--------|----------|")
         for s in candidates:
             price_str = f"${s['price']:.2f}" if s['price'] else "—"
             mom = s.get('sector_momentum', '—') or '—'
-            lines.append(f"| [{s['ticker']}]({s['ticker']}.md) | {s['priority_score']} | {price_str} | {rsi_md(s.get('rsi'))} | {pe_md(s.get('fwd_pe'))} | {s['sector'] or '?'} | {mom} |")
+            held = _held_md(s)
+            lines.append(f"| [{s['ticker']}]({s['ticker']}.md) | {s['priority_score']} | {price_str} | {rsi_md(s.get('rsi'))} | {pe_md(s.get('fwd_pe'))} | {held} | {s['sector'] or '?'} | {mom} |")
         lines.append(f"")
 
     # Active — grouped by sector
@@ -826,8 +1050,8 @@ def generate_watchlist_md(classified: list[dict], top_n: int = DEFAULT_TOP_N) ->
     for sector in sorted(sectors.keys()):
         lines.append(f"### {sector}")
         lines.append(f"")
-        lines.append(f"| Ticker | Conv | Price | RSI | Fwd P/E | Target | Gap | Earn | Status | Thesis |")
-        lines.append(f"|--------|------|-------|-----|---------|--------|-----|------|--------|--------|")
+        lines.append(f"| Ticker | Conv | Price | RSI | Fwd P/E | Target | Gap | Earn | Held | Status | Thesis |")
+        lines.append(f"|--------|------|-------|-----|---------|--------|-----|------|------|--------|--------|")
         for s in sectors[sector]:
             conv = f"{s['conviction']:.1f}" if s['conviction'] else "?"
             price_str = f"${s['price']:.2f}" if s['price'] else "—"
@@ -836,21 +1060,22 @@ def generate_watchlist_md(classified: list[dict], top_n: int = DEFAULT_TOP_N) ->
             earn_str = f"{s['earnings_days']}d" if s.get('earnings_days') and s['earnings_days'] > 0 else "—"
             status = f"🔄 {s['priority_score']}" if s['needs_refresh'] else "✅"
             thesis = s.get('thesis', '')[:80]
-            strategies = ", ".join(s['strategies']) if isinstance(s['strategies'], list) else s.get('strategies', '')
-            lines.append(f"| [{s['ticker']}]({s['ticker']}.md) | {conv} | {price_str} | {rsi_md(s.get('rsi'))} | {pe_md(s.get('fwd_pe'))} | {target_str} | {gap_str} | {earn_str} | {status} | {thesis} |")
+            held = _held_md(s)
+            lines.append(f"| [{s['ticker']}]({s['ticker']}.md) | {conv} | {price_str} | {rsi_md(s.get('rsi'))} | {pe_md(s.get('fwd_pe'))} | {target_str} | {gap_str} | {earn_str} | {held} | {status} | {thesis} |")
         lines.append(f"")
 
     # Passive
     if passive:
         lines.append(f"## Passive ({len(passive)} stocks)")
         lines.append(f"")
-        lines.append(f"| Ticker | Conv | Price | RSI | Fwd P/E | Sector | Reason |")
-        lines.append(f"|--------|------|-------|-----|---------|--------|--------|")
+        lines.append(f"| Ticker | Conv | Price | RSI | Fwd P/E | Held | Sector | Reason |")
+        lines.append(f"|--------|------|-------|-----|---------|------|--------|--------|")
         for s in passive:
             conv = f"{s['conviction']:.1f}" if s['conviction'] else "?"
             price_str = f"${s['price']:.2f}" if s['price'] else "—"
+            held = _held_md(s)
             reasons_str = ", ".join(s['reasons'][:2])
-            lines.append(f"| [{s['ticker']}]({s['ticker']}.md) | {conv} | {price_str} | {rsi_md(s.get('rsi'))} | {pe_md(s.get('fwd_pe'))} | {s['sector'] or '?'} | {reasons_str} |")
+            lines.append(f"| [{s['ticker']}]({s['ticker']}.md) | {conv} | {price_str} | {rsi_md(s.get('rsi'))} | {pe_md(s.get('fwd_pe'))} | {held} | {s['sector'] or '?'} | {reasons_str} |")
         lines.append(f"")
 
     # Remove
@@ -1079,6 +1304,14 @@ def _build_scatter(stocks: list[dict], date_str: str):
             price_str = f"${s['price']:.2f}" if s.get('price') else "—"
             conv_str = f"{s['conviction']:.1f}" if s.get('conviction') else "?"
             earn_str = f"{s['earnings_days']}d" if s.get('earnings_days') and s['earnings_days'] > 0 else "—"
+            held_line = ""
+            if s.get('held_in'):
+                accts = [ACCOUNT_ABBREV.get(h['account'], h['account'])
+                         for h in s['held_in']]
+                hv = s.get('total_held_value', 0)
+                held_line = (f"<br><b>Held:</b> {', '.join(accts)}"
+                             f" (${hv / 1000:.0f}K)" if hv >= 1000 else
+                             f"<br><b>Held:</b> {', '.join(accts)}")
             hover_texts.append(
                 f"<b>{s['ticker']}</b><br>"
                 f"Price: {price_str}<br>"
@@ -1087,7 +1320,11 @@ def _build_scatter(stocks: list[dict], date_str: str):
                 f"Sector: {s['sector']}<br>"
                 f"Conv: {conv_str} | Target: {target_str} | Gap: {gap_str}<br>"
                 f"Earnings: {earn_str}"
+                f"{held_line}"
             )
+
+        # Thicker border for held stocks
+        line_widths = [2.5 if s.get('held_in') else 1 for s in ss]
 
         fig.add_trace(go.Scatter(
             x=[s['rsi'] for s in ss],
@@ -1100,7 +1337,7 @@ def _build_scatter(stocks: list[dict], date_str: str):
             hovertext=hover_texts,
             hoverinfo="text",
             marker=dict(size=sizes, color=color, opacity=0.85,
-                        line=dict(width=1, color="#ffffff")),
+                        line=dict(width=line_widths, color="#ffffff")),
         ))
 
     # Reference lines
