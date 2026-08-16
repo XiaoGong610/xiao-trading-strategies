@@ -1172,7 +1172,7 @@ def main():
             [{k: v for k, v in s.items() if k != 'filepath'} for s in classified])
         try:
             proc = subprocess.run(
-                [sys.executable, "scripts/dashboard.py"],
+                [sys.executable, "scripts/dashboard.py", "--no-open"],
                 input=dashboard_json, capture_output=True, text=True, timeout=30,
             )
             if proc.returncode == 0:
