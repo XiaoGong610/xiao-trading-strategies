@@ -539,47 +539,136 @@ def _load_latest_plan() -> tuple[str, str]:
     return _render_plan_md(content), plan_date
 
 
-def _render_plan_md(md: str) -> str:
-    """Convert plan markdown to styled HTML. Lightweight parser for tables and headers."""
+def _md_inline(text: str) -> str:
+    """Process inline markdown: **bold**, ~~strikethrough~~, `code`."""
     import re
+    # Bold
+    text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+    # Strikethrough
+    text = re.sub(r'~~(.+?)~~', r'<s style="color:#8b949e">\1</s>', text)
+    # Inline code
+    text = re.sub(r'`(.+?)`', r'<code style="background:#21262d;padding:1px 5px;'
+                  r'border-radius:3px;font-size:12px;">\1</code>', text)
+    return text
+
+
+def _action_badge(text: str) -> str:
+    """Detect action keywords and return a colored badge."""
+    t = text.upper().strip('* ')
+    badge = '<span class="badge badge-{cls}">{label}</span>'
+    if any(k in t for k in ['SELL CC', 'SELL TO OPEN']):
+        return badge.format(cls='red', label='SELL CC')
+    if 'SELL HALF' in t or 'TAKE PROFIT' in t:
+        return badge.format(cls='orange', label='TAKE PROFIT')
+    if t.startswith('SELL') or 'CLOSE' in t:
+        return badge.format(cls='red', label=t.split()[0])
+    if t.startswith('BUY') or 'RESUME' in t:
+        return badge.format(cls='green', label=t.split()[0])
+    if t.startswith('ROLL'):
+        return badge.format(cls='orange', label='ROLL')
+    if 'MONITOR' in t:
+        return badge.format(cls='orange', label='MONITOR')
+    if 'HOLD' in t or 'DELIBERATE' in t:
+        return badge.format(cls='blue', label='HOLD')
+    if 'LET EXPIRE' in t or 'EXPIRE' in t:
+        return badge.format(cls='gray', label='EXPIRE')
+    if 'PAUSED' in t or 'Paused' in text:
+        return badge.format(cls='gray', label='PAUSED')
+    if 'RESUMED' in t:
+        return badge.format(cls='green', label='RESUMED')
+    return ''
+
+
+def _render_plan_md(md: str) -> str:
+    """Convert plan markdown to richly styled HTML matching the old PLAN dashboard."""
+    import re
+
+    # Badge CSS (injected once at the top)
+    badge_css = """<style>
+    .badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+    .badge-red{background:#f8514933;color:#f85149}
+    .badge-green{background:#3fb95033;color:#3fb950}
+    .badge-orange{background:#d2992233;color:#d29922}
+    .badge-blue{background:#58a6ff33;color:#58a6ff}
+    .badge-gray{background:#8b949e33;color:#8b949e}
+    .priority{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;
+              padding:14px 18px;background:#161b22;border-radius:8px;border-left:4px solid;line-height:1.5}
+    .priority .num{font-size:22px;font-weight:700;min-width:28px}
+    .plan-table tr.paused{color:#8b949e;text-decoration:line-through}
+    .plan-table tr.paused .badge{opacity:0.6}
+    .plan-table td{vertical-align:top}
+    .section-box{background:#161b22;border:1px solid #30363d;border-radius:8px;
+                 padding:14px 18px;margin:12px 0}
+    </style>"""
+
     lines = md.split('\n')
-    html_parts = []
+    html_parts = [badge_css]
     in_table = False
-    table_rows = []
+    table_rows: list = []
+    current_section = ''
+    in_summary = False
+    summary_count = 0
+    priority_colors = ['#f85149', '#d29922', '#58a6ff', '#bc8cff', '#8b949e']
+
+    def _is_paused_row(cells):
+        return any('~~' in c or 'Paused' in c or 'paused' in c for c in cells)
 
     def flush_table():
         nonlocal in_table, table_rows
         if not table_rows:
             return
-        # First row is header, second is separator, rest are data
         header = table_rows[0]
-        data = [r for r in table_rows[1:] if not all(c.strip(' -') == '' for c in r)]
-        cols = [c.strip() for c in header]
+        data_rows = table_rows[1:]
+        cols = [_md_inline(c.strip()) for c in header]
 
         thead = '<tr>' + ''.join(f'<th>{c}</th>' for c in cols) + '</tr>'
-        tbody = ''
-        for row in data:
+        tbody_rows = []
+
+        for row in data_rows:
             cells = [c.strip() for c in row]
-            # Pad or trim to match header length
             while len(cells) < len(cols):
                 cells.append('')
-            style = ''
-            first = cells[0] if cells else ''
-            # Color-code action types
-            if any(k in first for k in ['SELL', 'TAKE PROFIT', 'CLOSE']):
-                style = ' style="border-left:3px solid #f85149;"'
-            elif any(k in first for k in ['BUY', 'RESUME', 'RESUMED']):
-                style = ' style="border-left:3px solid #3fb950;"'
-            elif any(k in first for k in ['ROLL', 'MONITOR']):
-                style = ' style="border-left:3px solid #d29922;"'
-            elif any(k in first for k in ['HOLD', 'DELIBERATE']):
-                style = ' style="border-left:3px solid #58a6ff;"'
-            elif any(k in first for k in ['LET EXPIRE']):
-                style = ' style="border-left:3px solid #8b949e;"'
-            tbody += f'<tr{style}>' + ''.join(f'<td>{c}</td>' for c in cells) + '</tr>'
 
-        html_parts.append(f'<table><thead>{thead}</thead><tbody>{tbody}</tbody></table>')
-        table_rows = []
+            paused = _is_paused_row(cells)
+            row_class = ' class="paused"' if paused else ''
+
+            # Color-code left border based on action column
+            style = ''
+            all_cells_text = ' '.join(cells)
+            if any(k in all_cells_text for k in ['SELL', 'TAKE PROFIT', 'CLOSE']):
+                style = ' style="border-left:3px solid #f85149;"'
+            elif any(k in all_cells_text for k in ['BUY', 'RESUME', 'RESUMED']):
+                style = ' style="border-left:3px solid #3fb950;"'
+            elif any(k in all_cells_text for k in ['ROLL', 'MONITOR']):
+                style = ' style="border-left:3px solid #d29922;"'
+            elif any(k in all_cells_text for k in ['HOLD', 'DELIBERATE']):
+                style = ' style="border-left:3px solid #58a6ff;"'
+            elif any(k in all_cells_text for k in ['LET EXPIRE']):
+                style = ' style="border-left:3px solid #8b949e;"'
+
+            # Total/summary rows
+            if cells[0].strip('* ').upper() == 'TOTAL':
+                style = ' style="border-top:2px solid #30363d;font-weight:600;"'
+
+            # Process each cell: inline markdown + detect badges for Type column
+            rendered = []
+            for i, cell in enumerate(cells):
+                processed = _md_inline(cell)
+                # If header is "Type" or "Change", try adding badge
+                header_name = cols[i].strip().lower() if i < len(cols) else ''
+                if header_name in ('type', 'change', 'action'):
+                    badge = _action_badge(cell)
+                    if badge:
+                        processed = badge
+                rendered.append(f'<td>{processed}</td>')
+
+            tbody_rows.append(f'<tr{row_class}{style}>{"".join(rendered)}</tr>')
+
+        html_parts.append(
+            f'<table class="plan-table"><thead>{thead}</thead>'
+            f'<tbody>{"".join(tbody_rows)}</tbody></table>'
+        )
+        table_rows.clear()
         in_table = False
 
     for line in lines:
@@ -588,7 +677,6 @@ def _render_plan_md(md: str) -> str:
         # Table rows
         if stripped.startswith('|') and stripped.endswith('|'):
             cells = stripped.split('|')[1:-1]
-            # Skip separator rows
             if all(c.strip().replace('-', '').replace(':', '') == '' for c in cells):
                 if not in_table:
                     in_table = True
@@ -601,35 +689,58 @@ def _render_plan_md(md: str) -> str:
         elif in_table:
             flush_table()
 
+        # Track summary section for priority cards
+        if '3 Things That Matter' in stripped or 'Summary' in stripped and '#' in stripped:
+            in_summary = True
+            summary_count = 0
+
         # Headers
-        if stripped.startswith('# '):
-            html_parts.append(f'<h2 style="margin:24px 0 8px;font-size:20px;color:#e6edf3;">'
-                              f'{stripped[2:]}</h2>')
+        if stripped.startswith('# ') and not stripped.startswith('## '):
+            html_parts.append(
+                f'<h2 style="margin:24px 0 8px;font-size:20px;color:#e6edf3;">'
+                f'{_md_inline(stripped[2:])}</h2>')
+            current_section = stripped[2:]
         elif stripped.startswith('## '):
-            html_parts.append(f'<h3 style="margin:20px 0 8px;font-size:16px;color:#e6edf3;'
-                              f'border-bottom:1px solid #30363d;padding-bottom:6px;">'
-                              f'{stripped[3:]}</h3>')
+            in_summary = 'summary' in stripped.lower() or '3 things' in stripped.lower()
+            summary_count = 0
+            html_parts.append(
+                f'<h3 style="margin:20px 0 8px;font-size:16px;color:#e6edf3;'
+                f'border-bottom:1px solid #30363d;padding-bottom:6px;">'
+                f'{_md_inline(stripped[3:])}</h3>')
+            current_section = stripped[3:]
         elif stripped.startswith('### '):
-            html_parts.append(f'<h4 style="margin:16px 0 6px;font-size:14px;color:#8b949e;">'
-                              f'{stripped[4:]}</h4>')
+            html_parts.append(
+                f'<h4 style="margin:16px 0 6px;font-size:14px;color:#8b949e;">'
+                f'{_md_inline(stripped[4:])}</h4>')
         elif stripped == '---':
-            html_parts.append('<hr style="border:none;border-top:1px solid #30363d;margin:16px 0;">')
+            in_summary = False
+            html_parts.append(
+                '<hr style="border:none;border-top:1px solid #30363d;margin:16px 0;">')
         elif stripped.startswith('**') and stripped.endswith('**') and len(stripped) > 4:
-            # Bold standalone line → callout
-            html_parts.append(f'<p style="color:#e6edf3;font-weight:600;margin:8px 0;">'
-                              f'{stripped}</p>')
+            html_parts.append(
+                f'<div class="section-box" style="border-left:3px solid #d29922;">'
+                f'{_md_inline(stripped)}</div>')
         elif stripped:
-            # Numbered list items (1. 2. 3.)
             m = re.match(r'^(\d+)\.\s+(.+)', stripped)
-            if m:
+            if m and in_summary:
+                # Priority cards with numbered badges
+                idx = summary_count
+                color = priority_colors[idx] if idx < len(priority_colors) else '#8b949e'
+                summary_count += 1
                 html_parts.append(
-                    f'<div style="margin:8px 0;padding:12px 16px;background:#161b22;'
-                    f'border:1px solid #30363d;border-radius:8px;line-height:1.5;">'
+                    f'<div class="priority" style="border-left-color:{color};">'
+                    f'<div class="num" style="color:{color};">{m.group(1)}</div>'
+                    f'<div style="flex:1;font-size:13px;">{_md_inline(m.group(2))}</div>'
+                    f'</div>')
+            elif m:
+                html_parts.append(
+                    f'<div style="margin:6px 0;padding:10px 14px;background:#161b22;'
+                    f'border:1px solid #30363d;border-radius:6px;line-height:1.5;">'
                     f'<span style="color:#58a6ff;font-weight:700;margin-right:8px;">'
-                    f'{m.group(1)}.</span>{m.group(2)}</div>'
-                )
+                    f'{m.group(1)}.</span>{_md_inline(m.group(2))}</div>')
             else:
-                html_parts.append(f'<p style="margin:6px 0;line-height:1.5;">{stripped}</p>')
+                html_parts.append(
+                    f'<p style="margin:6px 0;line-height:1.5;">{_md_inline(stripped)}</p>')
 
     if in_table:
         flush_table()
