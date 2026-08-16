@@ -35,6 +35,7 @@ Portfolio drives everything. Holdings determine what gets researched, not the ot
 4. RESEARCH (top-down, demand-driven)
    a. /research-market        — always run (non-negotiable, even if recent)
    b. /research-sector        — batch all stale sectors needed by the refresh queue
+                                 Staleness: 7 days if you hold stocks in that sector, 14 days otherwise
                                  (don't loop: identify all stale sectors upfront, refresh, then move on)
    c. /research-stock         — top refresh queue items, prioritized by score
                                  Portfolio gap candidates: $10K+ positions now, sub-$5K can wait
@@ -47,7 +48,8 @@ Portfolio drives everything. Holdings determine what gets researched, not the ot
                                 (specific actions per account for next week)
 
 7. FINAL DASHBOARD            → .venv/bin/python3 scripts/watchlist.py
-                                Regenerate 0-WATCHLIST.md + HTML with all fresh data.
+                                Regenerate 0-WATCHLIST.md + unified HTML dashboard
+                                (portfolio overview, RSI vs P/E, earnings, holdings, trading plan).
                                 Also: .venv/bin/python3 -m streamlit run scripts/app.py
 ```
 
@@ -316,7 +318,7 @@ echo '{"ticker":"AEHR",...}' | .venv/bin/python3 scripts/bottleneck-scorecard.py
 Scores 8 weighted factors (demand inflection, chokepoint severity, evidence quality, supplier concentration, expansion difficulty, valuation disconnect, architecture coupling, catalyst timing) minus penalties (dilution, governance, geopolitics, liquidity, hype risk, accounting quality, cyclicality, alternative design risk). Verdicts: ≥85 Top priority, ≥70 High, ≥55 Worth tracking, <55 Early lead.
 
 ### `scripts/watchlist.py`
-Consolidated watchlist manager. Tiers stocks, scores refresh urgency, fetches live data (RSI, fwd P/E, sector momentum, earnings countdown, gap-to-target), and generates `research/stocks/0-WATCHLIST.md` + `research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html` (tabbed: RSI vs P/E scatter + earnings calendar).
+Consolidated watchlist manager. Tiers stocks, scores refresh urgency, fetches live data (RSI, fwd P/E, sector momentum, earnings countdown, gap-to-target), scans portfolio accounts for gaps, and generates `research/stocks/0-WATCHLIST.md`. Pipes classified JSON to `dashboard.py` for unified HTML.
 
 ```bash
 .venv/bin/python3 scripts/watchlist.py              # terminal dashboard + saves 0-WATCHLIST.md
@@ -344,6 +346,17 @@ Classification logic:
 - **Candidate:** new stock (`status: candidate`), needs first `/research-stock`
 - **Passive:** conviction 5-6, no near-term catalyst
 - **Remove:** no conviction + stale >60 days, or conviction <5, or >50% above target
+
+### `scripts/dashboard.py`
+Unified HTML dashboard combining portfolio + watchlist data into one interactive view. 5 tabs: Portfolio Overview (donut charts, metrics, account bars), RSI vs P/E Scatter, Earnings Calendar, Holdings (cross-account table by sector), Trading Plan (rendered from latest `portfolio/plans/PLAN-*.md`).
+
+```bash
+.venv/bin/python3 scripts/dashboard.py              # auto-runs watchlist.py, opens browser
+.venv/bin/python3 scripts/dashboard.py --no-open     # don't open browser
+.venv/bin/python3 scripts/watchlist.py --json | .venv/bin/python3 scripts/dashboard.py  # piped
+```
+
+Output: `research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html`. Automatically called by `watchlist.py` when saving.
 
 ### `scripts/app.py`
 Interactive Streamlit dashboard combining all research data into one view.
