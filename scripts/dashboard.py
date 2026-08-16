@@ -391,47 +391,72 @@ def _build_earnings(stocks, date_str):
     if not entries:
         return None
 
-    entries.sort(key=lambda e: e['earnings_date'], reverse=True)
+    entries.sort(key=lambda e: e['days_until'])
     fig = go.Figure()
 
+    def urgency_color(d):
+        if d < 7: return "#ef5350"
+        if d < 14: return "#ffa726"
+        if d < 30: return "#ffee58"
+        return "#66bb6a"
+
+    def urgency_label(d):
+        if d < 7: return "IMMINENT"
+        if d < 14: return "SOON"
+        if d < 30: return "UPCOMING"
+        return "SAFE"
+
+    tickers = [e['ticker'] for e in entries]
+    days = [e['days_until'] for e in entries]
+    colors = [urgency_color(d) for d in days]
+    dates = [e['earnings_date'].strftime('%b %d') for e in entries]
+
+    hover_texts = []
     for e in entries:
-        earn_date = e['earnings_date']
-        d = e['days_until']
-        color = "#ef5350" if d < 7 else "#ffa726" if d < 14 else "#ffee58" if d < 30 else "#66bb6a"
-        urgency = "IMMINENT" if d < 7 else "SOON" if d < 14 else "UPCOMING" if d < 30 else "SAFE"
         conv = f"{e['conviction']:.1f}" if e.get('conviction') else "?"
         held = "Yes" if e['held'] else "No"
+        hover_texts.append(
+            f"<b>{e['ticker']}</b><br>"
+            f"Earnings: {e['earnings_date'].strftime('%b %d, %Y')}<br>"
+            f"Days: {e['days_until']}<br>"
+            f"Sector: {e['sector']}<br>"
+            f"Conv: {conv}<br>"
+            f"Held: {held}<br>"
+            f"Urgency: {urgency_label(e['days_until'])}"
+        )
 
-        fig.add_trace(go.Bar(
-            y=[e['ticker']], x=[(earn_date - today).days],
-            base=[today.isoformat()], orientation="h",
-            marker=dict(color=color, opacity=0.85, line=dict(width=0)),
-            hovertemplate=(
-                f"<b>{e['ticker']}</b><br>Earnings: {earn_date.strftime('%b %d, %Y')}<br>"
-                f"Days: {d}<br>Sector: {e['sector']}<br>Conv: {conv}<br>"
-                f"Held: {held}<br>Urgency: {urgency}<extra></extra>"
-            ),
-            showlegend=False,
-        ))
-        mid_date = today + (earn_date - today) / 2
-        fig.add_annotation(x=mid_date.isoformat(), y=e['ticker'],
-                           text=f"<b>{d}d</b>", showarrow=False,
-                           font=dict(color="white", size=12))
+    fig.add_trace(go.Bar(
+        y=tickers, x=days, orientation="h",
+        marker=dict(color=colors, opacity=0.9,
+                    line=dict(width=1, color="#0d1117")),
+        text=[f"  {d}d — {dt}" for d, dt in zip(days, dates)],
+        textposition="outside",
+        textfont=dict(color="#e6edf3", size=12),
+        hovertext=hover_texts, hoverinfo="text",
+        showlegend=False,
+    ))
 
-    fig.add_shape(type="line", x0=today.isoformat(), x1=today.isoformat(),
-                  y0=0, y1=1, yref="paper",
-                  line=dict(color="white", width=2, dash="dash"))
-    fig.add_annotation(x=today.isoformat(), y=1, yref="paper",
-                       text="TODAY", showarrow=False,
-                       font=dict(color="white", size=12), yshift=10)
+    # Reference lines at 7 and 14 days
+    fig.add_vline(x=7, line_dash="dash", line_color="#ef5350", line_width=1,
+                  annotation_text="7d", annotation_position="top",
+                  annotation_font=dict(color="#ef5350", size=10))
+    fig.add_vline(x=14, line_dash="dash", line_color="#ffa726", line_width=1,
+                  annotation_text="14d", annotation_position="top",
+                  annotation_font=dict(color="#ffa726", size=10))
+    fig.add_vline(x=30, line_dash="dash", line_color="#ffee58", line_width=1,
+                  annotation_text="30d", annotation_position="top",
+                  annotation_font=dict(color="#ffee58", size=10))
+
+    chart_height = max(350, len(entries) * 40 + 100)
 
     fig.update_layout(
         title=dict(text=f"Earnings Calendar | {date_str}", font=dict(size=18)),
-        xaxis=dict(title="Date", type="date", gridcolor="#333333",
-                   tickfont=dict(color="#cccccc")),
-        yaxis=dict(title="", tickfont=dict(color="#cccccc", size=13), automargin=True),
-        barmode="overlay", height=max(400, len(entries) * 35 + 120),
-        margin=dict(t=60, l=10, r=30, b=60),
+        xaxis=dict(title="Days Until Earnings", gridcolor="#333333",
+                   tickfont=dict(color="#cccccc"), zeroline=False),
+        yaxis=dict(title="", tickfont=dict(color="#cccccc", size=13),
+                   automargin=True, categoryorder="total ascending"),
+        height=chart_height,
+        margin=dict(t=60, l=10, r=80, b=60),
         paper_bgcolor="#0d1117", plot_bgcolor="#0d1117", font=dict(color="white"),
     )
     return fig
