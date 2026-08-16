@@ -147,6 +147,10 @@ For each ETF, note:
 - Whether it has liquid options (for theta gang viability)
 - Whether DCA into the ETF makes more sense than picking individual stocks
 
+## Influencer Check
+
+Read `knowledge/reference/influencers.md` for tracked accounts whose focus matches this sector. Web search their recent posts for signals not in mainstream coverage — new picks, thesis changes, supply chain insights. Note anything relevant in Top Picks or Candidate Scoring.
+
 ## Top Picks
 Highlight the top 2-3 candidates (highest scoring) and suggest next steps:
 - Run `/research-stock TICKER` for a deep-dive on fundamentals

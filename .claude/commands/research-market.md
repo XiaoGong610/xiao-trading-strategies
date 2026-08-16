@@ -134,6 +134,18 @@ Signs of exhaustion to watch for: multiple ETFs launched, mainstream media satur
 
 - Contrarian opportunities — sectors/themes that are hated but could be turning
 
+## Influencer Check
+
+Read `knowledge/reference/influencers.md` for tracked accounts. Web search for recent posts from relevant influencers to catch signals not in mainstream coverage:
+
+```
+"@aleabitoreddit" latest stock picks OR portfolio update 2026
+"@maojietrading" stock analysis OR trading 2026
+"@AlexMoonvestCN" investment OR stock 2026
+```
+
+Note any new stock mentions, thesis changes, or supply chain insights. If an influencer has flagged something not on the watchlist, note it in Sector Recommendations.
+
 ## Anomaly Watch
 
 Flag anything where the market reaction doesn't match expectations. These are often the most informative signals.
