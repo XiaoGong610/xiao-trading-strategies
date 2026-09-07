@@ -40,8 +40,12 @@ All skills work independently — `/research-stock`, `/strategy-theta-gang`, `/p
    c. /research-sector        — batch all stale sectors needed by the refresh queue
                                  Staleness: 7 days if you hold stocks in that sector, 14 days otherwise
                                  (don't loop: identify all stale sectors upfront, refresh, then move on)
-   d. /research-stock         — top refresh queue items, prioritized by score
-                                 Portfolio gap candidates: $10K+ positions now, sub-$5K can wait
+   d. /research-stock HELD    — **HELD STOCKS FIRST.** Refresh all held stocks past their cadence
+                                 BEFORE researching new candidates. Use agents for parallelism.
+                                 Cadence: conv 8+: 14d, conv 6-7: 28d, conv <6: 42d.
+                                 Prioritize by: position size ($10K+ first) × staleness.
+   e. /research-stock NEW     — THEN research new candidates from refresh queue / sector scans.
+                                 Portfolio gap candidates: $10K+ positions now, sub-$5K can wait.
 
 5. DISCUSS → /plan-stock     — Bounce ideas on which 2-3 stocks deserve full plans.
                                 User decides, Claude runs. Don't auto-run on everything.
@@ -53,6 +57,11 @@ All skills work independently — `/research-stock`, `/strategy-theta-gang`, `/p
 7. /trading-plan              — Checks /plan-stock coverage on recommendations, generates
                                 DCA schedule, orders, position management, key dates, risk budget
                                 → PLAN-YYYY-MM-DD.md. Answers: "What should I do this week?"
+                                **POST-PLAN GATES (mandatory):**
+                                  → Run cash-check.py to validate orders vs account cash
+                                  → Verify DCA $/day is proportional to conviction (higher conv ≥ equal $/day)
+                                  → Sanity-check option orders (share counts, contract math, terminology)
+                                  → Regenerate dashboard after any plan edit
 
 8. FINAL DASHBOARD            → .venv/bin/python3 scripts/watchlist.py
                                 Regenerate 0-WATCHLIST.md + unified HTML dashboard.
@@ -62,9 +71,14 @@ All skills work independently — `/research-stock`, `/strategy-theta-gang`, `/p
 
 **Key principles:**
 - **Portfolio-aware** — when portfolio is shared, holdings inform research priorities and surface gaps
+- **Held stocks before new stocks** — refresh all held stocks past cadence BEFORE researching new candidates. Your existing $10K+ positions matter more than shiny new ideas.
 - **Batch sectors** — identify all stale sectors upfront from the refresh queue, refresh them all, then do stock research
 - **Market overview is non-negotiable** — always run, even if recent. It's cheap and frames everything.
 - **No holding without thesis** — portfolio gaps (held stocks with no research) are always researched, not optional. Prioritize by position size ($10K+ first)
+- **Conviction drives allocation** — DCA $/day must be proportional to conviction. Higher conviction = equal or greater $/day. Never give a conv 8.0 stock more DCA than a conv 8.5 stock.
+- **Cash-check before finalizing plans** — run `scripts/cash-check.py` after every `/trading-plan` to validate feasibility. Don't recommend deploying more cash than exists.
+- **Sanity-check option orders** — verify contract math (can't sell half of 1 contract), terminology (put ≠ call), and share requirements before including in plans.
+- **Dashboard stays current** — regenerate dashboard after ANY plan edit. Don't wait for the user to ask.
 - **One dashboard at the end** — don't save intermediate outputs; the final run reflects all fresh data
 - **Skills are modular** — any skill can be used standalone without the full workflow
 
