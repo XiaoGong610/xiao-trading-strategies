@@ -147,23 +147,30 @@ These indicators tell you **where in the cycle you are**. Use them together — 
 - **What it measures:** BTC price against logarithmic regression bands with color zones (fire sale → bubble)
 - **⚠️ Caveat:** No fundamental basis — pure pattern-fitting. Fun to look at but not an investment tool.
 
-## Current Cycle Dashboard (Update Periodically)
+## Current Cycle Dashboard (Updated 2026-08-23)
 
-| Indicator | Reading (Jul 2026) | Zone | Signal |
-|-----------|-------------------|------|--------|
-| MVRV Z-Score | 1.22 | Fair-Moderate (1-3) | Markup territory — but BTC is -49%, conflicting |
-| NUPL | 0.18 | Anxiety (0-0.25) | Deteriorating — approaching capitulation (<0) |
-| Cycle Composite | 1.18/10 | Maximum Opportunity | Deep value zone — historically best long-term entries |
-| Puell Multiple | 2.8 (component) | Normal-Low | Miners stressed but not extreme |
-| Hash Ribbon | Recovery signal Q1 2026 | Post-capitulation | Historically bullish — buy signal fired |
-| BTC vs. Realized Price | $64K vs $52K (+22%) | Above realized | Not yet capitulation (would need BTC < realized) |
-| Mining Difficulty | -20% from ATH | Capitulation confirmed | Largest drop since China 2021 ban |
+| Indicator | Reading | Zone | Signal |
+|-----------|---------|------|--------|
+| MVRV Z-Score | 1.48 | Fair to Moderate | Markup phase — hold/accumulate |
+| NUPL | 0.3240 | Hope/Fear | Early recovery or early decline |
+| Cycle Composite | 1.91/10 | Maximum Opportunity |  |
+| Realized Price | $52,421 | — | BTC cost basis of all holders |
+| BTC Price | $77,543 | — | +47.9% vs realized price |
 
-**Dashboard interpretation (Jul 2026 update):** The picture has worsened since June. NUPL dropped from 0.28 to 0.18 (now in Anxiety zone, approaching capitulation). Cycle composite at 1.18/10 screams "maximum opportunity" — historically the best 12-24 month forward returns. But BTC is still +22% above realized price ($52K), so true capitulation (BTC < realized price) hasn't happened yet. Miner capitulation IS confirmed (difficulty -20%), which historically marks late-stage bear.
+**Component Scores (0-10):**
 
-**Key development — MSTR thesis broken:** Strategy sold 3,620 BTC in May-Jul 2026 and is trading at 0.77x mNAV. The "never sell" narrative — which provided a perceived floor for BTC demand — is gone. $1.5B+ annual preferred dividends force ongoing capital actions. This removes a structural buyer and adds a potential forced seller.
+| Component | Score |
+|-----------|-------|
+| MVRV Z-Score | 1.9 |
+| Puell Multiple | 3.5 |
+| Reserve Risk | 0.8 |
+| S2F Deviation | 0.3 |
+| Power Law | 2.8 |
+| Rainbow | 1.4 |
+| LTH MVRV | 2.6 |
 
-**Updated central tension:** On-chain metrics say "near bottom, accumulate." But the MSTR unwind adds a new systemic risk that didn't exist in prior cycles. Best approach: slow DCA into highest-quality names (COIN, IBIT), save dry powder for potential $50-55K BTC retest in Q3-Q4 2026.
+*Source: BGeometrics (bitcoin-data.com) | Updated: 2026-08-23*
+
 
 ## How to Use This Framework
 

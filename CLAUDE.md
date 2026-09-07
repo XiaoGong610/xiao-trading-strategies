@@ -366,6 +366,17 @@ Unified HTML dashboard combining portfolio + watchlist data into one interactive
 
 Output: `research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html`. Automatically called by `watchlist.py` when saving.
 
+### `scripts/cash-check.py`
+Validates trading plan orders against account cash balances. Parses the latest (or specified) PLAN-*.md and all account files, aggregates planned deployments (DCA, limit orders, LEAPs, CSP collateral) per account, and checks feasibility.
+
+```bash
+.venv/bin/python3 scripts/cash-check.py                        # latest plan, terminal dashboard
+.venv/bin/python3 scripts/cash-check.py --json                  # JSON output
+.venv/bin/python3 scripts/cash-check.py --plan PLAN-2026-09-06.md  # specific plan
+```
+
+Shows per-account: available cash, DCA burn (1 month), limit order costs, LEAP purchases, CSP collateral (reserved), remaining cash, DCA runway, and status (OK / TIGHT / OVER-COMMITTED).
+
 ### `scripts/app.py`
 Interactive Streamlit dashboard combining all research data into one view.
 
