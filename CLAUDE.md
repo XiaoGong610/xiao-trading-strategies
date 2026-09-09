@@ -399,6 +399,19 @@ Composite stock screener that scores and ranks all watchlist stocks (0-100) by: 
 
 Verdicts: >=75 STRONG BUY | 60-74 BUY | 45-59 HOLD | 30-44 WATCH | <30 AVOID. Uses stdlib only (no external deps). Reads watchlist JSON from stdin or runs watchlist.py internally.
 
+### `scripts/correlation.py`
+Cross-position correlation analysis for portfolio risk. Calculates pairwise Pearson correlation from 6-month daily returns (yfinance), flags dangerous pairs, detects correlated clusters, and scores portfolio diversification.
+
+```bash
+.venv/bin/python3 scripts/correlation.py                    # all held positions
+.venv/bin/python3 scripts/correlation.py --top 15           # top 15 by position size
+.venv/bin/python3 scripts/correlation.py --threshold 0.70   # only show pairs above threshold
+.venv/bin/python3 scripts/correlation.py --json             # JSON output
+.venv/bin/python3 scripts/watchlist.py --json --no-save | .venv/bin/python3 scripts/correlation.py  # piped
+```
+
+Severity levels: >=0.85 EXTREME (same position), 0.70-0.85 HIGH (moves together), 0.50-0.70 MODERATE, <0.50 LOW. Outputs: correlated pairs, diversification score (effective independent positions), cluster analysis (auto-labeled by sector/theme), and full correlation matrix. Reads held tickers from piped watchlist JSON or parses portfolio/accounts/*.md directly.
+
 ### `scripts/cash-check.py`
 Validates trading plan orders against account cash balances. Parses the latest (or specified) PLAN-*.md and all account files, aggregates planned deployments (DCA, limit orders, LEAPs, CSP collateral) per account, and checks feasibility.
 
