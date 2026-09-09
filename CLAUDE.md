@@ -423,6 +423,23 @@ Validates trading plan orders against account cash balances. Parses the latest (
 
 Shows per-account: available cash, DCA burn (1 month), limit order costs, LEAP purchases, CSP collateral (reserved), remaining cash, DCA runway, and status (OK / TIGHT / OVER-COMMITTED).
 
+### `scripts/whale-tracker.py`
+Tracks institutional activity, insider transactions, and unusual options volume. Surfaces "smart money" signals: insider buying/selling clusters, institutional holding changes, and unusual options activity.
+
+Data sources (all free, no API keys): SEC EDGAR (Form 4 insider filings via EFTS API + company submissions), Finviz (institutional holders, insider fallback), Yahoo Finance via yfinance (options chain unusual activity).
+
+```bash
+.venv/bin/python3 scripts/whale-tracker.py AAPL                  # single ticker, 30-day lookback
+.venv/bin/python3 scripts/whale-tracker.py AAPL --days 90         # custom lookback
+.venv/bin/python3 scripts/whale-tracker.py AAPL TSLA NVDA         # multiple tickers
+.venv/bin/python3 scripts/whale-tracker.py --portfolio            # all held positions (reads account files)
+.venv/bin/python3 scripts/whale-tracker.py AAPL --json            # JSON output
+.venv/bin/python3 scripts/whale-tracker.py AAPL --insider-only    # just insider data
+.venv/bin/python3 scripts/whale-tracker.py AAPL --options-only    # just unusual options
+```
+
+Signals: cluster buying (3+ insiders = STRONG), large purchases (>$500K), C-suite buying, unusual options volume (V/OI >3x), put/call skew. Results cached for 1 hour. Graceful degradation if a data source fails.
+
 ### `scripts/app.py`
 Interactive Streamlit dashboard combining all research data into one view.
 

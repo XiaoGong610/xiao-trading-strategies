@@ -200,7 +200,8 @@ Prevent overconcentration and size positions properly.
 - [x] **DCA cash runway alerts** — flags when DCA account cash drops below 4 weeks (<3 wks = critical). Caught BL at 2.3 weeks. (2026-07-20)
 - [x] **Options intelligence** — CC Sharpe on uncovered shares, CSP Score gate, Buffer % on sold puts, earnings-through-DTE check (2026-07-20)
 - [x] **Earnings risk dashboard** — all held positions with earnings in 14 days + options exposure through earnings (2026-07-20)
-- [ ] **Correlation analysis** — measure how correlated portfolio stocks are
+- [x] **Correlation analysis** — `scripts/correlation.py` calculates pairwise correlation, detects clusters (TSLA/TSLL 1.00, crypto 0.75, AI semis 0.75+), scores diversification. Found portfolio has ~4 effective independent positions out of 27 held. (added 2026-09-09)
+- [x] **Position sizing** — `scripts/position-sizer.py` automates conviction-based sizing, scaled entry math, and over-allocation detection. Correctly flags TSLA at 21.6% vs 2.0% target. (added 2026-09-09)
 - [ ] **Portfolio performance tracking** — total P&L over time, benchmark comparison (needs trade history)
 
 ### CC Sharpe Framework & Tax Rules (2026-06-27)
@@ -239,8 +240,14 @@ Build a knowledge layer for smarter decision-making. Start with knowledge files,
 - [x] `scripts/bottleneck-scorecard.py` — supply-chain bottleneck scoring (8 weighted factors + 8 penalties → 0-100 score). Adapted from serenity-skill (added 2026-06-23)
 - [x] `scripts/sentiment.py` — StockTwits bull/bear + Reddit posts, no API keys (added 2026-06-23, adapted from TradingAgents)
 - [x] `scripts/macro.py` — FRED macro dashboard + Polymarket predictions (added 2026-06-23, adapted from TradingAgents)
-- [ ] `scripts/screener.py` — composite scoring (RSI + fwd P/E + gap-to-target + IV rank)
-- [ ] Wire into `/research-stock-compare` for systematic ranking
+- [x] `scripts/screener.py` — composite scoring (RSI + PEG + gap-to-target + conviction + sector momentum + staleness). Verdicts: STRONG BUY / BUY / HOLD / WATCH / AVOID. (added 2026-09-09)
+- [x] `scripts/cash-check.py` — validates trading plan orders vs account cash balances, flags over-committed accounts (added 2026-09-06)
+- [x] `scripts/correlation.py` — cross-position correlation matrix, cluster detection (TSLA/TSLL, crypto, AI semis), diversification scoring (added 2026-09-09)
+- [x] `scripts/position-sizer.py` — conviction-based target allocation, scaled entry levels (40/30/30), over-allocation alerts (added 2026-09-09)
+- [x] `scripts/execution-tracker.py` — auto-diff plan orders vs account state, carry-forward detection, execution rate scoring (added 2026-09-09)
+- [ ] Wire screener into `/research-stock-compare` for systematic ranking
+- [ ] Wire position-sizer into `/plan-stock` Phase 1
+- [ ] Wire execution-tracker into `/portfolio-review` Step 0b
 
 ### 5. Macro Regime Detection ✅ DONE (2026-06-06)
 ~~Different market regimes favor different strategies.~~
@@ -252,11 +259,11 @@ Implemented via:
 - `scripts/sector-momentum.py` — quantitative sector momentum with Mansfield RS, Weinstein Stage, ROC
 - `knowledge/frameworks/sector-momentum.md` — documents the three-pillar methodology
 
-### 6. Market Intelligence Skills ➡️ MEDIUM
+### 6. Market Intelligence Skills 🔄 IN PROGRESS (2026-09-09)
 Add continuous monitoring capabilities beyond point-in-time research snapshots.
 
-- [ ] **Whale tracking** — institutional buys/sells, 13F filings, insider transactions, unusual options activity (dark pool, large blocks)
-- [ ] **Social sentiment** — monitor X (Twitter) for trending tickers and sentiment shifts, Reddit (r/wallstreetbets, r/options), StockTwits
+- [x] **Social sentiment** — `scripts/sentiment.py` covers StockTwits bull/bear + Reddit posts (added 2026-06-23)
+- [x] **Whale tracking** — `scripts/whale-tracker.py` (2026-09-09). SEC EDGAR Form 4 insider transactions, institutional 13F holdings (yfinance), unusual options activity. Multi-ticker + --portfolio mode. Cluster buying detection, C-suite signals, composite verdict.
 - [ ] **News alerts** — breaking news, FDA decisions, earnings surprises, analyst upgrades/downgrades
 - [ ] Consider using `/loop` for periodic monitoring
 
@@ -311,7 +318,7 @@ Maximize after-tax returns. Critical before year-end.
 - [ ] **Wash sale tracking** — auto-flag if selling a stock at a loss and rebuying within 30 days across accounts
 - [ ] **End-of-year review** — annual skill to scan portfolio for tax optimization before Dec 31
 
-### 11. Harvest Decision Framework ⬜ TODO
+### 11. Harvest Decision Framework ✅ DONE (2026-09-09)
 
 Unified logic for when to take profit, trim, or exit across all position types. Currently exit logic is scattered and inconsistent — the IGV LEAP incident (Aug 15) showed the system auto-recommended selling a +105% LEAP in an accelerating sector with 7 months left.
 
@@ -325,4 +332,4 @@ Unified logic for when to take profit, trim, or exit across all position types. 
 
 **Key principle:** Different instruments have different exit logic. Don't apply theta-gang rules to directional bets.
 
-**Deliverable:** `knowledge/strategies/when-to-harvest.md` — decision matrices per position type, integrated into `/portfolio-review` Step 3 and `/trading-plan` Step 5.
+**Deliverable:** `knowledge/strategies/when-to-harvest.md` ✅ — 6 position-type harvest matrices (sold options, LEAPs, DCA shares, lump sum shares, leveraged ETFs, concentration management) + cross-cutting rules (earnings, sector transitions, tax priority). Includes IGV LEAP case study. Integrated into `/portfolio-review` Step 3 and `/trading-plan` Step 5.
