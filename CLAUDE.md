@@ -380,6 +380,25 @@ Unified HTML dashboard combining portfolio + watchlist data into one interactive
 
 Output: `research/stocks/0-watchlist-dashboard-YYYY-MM-DD.html`. Automatically called by `watchlist.py` when saving.
 
+### `scripts/screener.py`
+Composite stock screener that scores and ranks all watchlist stocks (0-100) by: RSI positioning (20%), PEG valuation (20%), gap-to-target (20%), conviction (20%), sector momentum (10%), and research staleness (10%). Replaces manual triage scanning.
+
+```bash
+# Piped from watchlist.py (no extra network calls):
+.venv/bin/python3 scripts/watchlist.py --json --no-save | .venv/bin/python3 scripts/screener.py
+
+# Standalone (re-runs watchlist internally):
+.venv/bin/python3 scripts/screener.py
+
+# Filters:
+.venv/bin/python3 scripts/screener.py --held           # only held positions
+.venv/bin/python3 scripts/screener.py --top 10         # top 10 only
+.venv/bin/python3 scripts/screener.py --min-score 60   # only scores >= 60
+.venv/bin/python3 scripts/screener.py --json           # JSON output
+```
+
+Verdicts: >=75 STRONG BUY | 60-74 BUY | 45-59 HOLD | 30-44 WATCH | <30 AVOID. Uses stdlib only (no external deps). Reads watchlist JSON from stdin or runs watchlist.py internally.
+
 ### `scripts/cash-check.py`
 Validates trading plan orders against account cash balances. Parses the latest (or specified) PLAN-*.md and all account files, aggregates planned deployments (DCA, limit orders, LEAPs, CSP collateral) per account, and checks feasibility.
 
